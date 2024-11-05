@@ -1,0 +1,28 @@
+{
+  "name": "mern-blog",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon api/functions/index.js",
+    "start": "node api/functions/index.js",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cookieparser": "^0.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.1",
+    "nodemon": "^3.1.7",
+    "react-quill": "^2.0.0",
+    "resend": "^4.0.1-alpha.0",
+    "serverless-http": "^3.2.0"
+  }
+}
