@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { useEffect, useState } from 'react';
-import { HiAcademicCap, HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
+import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiDocumentText, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
@@ -80,6 +80,16 @@ export default function DashSidebar() {
                                 Posts
                             </Sidebar.Item>
                         </Link>
+                        <Link to="/dashboard?tab=excersises">
+                            <Sidebar.Item
+                                active={tab === 'excersises'}
+                                icon={HiHand}
+                                labelColor='dark'
+                                as='div'
+                            >
+                                Excersises
+                            </Sidebar.Item>
+                        </Link>
                         <Link to="/dashboard?tab=comments">
                             <Sidebar.Item
                                 active={tab === 'comments'}
@@ -97,7 +107,16 @@ export default function DashSidebar() {
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Categories
+                                    Categories posts
+                                </Sidebar.Item>
+                            </Link>
+                            <Link to="/dashboard?tab=excersiseCategories">
+                                <Sidebar.Item
+                                    active={tab === 'excersiseCategories'}
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Categories excersises
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=about">

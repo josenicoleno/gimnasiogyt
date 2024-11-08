@@ -10,6 +10,9 @@ import DashCategory from '../components/DashCategory';
 import DashUserEdit from '../components/DashUserEdit';
 import DashAbout from '../components/DashAbout';
 import DashProjects from '../components/DashProjects';
+import { DashExcersise } from '../components/DashExcersise';
+import DashExcersiseCategory from '../components/DashExcersiseCategory';
+
 export default function Dashboard() {
   const location = useLocation();
   const [tab, setTab] = useState('');
@@ -34,6 +37,10 @@ export default function Dashboard() {
       {tab === 'userupdate' && <DashUserEdit />}  
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
+      {/* Excersises */}
+      {tab === 'excersises' && <DashExcersise />}
+      {/* Excersise Categories */}
+      {tab === 'excersiseCategories' && <DashExcersiseCategory />}
       {/* Comments */}
       {tab === 'comments' && <DashComments />}
       {/* Categories */}

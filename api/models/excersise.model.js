@@ -1,26 +1,36 @@
 import mongoose from "mongoose";
 
 const excersiseSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+    userId: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      default:
+        "https://www.hostinger.it/tutorial/wp-content/uploads/sites/24/2023/09/come-scrivere-un-blog-768x334.webp",
+    },
+    category: {
+      type: String,
+      default: "uncategorized",
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  imageUrl: {
-    type: String,
-  },
-  userId: {
-    type: String,
-    required: true,
-  },
-  excersiseCategory: {
-    type: String,
-    required: true,
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 const Excersise = mongoose.model("Excersise", excersiseSchema);
 

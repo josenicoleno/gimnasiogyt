@@ -20,6 +20,9 @@ import ResetPassword from './pages/ResetPassword'
 import VerifyEmail from './pages/VerifyEmail'
 import ContactMe from './pages/ContactMe'
 import Posts from './pages/Posts'
+import CreateExcersise from './pages/CreateExcersise'
+import UpdateExcersise from './pages/UpdateExcersise'
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -44,6 +47,8 @@ export default function App() {
         <Route element={<OnlyAdminPrivateRoutes />}>
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
+          <Route path='/create-excersise' element={<CreateExcersise />} />
+          <Route path='/update-excersise/:excersiseId' element={<UpdateExcersise />} />
         </Route>
         <Route path='/post/:postSlug' element={<Post />} />
 
