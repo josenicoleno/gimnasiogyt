@@ -6,21 +6,21 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 export const DashExcersise = () => {
   const { currentUser } = useSelector(state => state.user)
-  const [userPost, setUserPost] = useState([]);
+  const [excersises, setExcersises] = useState([]);
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [postIdToDelete, setPostIdToDelete] = useState(null)
+  const [excersiseIdToDelete, setExcersiseIdToDelete] = useState(null)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchExcersise = async () => {
       try {
         const res = await fetch(`/api/excersise/getexcersises`)
         /*   const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`) */
         const data = await res.json();
         if (res.ok) {
-          setUserPost(data.posts)
-          if (data.posts.length < 9) {
+          setExcersises(data.excersises)
+          if (data.excersises.length < 9) {
             setShowMore(false)
           }
         }
@@ -29,18 +29,18 @@ export const DashExcersise = () => {
       }
     }
     if (currentUser.isAdmin) {
-      fetchPost();
+      fetchExcersise();
     }
   }, [currentUser._id])
 
   const handleShowMore = async () => {
     try {
-      const startIndex = userPost.length;
+      const startIndex = excersises.length;
       const res = await fetch(`/api/excersise/getexcersises?startIndex=${startIndex}`);
       const data = await res.json();
       if (res.ok) {
-        setUserPost(prev => [...prev, ...data.posts]);
-        if (data.posts.length < 9) {
+        setExcersises(prev => [...prev, ...data.excersises]);
+        if (data.excersises.length < 9) {
           setShowMore(false);
         }
       }
@@ -51,14 +51,14 @@ export const DashExcersise = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`api/excersise/delete/${postIdToDelete}/${currentUser._id}`, {
+      const res = await fetch(`api/excersise/delete/${excersiseIdToDelete}/${currentUser._id}`, {
         method: 'DELETE'
       });
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message)
       } else {
-        setUserPost(prev => prev.filter(post => post._id !== postIdToDelete))
+        setExcersises(prev => prev.filter(excersise => excersise._id !== excersiseIdToDelete))
       }
     } catch (error) {
       console.log(error.message)
@@ -70,7 +70,7 @@ export const DashExcersise = () => {
     e.preventDefault();
     const res = await fetch(`/api/excersise/getexcersises?searchTerm=${search}`);
     const data = await res.json();
-    setUserPost(data.posts);
+    setExcersises(data.excersises);
   }
 
   return (
@@ -98,68 +98,68 @@ export const DashExcersise = () => {
           </form>
         </div>
       </div>
-      {currentUser.isAdmin && userPost.length > 0 ?
+      {currentUser.isAdmin && excersises.length > 0 ?
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>
-            <Table.HeadCell>Date updated</Table.HeadCell>
-            <Table.HeadCell>Image</Table.HeadCell>
-            <Table.HeadCell>Title</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>
-              <span>Edit</span>
-            </Table.HeadCell>
-            <Table.HeadCell>Delete</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {userPost.map(excersise =>
-              <Table.Row key={excersise._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell>{new Date(excersise.updatedAt).toLocaleDateString()}</Table.Cell>
-                <Table.Cell>
-                  <Link to={`/post/${post.slug}`}>
-                    <img
-                      src={excersise.image}
-                      alt={excersise.title}
-                      className="w-20 h-10 object-cover bg-gray-500"
-                    />
-                  </Link>
-                </Table.Cell>
-                <Table.Cell className="line-clamp-1">
-                  <Link to={`/excersise/${excersise.slug}`}>
-                    {excersise.title}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>{excersise.category}</Table.Cell>
-                <Table.Cell>
-                  <Link className="text-teal-500 hover:underline" to={`/update-excersise/${excersise._id}`}>
-                    <span>
-                      Edit
+              <Table.HeadCell>Date updated</Table.HeadCell>
+              <Table.HeadCell>Image</Table.HeadCell>
+              <Table.HeadCell>Title</Table.HeadCell>
+              <Table.HeadCell>Category</Table.HeadCell>
+              <Table.HeadCell>
+                <span>Edit</span>
+              </Table.HeadCell>
+              <Table.HeadCell>Delete</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {excersises.map(excersise =>
+                <Table.Row key={excersise._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Cell>{new Date(excersise.updatedAt).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/excersise/${excersise.slug}`}>
+                      <img
+                        src={excersise.image}
+                        alt={excersise.title}
+                        className="w-20 h-10 object-cover bg-gray-500"
+                      />
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell className="line-clamp-1">
+                    <Link to={`/excersise/${excersise.slug}`}>
+                      {excersise.title}
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>{excersise.category}</Table.Cell>
+                  <Table.Cell>
+                    <Link className="text-teal-500 hover:underline" to={`/update-excersise/${excersise._id}`}>
+                      <span>
+                        Edit
+                      </span>
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span
+                      className="font-medium text-red-500 hover:underline cursor-pointer"
+                      onClick={() => {
+                        setExcersiseIdToDelete(excersise._id)
+                        setShowModal(true)
+                      }}
+                    >
+                      Delete
                     </span>
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <span
-                    className="font-medium text-red-500 hover:underline cursor-pointer"
-                    onClick={() => {
-                      setPostIdToDelete(excersise._id)
-                      setShowModal(true)
-                    }}
-                  >
-                    Delete
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            )}
-          </Table.Body>
-        </Table>
+                  </Table.Cell>
+                </Table.Row>
+              )}
+            </Table.Body>
+          </Table>
           {showMore && <>
-        <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
-          Show more
+            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
+              Show more
             </button>
           </>
-        }
+          }
         </>
-      : <p>You have not posts yet!</p>
+        : <p>You have not excersises yet!</p>
       }
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
         <Modal.Header>Delete excersise?</Modal.Header>

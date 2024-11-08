@@ -21,28 +21,28 @@ export default function UpdateExcersise() {
     });
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
-    const { postId } = useParams();
+    const { excersiseId } = useParams();
     const { currentUser } = useSelector(state => state.user)
     const [cont, setCont] = useState("")
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchPost = async () => {
+        const fetchExcersise = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`/api/post/getposts?postId=${postId}`);
+                const res = await fetch(`/api/excersise/getexcersises?excersiseId=${excersiseId}`);
                 const data = await res.json();
                 if (!res.ok) {
                     setPublishError(data.message);
                     return;
                 }
                 setPublishError(null);
-                setFormData(data.posts[0]);
-                setCont(data.posts[0].content);
+                setFormData(data.excersises[0]);
+                setCont(data.excersises[0].content);
             } catch (error) {
                 console.log(error);
-                setPublishError('Error al cargar el post');
+                setPublishError('Error al cargar el excersise');
             } finally {
                 setLoading(false);
             }
@@ -50,7 +50,7 @@ export default function UpdateExcersise() {
 
         const fetchCategories = async () => {
             try {
-                const res = await fetch('/api/category/');
+                const res = await fetch('/api/excersiseCategory/');
                 const data = await res.json();
                 setCategories(data);
             } catch (error) {
@@ -58,9 +58,9 @@ export default function UpdateExcersise() {
             }
         };
         // Ejecutar ambas funciones
-        fetchPost();
+        fetchExcersise();
         fetchCategories();
-    }, [postId]);
+    }, [excersiseId]);
 
     const handleUploadImage = () => {
         try {

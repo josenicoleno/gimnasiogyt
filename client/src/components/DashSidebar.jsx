@@ -107,7 +107,7 @@ export default function DashSidebar() {
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Categories posts
+                                    Post Categories
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=excersiseCategories">
@@ -116,7 +116,7 @@ export default function DashSidebar() {
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Categories excersises
+                                    Excersise Categories
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=about">

@@ -26,7 +26,7 @@ export const createExcersise = async (req, res, next) => {
   }
 };
 
-export const getPosts = async (req, res, next) => {
+export const getExcersises = async (req, res, next) => {
   const startIndex = parseInt(req.query.startIndex) || 0;
   const limit = parseInt(req.query.limit) || 9;
   const sortDirection = req.query.order === "asc" ? 1 : -1;
@@ -35,7 +35,7 @@ export const getPosts = async (req, res, next) => {
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
-      ...(req.query.postId && { _id: req.query.postId }),
+      ...(req.query.excersiseId && { _id: req.query.excersiseId }),
       ...(req.query.searchTerm && {
         $or: [
           { title: { $regex: req.query.searchTerm, $options: "i" } },
@@ -47,7 +47,7 @@ export const getPosts = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-    const totalPosts = await Excersise.countDocuments();
+    const totalExcersises = await Excersise.countDocuments();
 
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -56,13 +56,13 @@ export const getPosts = async (req, res, next) => {
       now.getDate()
     );
 
-    const totalPostsLastMonth = await Excersise.countDocuments({
+    const totalExcersisesLastMonth = await Excersise.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
     res.status(200).json({
-      posts,
-      totalPosts,
-      totalPostsLastMonth,
+      excersises,
+      totalExcersises,
+      totalExcersisesLastMonth,
     });
   } catch (error) {
     next(error);
@@ -71,11 +71,11 @@ export const getPosts = async (req, res, next) => {
 
 export const deleteExcersise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to delete this post"));
+    return next(errorHandler(403, "You are not allowed to delete this excersise"));
   }
   try {
-    await Excersise.findByIdAndDelete(req.params.postId);
-    res.status(200).json("The post has been deleted");
+    await Excersise.findByIdAndDelete(req.params.excersiseId);
+    res.status(200).json("The excersise has been deleted");
   } catch (error) {
     next(error);
   }
@@ -83,11 +83,11 @@ export const deleteExcersise = async (req, res, next) => {
 
 export const updateExcersise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to delete this post"));
+    return next(errorHandler(403, "You are not allowed to update this excersise"));
   }
   try {
     const updateExcersise = await Excersise.findByIdAndUpdate(
-      req.params.postId,
+      req.params.excersiseId,
       {
         $set: {
           title: req.body.title,
