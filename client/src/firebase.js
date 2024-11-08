@@ -5,15 +5,13 @@ import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_KEY,
-  authDomain: "josenicoleno-blog.firebaseapp.com",
-  projectId: "josenicoleno-blog",
-  storageBucket: "josenicoleno-blog.appspot.com",
-  messagingSenderId: "958387750617",
-  appId: "1:958387750617:web:ed7d54fe122b9c4b5920c8",
-  measurementId: "G-0260457KNB"
+  authDomain: "mern-blog-410211.firebaseapp.com",
+  projectId: "mern-blog-410211",
+  storageBucket: "mern-blog-410211.appspot.com",
+  messagingSenderId: "232583010876",
+  appId: "1:232583010876:web:7902cfd9942c48f8104139"
 };
 
 // Initialize Firebase
