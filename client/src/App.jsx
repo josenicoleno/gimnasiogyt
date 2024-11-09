@@ -22,7 +22,7 @@ import ContactMe from './pages/ContactMe'
 import Posts from './pages/Posts'
 import CreateExcersise from './pages/CreateExcersise'
 import UpdateExcersise from './pages/UpdateExcersise'
-
+import Excersise from './pages/Excersise'
 export default function App() {
   return (
     <BrowserRouter>
@@ -51,7 +51,7 @@ export default function App() {
           <Route path='/update-excersise/:excersiseId' element={<UpdateExcersise />} />
         </Route>
         <Route path='/post/:postSlug' element={<Post />} />
-
+        <Route path='/excersise/:excersiseSlug' element={<Excersise />} />
         {/* 404 */}
         <Route path='*' element={<NotFound />} />
       </Routes>
