@@ -8,8 +8,8 @@ import commentRoutes from "../routes/comment.route.js";
 import categoryRoutes from "../routes/category.route.js";
 import contactRoutes from "../routes/contact.route.js";
 import paramRoutes from "../routes/param.route.js";
-import excersiseCategoryRoutes from "../routes/excersiseCategory.route.js";
-import excersiseRoutes from "../routes/excersise.route.js";
+import excerciseRoutes from "../routes/excercise.route.js";
+import excerciseCategoryRoutes from "../routes/excerciseCategory.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 
@@ -30,8 +30,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/excersiseCategory", excersiseCategoryRoutes);
-app.use("/api/excersise", excersiseRoutes);
+app.use("/api/excerciseCategory", excerciseCategoryRoutes);
+app.use("/api/excercise", excerciseRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/param", paramRoutes);
 

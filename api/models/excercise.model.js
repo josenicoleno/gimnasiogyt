@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const excersiseSchema = new mongoose.Schema({
+const excerciseSchema = new mongoose.Schema({
     userId: {
       type: String,
       required: true,
@@ -32,7 +32,7 @@ const excersiseSchema = new mongoose.Schema({
   { timestamps: true }
 );
 
-const Excersise = mongoose.model("Excersise", excersiseSchema);
+const excercise = mongoose.model("excercise", excerciseSchema);
 
-export default Excersise;
+export default excercise;
 

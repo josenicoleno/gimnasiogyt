@@ -20,9 +20,10 @@ import ResetPassword from './pages/ResetPassword'
 import VerifyEmail from './pages/VerifyEmail'
 import ContactMe from './pages/ContactMe'
 import Posts from './pages/Posts'
-import CreateExcersise from './pages/CreateExcersise'
-import UpdateExcersise from './pages/UpdateExcersise'
-import Excersise from './pages/Excersise'
+import UpdateExcercise from './pages/UpdateExcercise'
+import CreateExcercise from './pages/CreateExcercise'
+import Excercise from './pages/Excercise'
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -47,11 +48,11 @@ export default function App() {
         <Route element={<OnlyAdminPrivateRoutes />}>
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
-          <Route path='/create-excersise' element={<CreateExcersise />} />
-          <Route path='/update-excersise/:excersiseId' element={<UpdateExcersise />} />
+          <Route path='/create-excercise' element={<CreateExcercise />} />
+          <Route path='/update-excercise/:excerciseId' element={<UpdateExcercise />} />
         </Route>
         <Route path='/post/:postSlug' element={<Post />} />
-        <Route path='/excersise/:excersiseSlug' element={<Excersise />} />
+        <Route path='/excercise/:excerciseSlug' element={<Excercise />} />
         {/* 404 */}
         <Route path='*' element={<NotFound />} />
       </Routes>

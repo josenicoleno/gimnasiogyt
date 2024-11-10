@@ -4,23 +4,23 @@ import { Button, Modal, Table, TextInput } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
-export const DashExcersise = () => {
+export const DashExcercise = () => {
   const { currentUser } = useSelector(state => state.user)
-  const [excersises, setExcersises] = useState([]);
+  const [excercises, setExcercises] = useState([]);
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [excersiseIdToDelete, setExcersiseIdToDelete] = useState(null)
+  const [excerciseIdToDelete, setExcerciseIdToDelete] = useState(null)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    const fetchExcersise = async () => {
+    const fetchExcercise = async () => {
       try {
-        const res = await fetch(`/api/excersise/getexcersises`)
+        const res = await fetch(`/api/excercise/getexcercises`)
         /*   const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`) */
         const data = await res.json();
         if (res.ok) {
-          setExcersises(data.excersises)
-          if (data.excersises.length < 9) {
+          setExcercises(data.excercises)
+          if (data.excercises.length < 9) {
             setShowMore(false)
           }
         }
@@ -29,18 +29,18 @@ export const DashExcersise = () => {
       }
     }
     if (currentUser.isAdmin) {
-      fetchExcersise();
+      fetchExcercise();
     }
   }, [currentUser._id])
 
   const handleShowMore = async () => {
     try {
-      const startIndex = excersises.length;
-      const res = await fetch(`/api/excersise/getexcersises?startIndex=${startIndex}`);
+      const startIndex = excercises.length;
+      const res = await fetch(`/api/excercise/getexcercises?startIndex=${startIndex}`);
       const data = await res.json();
       if (res.ok) {
-        setExcersises(prev => [...prev, ...data.excersises]);
-        if (data.excersises.length < 9) {
+        setExcercises(prev => [...prev, ...data.excercises]);
+        if (data.excercises.length < 9) {
           setShowMore(false);
         }
       }
@@ -51,14 +51,14 @@ export const DashExcersise = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`api/excersise/delete/${excersiseIdToDelete}/${currentUser._id}`, {
+      const res = await fetch(`api/excercise/delete/${excerciseIdToDelete}/${currentUser._id}`, {
         method: 'DELETE'
       });
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message)
       } else {
-        setExcersises(prev => prev.filter(excersise => excersise._id !== excersiseIdToDelete))
+        setExcercises(prev => prev.filter(excercise => excercise._id !== excerciseIdToDelete))
       }
     } catch (error) {
       console.log(error.message)
@@ -68,27 +68,27 @@ export const DashExcersise = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const res = await fetch(`/api/excersise/getexcersises?searchTerm=${search}`);
+    const res = await fetch(`/api/excercise/getexcercises?searchTerm=${search}`);
     const data = await res.json();
-    setExcersises(data.excersises);
+    setExcercises(data.excercises);
   }
 
   return (
     <div className="table-auto overflow-x-auto md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 darkscrollbar-thumb-slate-500">
       <div className="flex flex-col gap-4">
-        <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200 self-center'>Excersises</h1>
+        <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200 self-center'>Excercises</h1>
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           {currentUser.isAdmin && (
             <Button outline gradientDuoTone="purpleToPink" >
-              <Link to="/create-excersise">
-                Create Excersise
+              <Link to="/create-excercise">
+                Create Excercise
               </Link>
             </Button>
           )}
           <form className="flex flex-col md:flex-row gap-4" onSubmit={handleSearch}>
             <TextInput
               type="text"
-              placeholder="Search excersise"
+              placeholder="Search excercise"
               className="w-full md:w-auto"
               onChange={e => setSearch(e.target.value)}
             />
@@ -98,7 +98,7 @@ export const DashExcersise = () => {
           </form>
         </div>
       </div>
-      {currentUser.isAdmin && excersises.length > 0 ?
+      {currentUser.isAdmin && excercises.length > 0 ?
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>
@@ -112,26 +112,26 @@ export const DashExcersise = () => {
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {excersises.map(excersise =>
-                <Table.Row key={excersise._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{new Date(excersise.updatedAt).toLocaleDateString()}</Table.Cell>
+              {excercises.map(excercise =>
+                <Table.Row key={excercise._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Cell>{new Date(excercise.updatedAt).toLocaleDateString()}</Table.Cell>
                   <Table.Cell>
-                    <Link to={`/excersise/${excersise.slug}`}>
+                    <Link to={`/excercise/${excercise.slug}`}>
                       <img
-                        src={excersise.image}
-                        alt={excersise.title}
+                        src={excercise.image}
+                        alt={excercise.title}
                         className="w-20 h-10 object-cover bg-gray-500"
                       />
                     </Link>
                   </Table.Cell>
                   <Table.Cell className="line-clamp-1">
-                    <Link to={`/excersise/${excersise.slug}`}>
-                      {excersise.title}
+                    <Link to={`/excercise/${excercise.slug}`}>
+                      {excercise.title}
                     </Link>
                   </Table.Cell>
-                  <Table.Cell>{excersise.category}</Table.Cell>
+                  <Table.Cell>{excercise.category}</Table.Cell>
                   <Table.Cell>
-                    <Link className="text-teal-500 hover:underline" to={`/update-excersise/${excersise._id}`}>
+                    <Link className="text-teal-500 hover:underline" to={`/update-excercise/${excercise._id}`}>
                       <span>
                         Edit
                       </span>
@@ -141,7 +141,7 @@ export const DashExcersise = () => {
                     <span
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                       onClick={() => {
-                        setExcersiseIdToDelete(excersise._id)
+                        setExcerciseIdToDelete(excercise._id)
                         setShowModal(true)
                       }}
                     >
@@ -159,15 +159,15 @@ export const DashExcersise = () => {
           </>
           }
         </>
-        : <p>You have not excersises yet!</p>
+        : <p>You have not excercises yet!</p>
       }
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-        <Modal.Header>Delete excersise?</Modal.Header>
+        <Modal.Header>Delete excercise?</Modal.Header>
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
             <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400 ">
-              Are you sure you want to delete the excersise?
+              Are you sure you want to delete the excercise?
             </h3>
             <div className="flex justify-center gap-4">
               <Button color="failure" onClick={handleDelete}>Yes, I'm sure</Button>

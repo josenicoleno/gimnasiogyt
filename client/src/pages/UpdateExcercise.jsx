@@ -1,34 +1,68 @@
 import { Alert, Button, FileInput, Select, Spinner, TextInput } from "flowbite-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function CreateExcersise() {
+export default function UpdateExcercise() {
     const [file, setFile] = useState(null)
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        _id: '',
+        title: '', // Valor inicial vacío
+        category: 'uncategorized', // Valor inicial definido
+        image: '',
+        content: ''
+    });
     const [publishError, setPublishError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [excersiseCategories, setExcersiseCategories] = useState([]);
     const navigate = useNavigate();
+    const { excerciseId } = useParams();
+    const { currentUser } = useSelector(state => state.user)
+    const [cont, setCont] = useState("")
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchExcersiseCategories = async () => {
-            setLoading(true);
-            const res = await fetch(`/api/excersiseCategory/`);
-            const data = await res.json();
-            setExcersiseCategories(data);
-            setLoading(false);
-        }
-        fetchExcersiseCategories();
-    }, []);
+        const fetchExcercise = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch(`/api/excercise/getexcercises?excerciseId=${excerciseId}`);
+                const data = await res.json();
+                if (!res.ok) {
+                    setPublishError(data.message);
+                    return;
+                }
+                setPublishError(null);
+                setFormData(data.excercises[0]);
+                setCont(data.excercises[0].content);
+            } catch (error) {
+                console.log(error);
+                setPublishError('Error al cargar el excercise');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handledUploadImage = () => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch('/api/excerciseCategory/');
+                const data = await res.json();
+                setCategories(data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        // Ejecutar ambas funciones
+        fetchExcercise();
+        fetchCategories();
+    }, [excerciseId]);
+
+    const handleUploadImage = () => {
         try {
             if (!file) {
                 return setImageUploadError('Please select an image')
@@ -63,17 +97,13 @@ export default function CreateExcersise() {
         }
     }
 
-    const handleChange = e => {
-        setFormData({ ...formData, [e.target.id]: e.target.value })
-    }
-
     const handleSubmit = async e => {
         e.preventDefault();
         setPublishError(null)
         setLoading(true);
         try {
-            const res = await fetch(`/api/excersise/create`, {
-                method: "POST",
+            const res = await fetch(`/api/post/update/${formData._id}/${currentUser._id}`, {
+                method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             })
@@ -84,15 +114,15 @@ export default function CreateExcersise() {
             }
             if (res.ok) {
                 setPublishError(null)
-                navigate(`/excersise/${data.savedExcersise.slug}`)
+                navigate(`/post/${data.slug}`)
+                return
             }
         } catch (error) {
-            setPublishError('Something went wrong!!')
+            setPublishError('Something went wrong ' + error)
         } finally {
             setLoading(false);
-        }   
+        }
     }
-
     return (
         loading ?
             <div className="flex justify-center items-center h-screen">
@@ -100,7 +130,7 @@ export default function CreateExcersise() {
             </div> :
             <div className="p-3 max-w-3xl mx-auto min-h-screen">
                 <h1 className="text-center text-3xl my-7 font-semibold">
-                    Create a excersise
+                    Update post
                 </h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -110,15 +140,18 @@ export default function CreateExcersise() {
                             placeholder="Title"
                             required
                             className="flex-1"
-                            onChange={handleChange}
+                            value={formData.title}
+                            onChange={(e) => { setFormData({ ...formData, title: e.target.value }) }}
                         />
                         <Select
                             id="category"
-                            onChange={handleChange}
-                        >   
+                            itemType="string"
+                            value={formData.category || 'uncategorized'}
+                            onChange={(e) => { setFormData({ ...formData, category: e.target.value }) }}
+                        >
                             <option value="uncategorized">Select a category</option>
-                            {excersiseCategories.map((excersiseCategory) => (
-                                <option key={excersiseCategory._id} value={excersiseCategory.name}>{excersiseCategory.name}</option>
+                            {categories.map((category) => (
+                                <option key={category._id} value={category.name}>{category.name}</option>
                             ))}
                         </Select>
                     </div>
@@ -133,7 +166,7 @@ export default function CreateExcersise() {
                             gradientDuoTone="purpleToBlue"
                             size="sm"
                             outline
-                            onClick={handledUploadImage}
+                            onClick={handleUploadImage}
                             disabled={imageUploadProgress}
                         >
                             {imageUploadProgress
@@ -154,15 +187,16 @@ export default function CreateExcersise() {
                     {formData.image && (
                         <img src={formData.image} alt="upload" className="w-full h-72 object-cover" />
                     )}
-                    <ReactQuill
+                    {<ReactQuill
                         id="content"
                         theme="snow"
                         placeholder="Write something..."
                         className="h-72 mb-12"
                         required
+                        value={formData.content}
                         onChange={value => setFormData({ ...formData, content: value })}
-                    />
-                    <Button type="submit" gradientDuoTone="purpleToPink">Publish</Button>
+                    />}
+                    <Button type="submit" gradientDuoTone="purpleToPink">Update</Button>
                     {publishError &&
                         <Alert color="failure" className="mt-4">
                             {publishError}

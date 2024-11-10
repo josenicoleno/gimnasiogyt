@@ -18,6 +18,7 @@ export default function Search() {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search)
+        const type = urlParams.get('type') || 'excercise'
         const searchTermFromUrl = urlParams.get('searchTerm') || ''
         const sortFromUrl = urlParams.get('sort') || 'desc'
         const categoryFromUrl = urlParams.get('category') || ''
@@ -25,9 +26,9 @@ export default function Search() {
         setSidebarData({
             searchTerm: searchTermFromUrl,
             sort: sortFromUrl,
-            category: categoryFromUrl
+            category: categoryFromUrl,
+            type: type
         })
-
         const fetchPosts = async () => {
             try {
                 setLoading(true)
@@ -45,7 +46,29 @@ export default function Search() {
                 setLoading(false)
             }
         }
-        fetchPosts();
+        const fetchExcercise = async () => {
+            try {
+                setLoading(true)
+                const searchQuery = urlParams.toString();
+                console.log(`/api/excercise/getexcercises?${searchQuery}`)
+                const res = await fetch(`/api/excercise/getexcercises?${searchQuery}`)
+                if (!res.ok) {
+                throw new Error('Error fetching excercises')
+            }
+                const data = await res.json();
+                setPosts(data.excercises)
+                setShowMore(data.excercises.length === 9)
+            } catch (error) {
+                console.error('Error fetching excercises:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        if (type === 'excercise') {
+            fetchExcercise()
+        } else {
+            fetchPosts()
+        }
     }, [location.search])
 
     useEffect(() => {

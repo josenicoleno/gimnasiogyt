@@ -1,8 +1,8 @@
-import ExcersiseCategory from "../models/excersiseCategory.model.js";
+import excerciseCategory from "../models/excerciseCategory.model.js";
 
-export const getExcersiseCategories = async (req, res, next) => {
+export const getExcerciseCategories = async (req, res, next) => {
   try {
-    const categories = await ExcersiseCategory.find({
+    const categories = await excerciseCategory.find({
       ...(req.query.category && { name: req.query.category })}
     );
     res.status(200).json(categories);
@@ -11,20 +11,20 @@ export const getExcersiseCategories = async (req, res, next) => {
   }
 };
 
-export const createExcersiseCategory = async (req, res, next) => {
+export const createExcerciseCategory = async (req, res, next) => {
   try {
-    const newExcersiseCategory = new ExcersiseCategory({ ...req.body });
-    const savedExcersiseCategory = await newExcersiseCategory.save();
-    if (!savedExcersiseCategory) {
+    const newexcerciseCategory = new excerciseCategory({ ...req.body });
+    const savedexcerciseCategory = await newexcerciseCategory.save();
+    if (!savedexcerciseCategory) {
       return next(errorHandler(400, "Failed to create category"));
     }
-    res.status(200).json(savedExcersiseCategory);
+    res.status(200).json(savedexcerciseCategory);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteExcersiseCategory = async (req, res, next) => {
+export const deleteExcerciseCategory = async (req, res, next) => {
   try {
     if (!req.user.isAdmin) {
       return next(errorHandler(401, "Unauthorized"));
@@ -33,20 +33,20 @@ export const deleteExcersiseCategory = async (req, res, next) => {
       return next(errorHandler(400, "Category ID is required"));
     }
     const categoryId = req.params.categoryId;
-    const deletedCategory = await ExcersiseCategory.findByIdAndDelete(categoryId);
+    const deletedCategory = await excerciseCategory.findByIdAndDelete(categoryId);
     res.status(200).json(deletedCategory);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateExcersiseCategory = async (req, res, next) => {
+export const updateExcerciseCategory = async (req, res, next) => {
   try {
     if (!req.params.categoryId) {
       return next(errorHandler(400, "Category ID is required"));
     }
     const categoryId = req.params.categoryId;
-    const category = await ExcersiseCategory.findById(categoryId);
+    const category = await excerciseCategory.findById(categoryId);
     if (!category) {
       return next(errorHandler(404, "Category not found"));
     }
@@ -56,7 +56,7 @@ export const updateExcersiseCategory = async (req, res, next) => {
     if (!req.body.name) {
       return next(errorHandler(400, "Name is required"));
     }
-    const updatedCategory = await ExcersiseCategory.findByIdAndUpdate(
+    const updatedCategory = await excerciseCategory.findByIdAndUpdate(
       categoryId,
       { ...req.body },
       { new: true }

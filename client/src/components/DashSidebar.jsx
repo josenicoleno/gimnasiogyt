@@ -80,14 +80,14 @@ export default function DashSidebar() {
                                 Posts
                             </Sidebar.Item>
                         </Link>
-                        <Link to="/dashboard?tab=excersises">
+                        <Link to="/dashboard?tab=excercises">
                             <Sidebar.Item
-                                active={tab === 'excersises'}
+                                active={tab === 'excercises'}
                                 icon={HiHand}
                                 labelColor='dark'
                                 as='div'
                             >
-                                Excersises
+                                Excercises
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=comments">
@@ -110,13 +110,13 @@ export default function DashSidebar() {
                                     Post Categories
                                 </Sidebar.Item>
                             </Link>
-                            <Link to="/dashboard?tab=excersiseCategories">
+                            <Link to="/dashboard?tab=excerciseCategories">
                                 <Sidebar.Item
-                                    active={tab === 'excersiseCategories'}
+                                    active={tab === 'excerciseCategories'}
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Excersise Categories
+                                    Excercise Categories
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=about">

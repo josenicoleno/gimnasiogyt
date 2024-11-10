@@ -10,8 +10,8 @@ import DashCategory from '../components/DashCategory';
 import DashUserEdit from '../components/DashUserEdit';
 import DashAbout from '../components/DashAbout';
 import DashProjects from '../components/DashProjects';
-import { DashExcersise } from '../components/DashExcersise';
-import DashExcersiseCategory from '../components/DashExcersiseCategory';
+import { DashExcercise } from '../components/DashExcercise';
+import DashExcerciseCategory from '../components/DashExcerciseCategory';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -38,9 +38,9 @@ export default function Dashboard() {
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
       {/* Excersises */}
-      {tab === 'excersises' && <DashExcersise />}
+      {tab === 'excercises' && <DashExcercise />}
       {/* Excersise Categories */}
-      {tab === 'excersiseCategories' && <DashExcersiseCategory />}
+      {tab === 'excerciseCategories' && <DashExcerciseCategory />}
       {/* Comments */}
       {tab === 'comments' && <DashComments />}
       {/* Categories */}

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const excersiseCategorySchema = new mongoose.Schema(
+const excerciseCategorySchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -29,6 +29,6 @@ const excersiseCategorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const ExcersiseCategory = mongoose.model("ExcersiseCategory", excersiseCategorySchema);
+const excerciseCategory = mongoose.model("excerciseCategory", excerciseCategorySchema);
 
-export default ExcersiseCategory;
+export default excerciseCategory;

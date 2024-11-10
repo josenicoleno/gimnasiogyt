@@ -1,7 +1,7 @@
-import Excersise from "../models/excersise.model.js";
+import Excercise from "../models/excercise.model.js";
 import { errorHandler } from "../utils/error.js";
 
-export const createExcersise = async (req, res, next) => {
+export const createExcercise = async (req, res, next) => {
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to create a post"));
   }
@@ -13,29 +13,29 @@ export const createExcersise = async (req, res, next) => {
     .join("-")
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, "");
-  const newExcersise = new Excersise({
+  const newExcercise = new Excercise({
     ...req.body,
     slug,
     userId: req.user.id,
   });
   try {
-    const savedExcersise = await newExcersise.save();
-    res.status(200).json({ savedExcersise });
+    const savedExcercise = await newExcercise.save();
+    res.status(200).json({ savedExcercise });
   } catch (error) {
     next(error);
   }
 };
 
-export const getExcersises = async (req, res, next) => {
+export const getExcercises = async (req, res, next) => {
   const startIndex = parseInt(req.query.startIndex) || 0;
   const limit = parseInt(req.query.limit) || 9;
   const sortDirection = req.query.order === "asc" ? 1 : -1;
   try {
-    const excersises = await Excersise.find({
+    const excercises = await Excercise.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
-      ...(req.query.excersiseId && { _id: req.query.excersiseId }),
+      ...(req.query.excerciseId && { _id: req.query.excerciseId }),
       ...(req.query.searchTerm && {
         $or: [
           { title: { $regex: req.query.searchTerm, $options: "i" } },
@@ -47,7 +47,7 @@ export const getExcersises = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-    const totalExcersises = await Excersise.countDocuments();
+    const totalExcercises = await Excercise.countDocuments();
 
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -56,38 +56,38 @@ export const getExcersises = async (req, res, next) => {
       now.getDate()
     );
 
-    const totalExcersisesLastMonth = await Excersise.countDocuments({
+    const totalExcercisesLastMonth = await Excercise.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
     res.status(200).json({
-      excersises,
-      totalExcersises,
-      totalExcersisesLastMonth,
+      excercises,
+      totalExcercises,
+      totalExcercisesLastMonth,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteExcersise = async (req, res, next) => {
+export const deleteExcercise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to delete this excersise"));
+    return next(errorHandler(403, "You are not allowed to delete this excercise"));
   }
   try {
-    await Excersise.findByIdAndDelete(req.params.excersiseId);
-    res.status(200).json("The excersise has been deleted");
+    await Excercise.findByIdAndDelete(req.params.excerciseId);
+    res.status(200).json("The excercise has been deleted");
   } catch (error) {
     next(error);
   }
 };
 
-export const updateExcersise = async (req, res, next) => {
+export const updateExcercise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to update this excersise"));
+    return next(errorHandler(403, "You are not allowed to update this excercise"));
   }
   try {
-    const updateExcersise = await Excersise.findByIdAndUpdate(
-      req.params.excersiseId,
+    const updateExcercise = await Excercise.findByIdAndUpdate(
+      req.params.excerciseId,
       {
         $set: {
           title: req.body.title,
@@ -98,7 +98,7 @@ export const updateExcersise = async (req, res, next) => {
       },
       { new: true }
     );
-    res.status(200).json(updateExcersise);
+    res.status(200).json(updateExcercise);
   } catch (error) {
     next(error);
   }
