@@ -23,6 +23,7 @@ import Posts from './pages/Posts'
 import UpdateExcercise from './pages/UpdateExcercise'
 import CreateExcercise from './pages/CreateExcercise'
 import Excercise from './pages/Excercise'
+import SearchExcercise from './pages/SearchExcercise'
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/projects' element={<Projects />} />
         <Route path='/search' element={<Search />} />
+        <Route path='/searchExcercise' element={<SearchExcercise />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password/:token' element={<ResetPassword />} />
         <Route path='/verify-email/:token' element={<VerifyEmail />} />
@@ -52,7 +54,7 @@ export default function App() {
           <Route path='/update-excercise/:excerciseId' element={<UpdateExcercise />} />
         </Route>
         <Route path='/post/:postSlug' element={<Post />} />
-        <Route path='/excercise/:excerciseSlug' element={<Excercise />} />
+        <Route path='/excercise/:excerciseSlug' element={<Excercise/>} />
         {/* 404 */}
         <Route path='*' element={<NotFound />} />
       </Routes>

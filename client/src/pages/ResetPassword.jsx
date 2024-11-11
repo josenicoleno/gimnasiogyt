@@ -25,6 +25,7 @@ const ResetPassword = () => {
     }
     const fetchUser = async () => {
       try {
+        setLoading(true)
         const res = await fetch(`/api/auth/reset-password/${token}`)
         const data = await res.json()
         if (!res.ok) {
@@ -35,6 +36,8 @@ const ResetPassword = () => {
       } catch (error) {
         setError(true)
         setErrorMessage(error.message)
+      } finally {
+        setLoading(false)
       }
     }
     fetchUser()
@@ -85,11 +88,11 @@ const ResetPassword = () => {
       <div className="flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1">
-          <Link to='/' className='font-bold dark:text-white text-4xl'>
-            Profe
-            <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-black'>Mariano Nicoleno</span>
+          <Link to='/' className='flex font-bold dark:text-white text-4xl'>
+            <img src="/logo.png" className="w-10 h-10" />
+            <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white'>Gimnasio GyT</span>
           </Link>
-          <p className='text-sm mt-5'>This is my blogpage. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod tenetur eum soluta. Nam animi blanditiis.</p>
+          <p className='text-sm mt-5'>Bienvenido al Gimnasio de tu club</p>
         </div>
         {/* right */}
         <div className="flex-1">
@@ -100,13 +103,13 @@ const ResetPassword = () => {
             </div>
             <div>
               <Label value='Your password' />
-              <TextInput id='password' type='password' placeholder='*********' onChange={handleChange} />
+              <TextInput id='password' type='password' placeholder='*********' onChange={handleChange} disabled={error} />
             </div>
             <div>
               <Label value='Confirm password' />
-              <TextInput id='confirmPassword' type='password' placeholder='*********' onChange={handleChange} />
+              <TextInput id='confirmPassword' type='password' placeholder='*********' onChange={handleChange} disabled={error} />
             </div>
-            <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
+            <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading || error}>
               {loading ? (
                 <>
                   <Spinner size='sm' />

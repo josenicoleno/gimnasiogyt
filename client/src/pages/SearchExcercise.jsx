@@ -3,7 +3,7 @@ import { Button, Select, TextInput, Spinner } from 'flowbite-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import PostCard from '../components/PostCard'
 
-export default function Search() {
+export default function SearchExcercise() {
     const [sidebarData, setSidebarData] = useState({
         searchTerm: '',
         sort: 'desc',
@@ -27,34 +27,34 @@ export default function Search() {
             sort: sortFromUrl,
             category: categoryFromUrl,
         })
-        
-        const fetchPosts = async () => {
+
+        const fetchExcercise = async () => {
             try {
                 setLoading(true)
                 const searchQuery = urlParams.toString();
-                const res = await fetch(`/api/post/getposts?${searchQuery}`)
+                const res = await fetch(`/api/excercise/getexcercises?${searchQuery}`)
                 if (!res.ok) {
-                    throw new Error('Error fetching posts')
+                    throw new Error('Error fetching excercises')
                 }
                 const data = await res.json();
-                setPosts(data.posts)
-                setShowMore(data.posts.length === 9)
+                setPosts(data.excercises)
+                setShowMore(data.excercises.length === 9)
             } catch (error) {
-                console.error('Error fetching posts:', error)
+                console.error('Error fetching excercises:', error)
             } finally {
                 setLoading(false)
             }
         }
-        fetchPosts()
+        fetchExcercise()
     }, [location.search])
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const res = await fetch('/api/category')
+        const fetchExcerciseCategories = async () => {
+            const res = await fetch('/api/excerciseCategory')
             const data = await res.json()
             setCategories(data)
         }
-        fetchCategories()
+        fetchExcerciseCategories()
     }, [])
 
     const handleChange = e => {
@@ -94,7 +94,7 @@ export default function Search() {
         const urlParams = new URLSearchParams(location.search)
         urlParams.set('startIndex', startIndex)
         try {
-            const res = await fetch(`/api/post/getposts?${urlParams}`)
+            const res = await fetch(`/api/excerciseCategory?${urlParams}`)
             const data = await res.json()
             setPosts([...posts, ...data.posts])
             setShowMore(data.posts.length === 9)
@@ -160,7 +160,7 @@ export default function Search() {
             {/* Main */}
             <div className='w-full p-7'>
                 <h1 className='text-3xl font-semibold sm:border-b sm:border-gray-500 pb-4'>
-                    Post results
+                    Excercise results
                 </h1>
                 {loading &&
                     <div className='flex justify-center items-center min-h-screen'>
@@ -168,11 +168,11 @@ export default function Search() {
                     </div>
                 }
                 {!loading && posts.length === 0 &&
-                    <p className='text-xl text-gray-500'>No posts found.</p>
+                    <p className='text-xl text-gray-500'>No excercise found.</p>
                 }
                 <div className='flex flex-wrap gap-4 m-4'>
                     {!loading && posts.map(post => (
-                        <PostCard key={post._id} post={post} type={'post'} />
+                        <PostCard key={post._id} post={post} type={'excercise'} />
                     ))}
                 </div>
                 {showMore &&

@@ -21,7 +21,6 @@ export default function Post() {
                 const data = await res.json();
                 if (!res.ok) {
                     setError(true)
-                    setLoading(false)
                     return
                 }
                 if (res.ok) {
@@ -29,12 +28,12 @@ export default function Post() {
                     const resCategory = await fetch(`/api/category/?category=${data.posts[0].category}`)
                     const dataCategory = await resCategory.json();
                     setTypePost(dataCategory[0]?.type || 'post')
-                    setLoading(false)
                     setError(false)
                 }
             } catch (error) {
                 console.log(error.message)
                 setError(true)
+            } finally {
                 setLoading(false)
             }
         }
