@@ -116,16 +116,9 @@ const Header = () => {
                             Inicio
                         </Link>
                     </Navbar.Link>
-                    {categories.filter(category => category.inMenu).map(category => (
-                        <Navbar.Link key={category._id} active={path === `/search?category=${category.name}`} as={'div'}>
-                            <Link to={`/search?category=${category.name}`}>
-                                {category.name}
-                            </Link>
-                        </Navbar.Link>
-                    ))}
                     <Navbar.Link active={path === "/searchexcercise"} as={'div'}>
                         <Link to='/searchexcercise'>
-                            Excercise
+                            Ejercicios
                         </Link>
                     </Navbar.Link>
                     <Navbar.Link active={path === "/search"} as={'div'}>
@@ -135,7 +128,7 @@ const Header = () => {
                     </Navbar.Link>
                     <Navbar.Link active={path === "/about"} as={'div'}>
                         <Link to='/about'>
-                            Sobre mí
+                            Nosotros
                         </Link>
                     </Navbar.Link>
                     <Navbar.Link active={path === "/projects"} as={'div'}>

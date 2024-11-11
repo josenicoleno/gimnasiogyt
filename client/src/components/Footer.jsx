@@ -1,6 +1,6 @@
 import { Footer } from "flowbite-react"
 import { Link } from "react-router-dom"
-import { BsFacebook, BsInstagram, BsLinkedin } from 'react-icons/bs'
+import { BsFacebook, BsFillPinMapFill, BsInstagram, BsLinkedin } from 'react-icons/bs'
 
 const FooterComponent = () => {
     return (
@@ -14,13 +14,19 @@ const FooterComponent = () => {
                                 Gimnasio GyT
                             </span>
                         </Link>
+                        <p className="flex flex-row  items-center gap-3 mt-3">
+                            <BsFillPinMapFill className="align-bottom" />
+                            <Link to={"https://maps.app.goo.gl/VBZjjzjJA6FMCqqZ7"} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                Vicente Lopez 670, Salta
+                            </Link>
+                        </p>
                     </div>
                     <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
                         <div>
-                            <Footer.Title title="Sobre mí" />
+                            <Footer.Title title="Sobre nosotros" />
                             <Footer.LinkGroup col>
                                 <Footer.Link href="/about">
-                                    Sobre mí
+                                    Nosotros
                                 </Footer.Link>
                             </Footer.LinkGroup>
                         </div>
@@ -61,7 +67,7 @@ const FooterComponent = () => {
                     </div>
                 </div>
             </div>
-        </Footer>
+        </Footer >
     )
 }
 
