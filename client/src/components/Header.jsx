@@ -58,7 +58,7 @@ const Header = () => {
         const searchQuery = urlParams.toString();
         if (!searchQuery)
             return
-        navigate(`/search?${searchQuery}`)
+        navigate(`/searchexcercise?${searchQuery}`)
     }
 
     return (
@@ -73,7 +73,7 @@ const Header = () => {
                 <form onSubmit={handleSubmit}>
                     <TextInput
                         type='text'
-                        placeholder='Buscar...'
+                        placeholder='Buscar ejercicio...'
                         rightIcon={AiOutlineSearch}
                         className='hidden lg:inline'
                         value={searchTerm}

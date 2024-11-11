@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function CallToAction() {
     const navigate = useNavigate()
     const handleClick = () => {
-        navigate('/inscription')
+        navigate('/registration')
     }
 
     return (

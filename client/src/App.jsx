@@ -24,6 +24,8 @@ import UpdateExcercise from './pages/UpdateExcercise'
 import CreateExcercise from './pages/CreateExcercise'
 import Excercise from './pages/Excercise'
 import SearchExcercise from './pages/SearchExcercise'
+import Registration from './pages/Registration'
+import WhatsappButton from './components/WhatsappButton'
 
 export default function App() {
   return (
@@ -44,6 +46,9 @@ export default function App() {
         <Route path='/reset-password/:token' element={<ResetPassword />} />
         <Route path='/verify-email/:token' element={<VerifyEmail />} />
         <Route path='/contact-me' element={<ContactMe />} />
+        <Route path='/post/:postSlug' element={<Post />} />
+        <Route path='/excercise/:excerciseSlug' element={<Excercise />} />
+        <Route path='/registration' element={<Registration />} />
         <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
@@ -53,11 +58,10 @@ export default function App() {
           <Route path='/create-excercise' element={<CreateExcercise />} />
           <Route path='/update-excercise/:excerciseId' element={<UpdateExcercise />} />
         </Route>
-        <Route path='/post/:postSlug' element={<Post />} />
-        <Route path='/excercise/:excerciseSlug' element={<Excercise/>} />
         {/* 404 */}
         <Route path='*' element={<NotFound />} />
       </Routes>
+      <WhatsappButton />
       <Footer />
     </BrowserRouter>
   )
