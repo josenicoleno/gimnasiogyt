@@ -44,8 +44,8 @@ export default function Home() {
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold lg:text-6xl text-blue-400">Gimnasio GyT</h1>
         <p className="text-gray-500 text-xs sm:text-sm">Bienvenido a la web del Gimnasio de tu club. Acá encontrarás información, ejercicios y posteos del gimnasio. También podés ver quiénes somos y contactarte con nosotros.</p>
-        <Link to='/search?type=post' className='text-xs sm:text-sm text-teal-500 hover:underline font-bold'>Ver todos los posts</Link>
-        <Link to='/search' className='text-xs sm:text-sm text-teal-500 hover:underline font-bold'>Ver todos los ejercicios</Link>
+        <Link to='/search' className='text-xs sm:text-sm text-teal-500 hover:underline font-bold'>Ver todos los posts</Link>
+        <Link to='/searchexcercise' className='text-xs sm:text-sm text-teal-500 hover:underline font-bold'>Ver todos los ejercicios</Link>
       </div>
       <div className="p-3 bg-amber-100 dark:bg-slate-700">
         <CallToAcction />
@@ -59,7 +59,7 @@ export default function Home() {
                 <PostCard key={excercise._id} post={excercise} type={'excercise'}/>
               )}
             </div>
-            <Link to={'/search'} className='text-lg text-teal-500 hover:underline text-center'>Ver todos los ejercicios</Link>
+            <Link to={'/searchexcercise'} className='text-lg text-teal-500 hover:underline text-center'>Ver todos los ejercicios</Link>
           </div>
       <div className="flex flex-col max-w-6xl mx-auto p-3 gap-8 py-7">
         {posts &&
@@ -72,7 +72,7 @@ export default function Home() {
                 <PostCard key={post._id} post={post} type={'post'}/>
               )}
             </div>
-            <Link to={'/search?type=post'} className='text-lg text-teal-500 hover:underline text-center'>Ver todos los posts</Link>
+            <Link to={'/search'} className='text-lg text-teal-500 hover:underline text-center'>Ver todos los posts</Link>
           </div>
         }
       </div>

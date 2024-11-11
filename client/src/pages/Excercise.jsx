@@ -24,14 +24,12 @@ export default function Excercise() {
                     setLoading(false)
                     return
                 }
-                if (res.ok) {
-                    setExcercise(data.excercises[0])
-                    const resCategory = await fetch(`/api/excerciseCategory/?category=${data.excercises[0].category}`)
-                    const dataCategory = await resCategory.json();
-                    setTypeExcercise(dataCategory[0]?.type || 'excercise')
-                    setLoading(false)
-                    setError(false)
-                }
+                setExcercise(data.excercises[0])
+                const resCategory = await fetch(`/api/excerciseCategory/?category=${data.excercises[0].category}`)
+                const dataCategory = await resCategory.json();
+                setTypeExcercise(dataCategory[0]?.type || 'excercise')
+                setLoading(false)
+                setError(false)
             } catch (error) {
                 console.log(error.message)
                 setError(true)
@@ -68,7 +66,7 @@ export default function Excercise() {
                     {excercise?.title}
                 </h1>
                 <Link
-                    to={`/search?category=${excercise?.category}`}
+                    to={`/searchexcercise?category=${excercise?.category}`}
                     className="self-center mt-5"
                 >
                     <Button color="gray" pill size="xs">{excercise?.category}</Button>
