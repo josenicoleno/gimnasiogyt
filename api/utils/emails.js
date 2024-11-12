@@ -43,5 +43,10 @@ export const newCommentNotification = async (postTitle) => {
 
 export const sendContactEmail = async (to, name, content) => {
   const html = `<p>${content}</p>`;
-  await sendEmail(to, name, html);
+  await sendEmail(to, `New contact from ${name}`, html);
+};
+
+export const sendRegistrationtEmail = async (to, name, content, phone) => {
+  const html = `<p>${content}</p><p>${phone}</p>`
+  await sendEmail(to, `New registration from ${name}`, html);
 };

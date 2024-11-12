@@ -26,10 +26,15 @@ export default function Registration() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
+            setLoading(true)
             setErrorMessage('')
             setSuccessMessage('')
-            setLoading(true)
-            const res = await fetch('/api/contact/create', {
+            setError(false)
+            if (!name.trim() || !email || !phone.trim()) {
+                setError(true)
+                return setErrorMessage('Todos los campos son obligatorios')
+            }
+            const res = await fetch('/api/contact/create?type=Registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -94,13 +99,41 @@ export default function Registration() {
                                 <p className='text-sm text-gray-500 mb-5'></p>
                                 <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
                                     <Label htmlFor="name">Nombre</Label>
-                                    <TextInput type="text" required id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+                                    <TextInput
+                                        id="name"
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
                                     <Label htmlFor="email" required>Email</Label>
-                                    <TextInput type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <TextInput
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
                                     <Label htmlFor="email" required>Télefono</Label>
-                                    <TextInput type="tel" id="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                    <TextInput
+                                        id="phone"
+                                        type="tel"
+                                        name="phone"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        required
+                                    />
                                     <Label htmlFor="content">Mensaje</Label>
-                                    <textarea className='rounded-md p-2 bg-[rgb(55 65 81 / var(--tw-bg-opacity))] dark:bg-gray-800' rows={6} id="content" name="content" value={content} onChange={(e) => setContent(e.target.value)} />
+                                    <textarea
+                                        className='rounded-md p-2 bg-[rgb(55 65 81 / var(--tw-bg-opacity))] dark:bg-gray-800'
+                                        rows={6}
+                                        id="content"
+                                        name="content"
+                                        value={content}
+                                        onChange={(e) => setContent(e.target.value)}
+                                    />
                                     <Button type="submit" gradientDuoTone='purpleToPink' className='mt-3' outline disabled={loading}>
                                         Enviar mensaje
                                     </Button>

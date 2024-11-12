@@ -19,6 +19,10 @@ const contactSchema = new mongoose.Schema(
     content: {
       type: String,
     },
+    type: {
+      type: ["Contact us", "Registration"],
+      default: "Contact us",
+    },
   },
   { timestamps: true }
 );

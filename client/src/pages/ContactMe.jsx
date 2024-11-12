@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function ContactMe() {
     const { currentUser } = useSelector((state) => state.user)
-    const [message, setMessage] = useState('')
+    const [content, setContent] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [success, setSuccess] = useState(false)
@@ -28,16 +28,21 @@ export default function ContactMe() {
             setLoading(true)
             setErrorMessage('')
             setSuccessMessage('')
+            setError(false)
+            if (!name.trim() || !email || !content.trim()) {
+                setError(true)
+                return setErrorMessage('Todos los campos son obligatorios')
+            }
             const res = await fetch('/api/contact/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId: currentUser?._id || '', name, email, content: message })
+                body: JSON.stringify({ userId: currentUser?._id || '', name, email, content })
             })
             const data = await res.json()
             if (res.status === 201) {
-                setMessage('')
+                setContent('')
                 setSuccess(true)
                 setSuccessMessage(data.message)
             } else {
@@ -87,11 +92,32 @@ export default function ContactMe() {
                                 <p className='text-sm text-gray-500 mb-5'>Si tienes alguna pregunta o comentario, no dudes en contactarme.</p>
                                 <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
                                     <Label htmlFor="name">Nombre</Label>
-                                    <TextInput type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+                                    <TextInput
+                                        id="name"
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
                                     <Label htmlFor="email">Email</Label>
-                                    <TextInput type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                    <Label htmlFor="message">Mensaje</Label>
-                                    <textarea className='rounded-md p-2 bg-[rgb(55 65 81 / var(--tw-bg-opacity))] dark:bg-gray-800' rows={6} id="message" name="message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                                    <TextInput
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                    <Label htmlFor="content">Mensaje</Label>
+                                    <textarea
+                                        id="content"
+                                        name="content"
+                                        className='rounded-md p-2 bg-[rgb(55 65 81 / var(--tw-bg-opacity))] dark:bg-gray-800'
+                                        rows={6}
+                                        value={content} onChange={(e) => setContent(e.target.value)}
+                                        required
+                                    />
                                     <Button type="submit" gradientDuoTone='purpleToPink' className='mt-3' outline disabled={loading}>
                                         Enviar mensaje
                                     </Button>
