@@ -1,7 +1,7 @@
 import { Alert, Button, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { useNavigate } from "react-router-dom";
 
 export default function DashAbout() {
@@ -14,7 +14,7 @@ export default function DashAbout() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (aboutIsNew) {
