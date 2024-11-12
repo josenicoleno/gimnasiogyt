@@ -100,6 +100,16 @@ export default function DashSidebar() {
                                 Comments
                             </Sidebar.Item>
                         </Link>
+                        <Link to="/dashboard?tab=contacts">
+                            <Sidebar.Item
+                                active={tab === 'contacts'}
+                                icon={HiAnnotation}
+                                labelColor='dark'
+                                as='div'
+                            >
+                                Contacts
+                            </Sidebar.Item>
+                        </Link>
                         <Sidebar.Collapse label='Settings' icon={HiAdjustments}>
                             <Link to="/dashboard?tab=categories">
                                 <Sidebar.Item

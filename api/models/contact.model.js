@@ -20,7 +20,7 @@ const contactSchema = new mongoose.Schema(
       type: String,
     },
     type: {
-      type: ["Contact us", "Registration"],
+      type: String,
       default: "Contact us",
     },
   },
