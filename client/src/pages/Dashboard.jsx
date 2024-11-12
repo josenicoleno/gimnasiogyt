@@ -9,7 +9,6 @@ import DashboardComponent from '../components/DashboardComponent';
 import DashCategory from '../components/DashCategory';
 import DashUserEdit from '../components/DashUserEdit';
 import DashAbout from '../components/DashAbout';
-import DashProjects from '../components/DashProjects';
 import { DashExcercise } from '../components/DashExcercise';
 import DashExcerciseCategory from '../components/DashExcerciseCategory';
 
@@ -47,8 +46,6 @@ export default function Dashboard() {
       {tab === 'categories' && <DashCategory />}
       {/* About */}
       {tab === 'about' && <DashAbout />}
-      {/* Projects */}
-      {tab === 'projects' && <DashProjects />}
     </div>
   )
 }

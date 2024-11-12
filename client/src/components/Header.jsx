@@ -131,11 +131,6 @@ const Header = () => {
                             Nosotros
                         </Link>
                     </Navbar.Link>
-                    <Navbar.Link active={path === "/projects"} as={'div'}>
-                        <Link to='/projects'>
-                            Proyectos
-                        </Link>
-                    </Navbar.Link>
                     <Navbar.Link active={path === "/contact-me"} as={'div'}>
                         <Link to='/contact-me'>
                             Contactar
