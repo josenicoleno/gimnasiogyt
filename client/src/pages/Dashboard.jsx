@@ -11,6 +11,7 @@ import DashUserEdit from '../components/DashUserEdit';
 import DashAbout from '../components/DashAbout';
 import { DashExcercise } from '../components/DashExcercise';
 import DashExcerciseCategory from '../components/DashExcerciseCategory';
+import DashWhatsapp from '../components/DashWhatsapp';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -46,6 +47,8 @@ export default function Dashboard() {
       {tab === 'categories' && <DashCategory />}
       {/* About */}
       {tab === 'about' && <DashAbout />}
+      {/* WhatsApp */}
+      {tab === 'whatsapp' && <DashWhatsapp />}
     </div>
   )
 }

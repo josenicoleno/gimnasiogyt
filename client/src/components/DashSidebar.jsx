@@ -128,13 +128,13 @@ export default function DashSidebar() {
                                     About
                                 </Sidebar.Item>
                             </Link>
-                            <Link to="/dashboard?tab=projects">
+                            <Link to="/dashboard?tab=whatsapp">
                                 <Sidebar.Item
-                                    active={tab === 'projects'}
+                                    active={tab === 'whatsapp'}
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Projects
+                                    WhatsApp
                                 </Sidebar.Item>
                             </Link>
                         </Sidebar.Collapse>
