@@ -86,7 +86,7 @@ export default function SearchExcercise() {
         urlParams.set('sort', sidebarData.sort)
 
         const searchQuery = urlParams.toString();
-        navigate(`/search?${searchQuery}`)
+        navigate(`/searchexcercise?${searchQuery}`)
     }
 
     const handleShowMore = async () => {
