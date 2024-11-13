@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { useEffect, useState } from 'react';
-import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiDocumentText, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
+import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiDocumentText, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
@@ -103,7 +103,7 @@ export default function DashSidebar() {
                         <Link to="/dashboard?tab=contacts">
                             <Sidebar.Item
                                 active={tab === 'contacts'}
-                                icon={HiAnnotation}
+                                icon={HiChatAlt2}
                                 labelColor='dark'
                                 as='div'
                             >

@@ -209,9 +209,9 @@ export default function DashCategory() {
                         <Table.HeadCell>Update</Table.HeadCell>
                         <Table.HeadCell>Delete</Table.HeadCell>
                     </Table.Head>
-                    <Table.Body>
+                    <Table.Body className='divide-y'>
                         {categories.map((category) => (
-                            <Table.Row key={category._id}>
+                            <Table.Row key={category._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <Table.Cell>{category.name}</Table.Cell>
                                 <Table.Cell>
                                     {category.image ?

@@ -65,7 +65,7 @@ const Header = () => {
         <div>
             <Navbar className='border-b-2'>
                 <Link to='/' className='flex self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
-                    <img src="/logo.png" className="w-10 h-10" />
+                    <img src="logo.png" className="w-10 h-10" />
                     <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white'>
                         Gimnasio GyT
                     </span>

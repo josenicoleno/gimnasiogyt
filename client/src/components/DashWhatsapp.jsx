@@ -99,7 +99,7 @@ export default function DashWhatsapp() {
   }
 
   return (
-    <div className="flex flex-col w-full gap-4 items-center mt-10">
+    <div className="flex flex-col w-full gap-4 items-center">
       <h1 className="text-2xl font-bold">Whatsapp</h1>
       <form onSubmit={handleSubmit} className="max-w-4xl w-full flex flex-col gap-4">
         <TextInput

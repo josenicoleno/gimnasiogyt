@@ -103,7 +103,7 @@ export default function DashAbout() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full gap-4 items-center justify-center">
+    <div className="flex flex-col w-full gap-4 items-center">
       <h1 className="text-2xl font-bold">About</h1>
       <form onSubmit={handleSubmit} className="max-w-4xl w-full flex flex-col gap-4">
         <TextInput

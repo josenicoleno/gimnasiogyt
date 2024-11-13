@@ -94,7 +94,6 @@ export const createContact = async (req, res, next) => {
   }
 };
 
-
 export const deleteContact = async (req, res, next) => {
   try {
     const contact = await Contact.findById(req.params.contactId);
