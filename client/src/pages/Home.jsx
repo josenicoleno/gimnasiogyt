@@ -80,7 +80,7 @@ export default function Home() {
       {/* Sección Los Profes */}
       <div className="py-10 border-t border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
         <div className="flex flex-col items-center gap-6">
-          <h2 className="text-3xl font-semibold">Los Profesores</h2>
+          <h2 className="text-3xl font-semibold">Los profes</h2>
           <div className="flex flex-wrap gap-8 justify-center">
             {profesores.map(profe => (
               <div key={profe.id} className="relative group w-80 h-96 overflow-hidden rounded-lg shadow-lg">
