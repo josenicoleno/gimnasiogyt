@@ -16,7 +16,7 @@ export default function Home() {
       try {
         const sizeWindow = window.innerWidth;
         let limit = sizeWindow < 768 ? 3 : 6;
-        const res = await fetch(`/api/post/getPosts?limit=${limit}`);
+        const res = await fetch(`/api/post/getPosts?status=Published&limit=${limit}`);
         const data = await res.json();
         setPosts(data.posts);
       } catch (error) {

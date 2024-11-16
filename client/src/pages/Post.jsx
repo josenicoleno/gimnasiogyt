@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button, Spinner } from 'flowbite-react'
 import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
 import PostCard from "../components/PostCard"
+import { useSelector } from "react-redux"
 
 export default function Post() {
     const { postSlug } = useParams()
@@ -12,6 +13,8 @@ export default function Post() {
     const [post, setPost] = useState(null)
     const [recentPost, setRecentPost] = useState(null)
     const [typePost, setTypePost] = useState(null)
+    const { currentUser } = useSelector(state => state.user)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -38,12 +41,14 @@ export default function Post() {
             }
         }
         fetchPost();
+        if (post?.status !== 'Published' && !currentUser?.isAdmin)
+            navigate("/")
     }, [postSlug])
 
     useEffect(() => {
         const recentPost = async () => {
             try {
-                const res = await fetch(`/api/post/getposts?limit=3`)
+                const res = await fetch(`/api/post/getposts?limit=3&status=Published`)
                 if (res.ok) {
                     const data = await res.json();
                     setRecentPost(data.posts)

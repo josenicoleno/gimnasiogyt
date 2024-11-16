@@ -1,12 +1,11 @@
-import { Alert, Button, Label, Spinner, TextInput, Toast } from "flowbite-react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CallToAction from "../components/CallToAction";
 import { Link } from "react-router-dom";
 
 export default function Registration() {
     const { currentUser } = useSelector((state) => state.user)
-    const [content, setContent] = useState('')
+    const [content, setContent] = useState('Hola! Quiero inscribirme en el Gym del Club')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
@@ -21,6 +20,7 @@ export default function Registration() {
             setName(currentUser.username)
             setEmail(currentUser.email)
         }
+        document?.getElementById(currentUser ? 'phone' : 'name').focus();
     }, [currentUser])
 
     const handleSubmit = async (e) => {

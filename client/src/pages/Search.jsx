@@ -32,7 +32,7 @@ export default function Search() {
             try {
                 setLoading(true)
                 const searchQuery = urlParams.toString();
-                const res = await fetch(`/api/post/getposts?${searchQuery}`)
+                const res = await fetch(`/api/post/getposts?status=Published&${searchQuery}`)
                 if (!res.ok) {
                     throw new Error('Error fetching posts')
                 }
@@ -94,7 +94,7 @@ export default function Search() {
         const urlParams = new URLSearchParams(location.search)
         urlParams.set('startIndex', startIndex)
         try {
-            const res = await fetch(`/api/post/getposts?${urlParams}`)
+            const res = await fetch(`/api/post/getposts?status=Published&${urlParams}`)
             const data = await res.json()
             setPosts([...posts, ...data.posts])
             setShowMore(data.posts.length === 9)

@@ -106,6 +106,7 @@ export const DashPosts = () => {
             <Table.HeadCell>Image</Table.HeadCell>
             <Table.HeadCell>Title</Table.HeadCell>
             <Table.HeadCell>Category</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
             <Table.HeadCell>
               <span>Edit</span>
             </Table.HeadCell>
@@ -113,7 +114,7 @@ export const DashPosts = () => {
           </Table.Head>
           <Table.Body className="divide-y">
             {userPost.map(post =>
-              <Table.Row key={post._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <Table.Row key={post._id} className={post.status ==='Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600" }>
                 <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={`/post/${post.slug}`}>
@@ -130,6 +131,7 @@ export const DashPosts = () => {
                   </Link>
                 </Table.Cell>
                 <Table.Cell>{post.category}</Table.Cell>
+                <Table.Cell>{post.status}</Table.Cell>
                 <Table.Cell>
                   <Link className="text-teal-500 hover:underline" to={`/update-post/${post._id}`}>
                     <span>
