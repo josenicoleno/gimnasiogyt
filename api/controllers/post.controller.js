@@ -33,6 +33,7 @@ export const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
+      ...(req.query.status && { status: req.query.status }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
@@ -92,6 +93,7 @@ export const updatePost = async (req, res, next) => {
         $set: {
           title: req.body.title,
           content: req.body.content,
+          status: req.body.status,
           category: req.body.category,
           image: req.body.image,
         },

@@ -34,6 +34,7 @@ export const getExcercises = async (req, res, next) => {
     const excercises = await Excercise.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
+      ...(req.query.status && { category: req.query.status }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.excerciseId && { _id: req.query.excerciseId }),
       ...(req.query.searchTerm && {
@@ -71,7 +72,9 @@ export const getExcercises = async (req, res, next) => {
 
 export const deleteExcercise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to delete this excercise"));
+    return next(
+      errorHandler(403, "You are not allowed to delete this excercise")
+    );
   }
   try {
     await Excercise.findByIdAndDelete(req.params.excerciseId);
@@ -83,7 +86,9 @@ export const deleteExcercise = async (req, res, next) => {
 
 export const updateExcercise = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to update this excercise"));
+    return next(
+      errorHandler(403, "You are not allowed to update this excercise")
+    );
   }
   try {
     const updateExcercise = await Excercise.findByIdAndUpdate(
@@ -92,6 +97,7 @@ export const updateExcercise = async (req, res, next) => {
         $set: {
           title: req.body.title,
           content: req.body.content,
+          status: req.body.status,
           category: req.body.category,
           image: req.body.image,
         },
