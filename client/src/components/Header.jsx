@@ -66,7 +66,7 @@ const Header = () => {
             <Navbar className='border-b-2'>
                 <Link to='/' className='flex self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
                     <img src="logo.png" className="w-10 h-10" />
-                    <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white'>
+                    <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white content-center'>
                         Gimnasio GyT
                     </span>
                 </Link>
@@ -81,7 +81,7 @@ const Header = () => {
                     />
                 </form>
                 <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-                    <Link to='/search'>
+                    <Link to='/searchexcercise'>
                         <AiOutlineSearch />
                     </Link>
                 </Button>

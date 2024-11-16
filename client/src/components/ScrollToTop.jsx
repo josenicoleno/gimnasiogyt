@@ -28,7 +28,7 @@ export default function ScrollToTop() {
             onClick={scrollToTop}
             data-twe-ripple-init
             data-twe-ripple-color="light"
-            className="!fixed bottom-5 end-24 rounded-full bg-gray-600 p-3 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-gray-700 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-800 active:shadow-lg"
+            className="!fixed bottom-5 end-24 z-50 rounded-full bg-gray-600 p-3 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-gray-700 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-800 active:shadow-lg"
         >
             <span className="[&>svg]:w-4">
                 <svg
