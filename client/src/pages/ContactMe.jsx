@@ -20,6 +20,7 @@ export default function ContactMe() {
             setName(currentUser.username)
             setEmail(currentUser.email)
         }
+        document?.getElementById(currentUser ? 'content' : 'name').focus();
     }, [currentUser])
 
     const handleSubmit = async (e) => {
@@ -94,8 +95,8 @@ export default function ContactMe() {
                                     <Label htmlFor="name">Nombre</Label>
                                     <TextInput
                                         id="name"
-                                        type="text"
                                         name="name"
+                                        type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         required

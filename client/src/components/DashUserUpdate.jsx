@@ -15,9 +15,9 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function DashUserEdit() {
+export default function DashUserUpdate() {
     const { currentUser, error, loading } = useSelector(state => state.user);
     const [imageFile, setImageFile] = useState(null);
     const [imageFileUrl, setImageFileUrl] = useState(null);

@@ -17,7 +17,8 @@ export default function UpdatePost() {
         title: '', // Valor inicial vacío
         category: 'uncategorized', // Valor inicial definido
         image: '',
-        content: ''
+        content: '',
+        status: 'Draft'
     });
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
@@ -143,6 +144,8 @@ export default function UpdatePost() {
                             value={formData.title}
                             onChange={(e) => { setFormData({ ...formData, title: e.target.value }) }}
                         />
+                    </div>
+                    <div className="flex flex-col gap-4 sm:flex-row ">
                         <Select
                             id="category"
                             itemType="string"
@@ -154,6 +157,18 @@ export default function UpdatePost() {
                                 <option key={category._id} value={category.name}>{category.name}</option>
                             ))}
                         </Select>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="Published"
+                                className="w-4 h-4  dark:bg-gray-600"
+                                checked={formData.status === "Published"}
+                                onChange={e => setFormData({ ...formData, status: e.target.checked ? "Published" : "Draft" })}
+                            />
+                            <label htmlFor="Published" className="text-sm">
+                                Published?
+                            </label>
+                        </div>
                     </div>
                     <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
                         <FileInput

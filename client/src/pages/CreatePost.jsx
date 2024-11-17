@@ -11,7 +11,7 @@ export default function CreatePost() {
     const [file, setFile] = useState(null)
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({ status: "Published" });
     const [publishError, setPublishError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -90,7 +90,7 @@ export default function CreatePost() {
             setPublishError('Something went wrong!!')
         } finally {
             setLoading(false);
-        }   
+        }
     }
 
     return (
@@ -112,15 +112,29 @@ export default function CreatePost() {
                             className="flex-1"
                             onChange={handleChange}
                         />
+                    </div>
+                    <div className="flex flex-col gap-4 sm:flex-row">
                         <Select
                             id="category"
                             onChange={handleChange}
-                        >   
+                        >
                             <option value="uncategorized">Select a category</option>
                             {categories.map((category) => (
                                 <option key={category._id} value={category.name}>{category.name}</option>
                             ))}
                         </Select>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="Published"
+                                className="w-4 h-4  dark:bg-gray-600"
+                                checked={formData.status === "Published"}
+                                onChange={e => setFormData({ ...formData, status: e.target.checked ? "Published" : "Draft" })}
+                            />
+                            <label htmlFor="Published" className="text-sm">
+                                Published?
+                            </label>
+                        </div>
                     </div>
                     <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
                         <FileInput
