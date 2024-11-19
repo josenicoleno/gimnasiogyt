@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import CategoryList from '../components/CategoryList';
 import { profesores } from '/public/profesores';
+import ExcerciseCard from '../components/ExcerciseCard';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -103,7 +104,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios recientes</h2>
             <div className="flex flex-wrap gap-5 justify-center">
               {excercises.map((excercise) => (
-                <PostCard key={excercise._id} post={excercise} type="excercise" />
+                <ExcerciseCard key={excercise._id} excercise={excercise} />
               ))}
             </div>
             <Link to="/searchexcercise" className="block text-lg text-teal-500 hover:underline text-center mt-4">Ver todos los ejercicios</Link>

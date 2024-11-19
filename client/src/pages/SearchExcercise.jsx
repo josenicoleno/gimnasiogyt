@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Select, TextInput, Spinner } from 'flowbite-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import PostCard from '../components/PostCard'
+import ExcerciseCard from '../components/ExcerciseCard'
 
 export default function SearchExcercise() {
     const [sidebarData, setSidebarData] = useState({
@@ -11,7 +11,7 @@ export default function SearchExcercise() {
     })
     const [loading, setLoading] = useState(false)
     const location = useLocation();
-    const [posts, setPosts] = useState([])
+    const [excercises, setExcercises] = useState([])
     const [showMore, setShowMore] = useState(false)
     const [categories, setCategories] = useState([])
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function SearchExcercise() {
                     throw new Error('Error fetching excercises')
                 }
                 const data = await res.json();
-                setPosts(data.excercises)
+                setExcercises(data.excercises)
                 setShowMore(data.excercises.length === 9)
             } catch (error) {
                 console.error('Error fetching excercises:', error)
@@ -90,16 +90,16 @@ export default function SearchExcercise() {
     }
 
     const handleShowMore = async () => {
-        const startIndex = posts.length;
+        const startIndex = excercises.length;
         const urlParams = new URLSearchParams(location.search)
         urlParams.set('startIndex', startIndex)
         try {
             const res = await fetch(`/api/excerciseCategory?${urlParams}`)
             const data = await res.json()
-            setPosts([...posts, ...data.posts])
-            setShowMore(data.posts.length === 9)
+            setExcercises([...excercises, ...data.excercises])
+            setShowMore(data.excercises.length === 9)
         } catch (error) {
-            console.error('Error fetching more posts:', error)
+            console.error('Error fetching more excercises:', error)
         }
     }
 
@@ -167,12 +167,12 @@ export default function SearchExcercise() {
                         <Spinner size='xl' />
                     </div>
                 }
-                {!loading && posts.length === 0 &&
+                {!loading && excercises.length === 0 &&
                     <p className='text-xl text-gray-500'>No excercise found.</p>
                 }
                 <div className='flex flex-wrap gap-4 m-4'>
-                    {!loading && posts.map(post => (
-                        <PostCard key={post._id} post={post} type={'excercise'} />
+                    {!loading && excercises.map(excercise => (
+                        <ExcerciseCard key={excercise._id} excercise={excercise} />
                     ))}
                 </div>
                 {showMore &&

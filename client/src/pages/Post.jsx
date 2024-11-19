@@ -26,13 +26,15 @@ export default function Post() {
                     setError(true)
                     return
                 }
-                if (res.ok) {
-                    setPost(data.posts[0])
-                    const resCategory = await fetch(`/api/category/?category=${data.posts[0].category}`)
-                    const dataCategory = await resCategory.json();
-                    setTypePost(dataCategory[0]?.type || 'post')
-                    setError(false)
+                setPost(data.posts[0])
+                if (data.posts[0].status !== 'Published' && (!currentUser || !currentUser.isAdmin)) {
+                    navigate('/')
+                    return
                 }
+                const resCategory = await fetch(`/api/category/?category=${data.posts[0].category}`)
+                const dataCategory = await resCategory.json();
+                setTypePost(dataCategory[0]?.type || 'post')
+                setError(false)
             } catch (error) {
                 console.log(error.message)
                 setError(true)
@@ -40,25 +42,23 @@ export default function Post() {
                 setLoading(false)
             }
         }
-        fetchPost();
-        if (post?.status !== 'Published' && !currentUser?.isAdmin)
-            navigate("/")
-    }, [postSlug])
-
-    useEffect(() => {
-        const recentPost = async () => {
+        const fetchRecentPost = async () => {
             try {
-                const res = await fetch(`/api/post/getposts?limit=3&status=Published`)
+                const res = await fetch(`/api/post/getposts?limit=4&status=Published`)
                 if (res.ok) {
                     const data = await res.json();
-                    setRecentPost(data.posts)
+                    setRecentPost(data.posts
+                        .filter(post => post.slug !== postSlug)
+                        .slice(0, 3)
+                    )
                 }
             } catch (error) {
                 console.log(error.message)
             }
         }
-        recentPost();
-    }, [])
+        fetchRecentPost();
+        fetchPost();
+    }, [postSlug])
 
     if (loading)
         return <div className="flex justify-center items-center min-h-screen">
@@ -114,7 +114,7 @@ export default function Post() {
             </div>
             <CommentSection postId={post?._id} />
             <div className="flex flex-col justify-center items-center max-w-8xl p-3">
-                <h1 className="text-xl mt-5">Recent articles</h1>
+                <h1 className="text-xl mt-5">Recent posts</h1>
                 <div className="flex flex-wrap gap-5 mt-5 justify-center">
                     {recentPost &&
                         recentPost.map(post => <PostCard key={post._id} post={post} />)

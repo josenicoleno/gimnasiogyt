@@ -36,10 +36,6 @@ export default function Excercise() {
                 setLoading(false)
             }
         }
-        fetchExcercise();
-    }, [excerciseSlug])
-
-    useEffect(() => {
         const recentExcercise = async () => {
             try {
                 const res = await fetch(`/api/excercise/getexcercises?limit=3`)
@@ -52,7 +48,8 @@ export default function Excercise() {
             }
         }
         recentExcercise();
-    }, [])
+        fetchExcercise();
+    }, [excerciseSlug])
 
     if (loading)
         return <div className="flex justify-center items-center min-h-screen">
