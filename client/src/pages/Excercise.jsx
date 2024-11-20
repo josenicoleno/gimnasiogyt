@@ -103,7 +103,7 @@ export default function Excercise() {
             <div className="max-w-4xl mx-auto w-full">
                 <CallToAction />
             </div>
-            <CommentSection excerciseId={excercise?._id} />
+            <CommentSection postId={excercise?._id} />
             <div className="flex flex-col justify-center items-center max-w-8xl p-3">
                 <h1 className="text-xl mt-5">Exercises similares</h1>
                 <div className="flex flex-wrap gap-5 mt-5 justify-center">

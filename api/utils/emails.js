@@ -16,7 +16,7 @@ export const sendResetPasswordEmail = async (to, resetToken) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimansio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -39,7 +39,7 @@ export const sendPasswordHasBeenReset = async (to, username) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -60,7 +60,7 @@ export const sendVerificationEmail = async (to, verificationToken) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -82,7 +82,7 @@ export const sendWelcomeEmail = async (to, username) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -102,7 +102,7 @@ export const newCommentNotification = async (postTitle) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -110,7 +110,7 @@ export const newCommentNotification = async (postTitle) => {
         <p style="color: #666; margin-bottom: 30px;">Se ha publicado un nuevo comentario en la entrada: "${postTitle}"</p>
       </div>
       <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
-        <p>&copy; ${new Date().getFullYear()} Gimnasio GyT. Todos los derechos reservados.</p>
+        <p>&copy; ${new Date().getFullYear()}Gimnasio GyT. Todos los derechos reservados.</p>
       </div>
     </div>
   `;
@@ -123,7 +123,7 @@ export const sendContactEmail = async (to, name, content) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -143,7 +143,7 @@ export const sendRegistrationtEmail = async (to, name, content, phone) => {
   const html = `
     <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 150px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
         <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
       </div>
       <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
