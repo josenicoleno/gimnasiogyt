@@ -25,8 +25,15 @@ import Excercise from './pages/Excercise'
 import SearchExcercise from './pages/SearchExcercise'
 import Registration from './pages/Registration'
 import WhatsappButton from './components/WhatsappButton'
+import './utils/fetchInterceptor';
+import { setupAxiosInterceptors } from './utils/axiosInterceptor';
+import { useEffect } from 'react';
 
 export default function App() {
+  useEffect(() => {
+    setupAxiosInterceptors();
+  }, []);
+
   return (
     <BrowserRouter>
       <ScrollToTop />

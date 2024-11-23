@@ -167,7 +167,7 @@ export const forgotPassword = async (req, res, next) => {
       return next(errorHandler(404, "User not found"));
     }
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "1h",
     });
     await sendResetPasswordEmail(email, resetToken);
     user.resetPasswordToken = resetToken;
