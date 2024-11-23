@@ -6,7 +6,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { app } from "../firebase";
 import { CircularProgressbar } from 'react-circular-progressbar';
 
-export default function DashExcerciseCategory() {
+export default function DashExerciseCategory() {
     const [formData, setFormData] = useState({
         name: "",
         inMenu: false,
@@ -29,16 +29,16 @@ export default function DashExcerciseCategory() {
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
 
     useEffect(() => {
-        const fetchExcerciseCategories = async () => {
+        const fetchExerciseCategories = async () => {
             try {
-                const res = await fetch(`/api/excerciseCategory/`);
+                const res = await fetch(`/api/exerciseCategory/`);
                 const data = await res.json();
                 setCategories(data);
             } catch (error) {
                 console.log(error);
             }
         }
-        fetchExcerciseCategories();
+        fetchExerciseCategories();
     }, []);
 
     const handleSubmitCreateCategory = async (e) => {
@@ -50,7 +50,7 @@ export default function DashExcerciseCategory() {
         }
         try {
             setLoading(true);
-            const res = await fetch(`/api/excerciseCategory/create`, {
+            const res = await fetch(`/api/exerciseCategory/create`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -86,7 +86,7 @@ export default function DashExcerciseCategory() {
         }
         try {
             setLoading(true);
-            const res = await fetch(`/api/excerciseCategory/update/${categoryIdToUpdate}`, {
+            const res = await fetch(`/api/exerciseCategory/update/${categoryIdToUpdate}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -119,7 +119,7 @@ export default function DashExcerciseCategory() {
         setSuccessMessage("");
         setError(null);
         try {
-            const res = await fetch(`/api/excerciseCategory/delete/${categoryIdToDelete}`,
+            const res = await fetch(`/api/exerciseCategory/delete/${categoryIdToDelete}`,
                 {
                     method: "DELETE",
                 }
@@ -178,7 +178,7 @@ export default function DashExcerciseCategory() {
         <div className="table-auto overflow-x-auto md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 darkscrollbar-thumb-slate-500">
             <div className="flex flex-col flex-1 gap-4 mb-4">
                 <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200 self-center'>
-                    Excercise Categories
+                    Exercise Categories
                 </h1>
                 <Button
                     className='self-start'

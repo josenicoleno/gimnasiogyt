@@ -8,11 +8,12 @@ import { DashComments } from '../components/DashComment';
 import DashboardComponent from '../components/DashboardComponent';
 import DashCategory from '../components/DashCategory';
 import DashAbout from '../components/DashAbout';
-import { DashExcercise } from '../components/DashExcercise';
-import DashExcerciseCategory from '../components/DashExcerciseCategory';
+import { DashExercise } from '../components/DashExercise';
+import DashExerciseCategory from '../components/DashExerciseCategory';
 import DashWhatsapp from '../components/DashWhatsapp';
 import { DashContact } from '../components/DashContact';
 import DashUserUpdate from '../components/DashUserUpdate';
+import { DashPersonalRecord } from '../components/DashPersonalRecord';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -33,15 +34,16 @@ export default function Dashboard() {
       {tab === 'dashboard' && <DashboardComponent />}
       {/* Profile */}
       {tab === 'profile' && <DashProfile />}
+      {/* Personal records */}
+      {tab === 'personalRecords' && <DashPersonalRecord />}
       {/* Users */}
       {tab === 'users' && <DashUser />}
-      {tab === 'userupdate' && <DashUserUpdate />}  
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
       {/* Excersises */}
-      {tab === 'excercises' && <DashExcercise />}
+      {tab === 'exercises' && <DashExercise />}
       {/* Excersise Categories */}
-      {tab === 'excerciseCategories' && <DashExcerciseCategory />}
+      {tab === 'exerciseCategories' && <DashExerciseCategory />}
       {/* Comments */}
       {tab === 'comments' && <DashComments />}
       {/* Categories */}

@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { useEffect, useState } from 'react';
-import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiDocumentText, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
+import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiDocumentText, HiFire, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
@@ -47,6 +47,16 @@ export default function DashSidebar() {
                             as='div'
                         >
                             Profile
+                        </Sidebar.Item>
+                    </Link>
+                    <Link to="/dashboard?tab=personalRecords">
+                        <Sidebar.Item
+                            active={tab === 'personalRecords'}
+                            icon={HiFire}
+                            labelColor='dark'
+                            as='div'
+                        >
+                            Mis marcas
                         </Sidebar.Item>
                     </Link>
                     {currentUser.isAdmin && <>

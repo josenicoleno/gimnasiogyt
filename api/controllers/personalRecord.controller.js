@@ -1,4 +1,5 @@
-import PersonalRecord from "../models/personalRecords.model.js";
+import PersonalRecord from "../models/personalRecord.model.js";
+import Exercise from "../models/exercise.model.js";
 
 // Crear un nuevo registro personal
 export const createPersonalRecord = async (req, res) => {
@@ -8,12 +9,9 @@ export const createPersonalRecord = async (req, res) => {
   try {
     // Validar que el usuario logueado puede actuar como admin o crear para sí mismo
     if (!req.user.isAdmin && req.user.id !== userId) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "No tienes permisos para crear registros para otros usuarios",
-        });
+      return res.status(403).json({
+        message: "No tienes permisos para crear registros para otros usuarios",
+      });
     }
 
     const newRecord = new PersonalRecord({
@@ -33,7 +31,6 @@ export const createPersonalRecord = async (req, res) => {
 export const getPersonalRecords = async (req, res) => {
   const { userId } = req.params;
   const { exerciseId } = req.query;
-
   try {
     // Validar que el usuario puede acceder a los datos (propios o si es admin)
     if (!req.user.isAdmin && req.user.id !== userId) {
@@ -45,12 +42,30 @@ export const getPersonalRecords = async (req, res) => {
     const filter = { userId };
     if (exerciseId) filter.exerciseId = exerciseId;
 
-    const records = await PersonalRecord.find(filter).populate(
-      "exerciseId createdBy",
-      "username email"
-    );
+    const recordsBeforePopulate = await PersonalRecord.find(filter);
+    console.log('Registros antes del populate:', recordsBeforePopulate);
+
+    const ejerciciosPrueba = await Exercise.find({
+      _id: { 
+        $in: [
+          '6734fd6cce39dc958bf12322',
+          '6734fe0ace39dc958bf1233b'
+        ]
+      }
+    });
+    console.log('Ejercicios encontrados:', ejerciciosPrueba);
+
+    const records = await PersonalRecord.find(filter)
+      .populate("userId", "username")
+      .populate("createdBy", "username")
+      .populate("exerciseId", "title")
+      .exec();
+
+    console.log('Registros después del populate:', records);
+
     res.status(200).json(records);
   } catch (error) {
+    console.error('Error completo:', error);
     res.status(500).json({ message: error.message });
   }
 };

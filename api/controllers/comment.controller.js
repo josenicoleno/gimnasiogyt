@@ -2,7 +2,7 @@ import { errorHandler } from "../utils/error.js";
 import Comment from "../models/comment.model.js";
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
-import Excercise from "../models/excercise.model.js";
+import Exercise from "../models/exercise.model.js";
 import { newCommentNotification } from "../utils/emails.js";
 
 export const createComment = async (req, res, next) => {
@@ -24,8 +24,8 @@ export const createComment = async (req, res, next) => {
     if (post) 
       await newCommentNotification(post.title);
     else {
-      const excercise = await Excercise.findById(postId);
-      await newCommentNotification(excercise.title);
+      const exercise = await Exercise.findById(postId);
+      await newCommentNotification(exercise.title);
     }
   } catch (error) {
     next(error);

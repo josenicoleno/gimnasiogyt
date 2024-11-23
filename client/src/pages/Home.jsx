@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import CategoryList from '../components/CategoryList';
 import { profesores } from '/public/profesores';
-import ExcerciseCard from '../components/ExcerciseCard';
+import ExerciseCard from '../components/ExerciseCard'
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
-  const [excercises, setExcercises] = useState([]);
+  const [exercises, setExercises] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [excercisesCategories, setExcercisesCategories] = useState([]);
+  const [exercisesCategories, setExercisesCategories] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -25,13 +25,13 @@ export default function Home() {
       }
     };
 
-    const fetchExcercises = async () => {
+    const fetchExercises = async () => {
       try {
         const sizeWindow = window.innerWidth;
         let limit = sizeWindow < 768 ? 3 : 6;
-        const res = await fetch(`/api/excercise/getExcercises?limit=${limit}`);
+        const res = await fetch(`/api/exercise/getExercises?limit=${limit}`);
         const data = await res.json();
-        setExcercises(data.excercises);
+        setExercises(data.exercises);
       } catch (error) {
         console.log(error.message);
       }
@@ -45,20 +45,20 @@ export default function Home() {
         console.log(error);
       }
     }
-    const fetchExcerciseCategories = async () => {
+    const fetchExerciseCategories = async () => {
       try {
-        const res = await fetch(`/api/excerciseCategory/`);
+        const res = await fetch(`/api/exerciseCategory/`);
         const data = await res.json();
-        setExcercisesCategories(data);
+        setExercisesCategories(data);
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchExcerciseCategories();
+    fetchExerciseCategories();
     fetchCategories();
     fetchPosts();
-    fetchExcercises();
+    fetchExercises();
   }, []);
 
   return (
@@ -69,7 +69,7 @@ export default function Home() {
         <p className="text-gray-500 dark:text-gray-300 text-xs sm:text-sm">Bienvenido a la web del Gimnasio de tu club...</p>
         <div className="flex gap-4">
           <Link to='/search' className='text-sm text-teal-500 hover:underline font-bold'>Ver todos los posts</Link>
-          <Link to='/searchexcercise' className='text-sm text-teal-500 hover:underline font-bold'>Ver todos los ejercicios</Link>
+          <Link to='/searchexercise' className='text-sm text-teal-500 hover:underline font-bold'>Ver todos los ejercicios</Link>
         </div>
       </div>
 
@@ -98,20 +98,20 @@ export default function Home() {
       </div>
 
       {/* Sección Ejercicios */}
-      {excercises.length &&
+      {exercises.length &&
         <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-3/4">
             <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios recientes</h2>
             <div className="flex flex-wrap gap-5 justify-center">
-              {excercises.map((excercise) => (
-                <ExcerciseCard key={excercise._id} excercise={excercise} />
+              {exercises.map((exercise) => (
+                <ExerciseCard key={exercise._id} exercise={exercise} />
               ))}
             </div>
-            <Link to="/searchexcercise" className="block text-lg text-teal-500 hover:underline text-center mt-4">Ver todos los ejercicios</Link>
+            <Link to="/searchexercise" className="block text-lg text-teal-500 hover:underline text-center mt-4">Ver todos los ejercicios</Link>
           </div>
 
           {/* Sidebar de Categorías de Ejercicios */}
-          <CategoryList categories={excercisesCategories} title={"Categorías de Ejercicios"} type={"excercise"} />
+          <CategoryList categories={exercisesCategories} title={"Categorías de Ejercicios"} type={"exercise"} />
         </div>
       }
 

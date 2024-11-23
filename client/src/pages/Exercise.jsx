@@ -3,31 +3,31 @@ import { Link, useParams } from "react-router-dom"
 import { Button, Spinner } from 'flowbite-react'
 import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
-import ExcerciseCard from "../components/ExcerciseCard"
+import ExerciseCard from "../components/ExerciseCard"
 
-export default function Excercise() {
-    const { excerciseSlug } = useParams()
+export default function Exercise() {
+    const { exerciseSlug } = useParams()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
-    const [excercise, setExcercise] = useState(null)
-    const [recentExcercise, setRecentExcercise] = useState(null)
-    const [typeExcercise, setTypeExcercise] = useState(null)
+    const [exercise, setExercise] = useState(null)
+    const [recentExercise, setRecentExercise] = useState(null)
+    const [typeExercise, setTypeExercise] = useState(null)
 
     useEffect(() => {
-        const fetchExcercise = async () => {
+        const fetchExercise = async () => {
             try {
                 setLoading(true)
-                const res = await fetch(`/api/excercise/getexcercises?slug=${excerciseSlug}`)
+                const res = await fetch(`/api/exercise/getexercises?slug=${exerciseSlug}`)
                 const data = await res.json();
                 if (!res.ok) {
                     setError(true)
                     setLoading(false)
                     return
                 }
-                setExcercise(data.excercises[0])
-                const resCategory = await fetch(`/api/excerciseCategory/?category=${data.excercises[0].category}`)
+                setExercise(data.exercises[0])
+                const resCategory = await fetch(`/api/exerciseCategory/?category=${data.exercises[0].category}`)
                 const dataCategory = await resCategory.json();
-                setTypeExcercise(dataCategory[0]?.type || 'excercise')
+                setTypeExercise(dataCategory[0]?.type || 'exercise')
                 setLoading(false)
                 setError(false)
             } catch (error) {
@@ -36,20 +36,20 @@ export default function Excercise() {
                 setLoading(false)
             }
         }
-        const recentExcercise = async () => {
+        const recentExercise = async () => {
             try {
-                const res = await fetch(`/api/excercise/getexcercises?limit=3`)
+                const res = await fetch(`/api/exercise/getexercises?limit=3`)
                 if (res.ok) {
                     const data = await res.json();
-                    setRecentExcercise(data.excercises.filter(excercise => excercise.slug !== excerciseSlug))
+                    setRecentExercise(data.exercises.filter(exercise => exercise.slug !== exerciseSlug))
                 }
             } catch (error) {
                 console.log(error.message)
             }
         }
-        recentExcercise();
-        fetchExcercise();
-    }, [excerciseSlug])
+        recentExercise();
+        fetchExercise();
+    }, [exerciseSlug])
 
     if (loading)
         return <div className="flex justify-center items-center min-h-screen">
@@ -60,26 +60,26 @@ export default function Excercise() {
         <>
             <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
                 <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
-                    {excercise?.title}
+                    {exercise?.title}
                 </h1>
                 <Link
-                    to={`/searchexcercise?category=${excercise?.category}`}
+                    to={`/searchexercise?category=${exercise?.category}`}
                     className="self-center mt-5"
                 >
-                    <Button color="gray" pill size="xs">{excercise?.category}</Button>
+                    <Button color="gray" pill size="xs">{exercise?.category}</Button>
                 </Link>
-                {typeExcercise === 'excercise' ?
+                {typeExercise === 'exercise' ?
                     <>
                         <img
-                            src={excercise?.image}
-                            alt={excercise?.title}
+                            src={exercise?.image}
+                            alt={exercise?.title}
                             className="mt-10 p-3 max-h-[600px] w-full object-cover"
                         />
                         <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
-                            <span>{excercise && new Date(excercise.createdAt).toLocaleDateString()}</span>
-                            <span className="italic">{excercise && (excercise.content.length / 1000 + 1).toFixed(0)} mins read</span>
+                            <span>{exercise && new Date(exercise.createdAt).toLocaleDateString()}</span>
+                            <span className="italic">{exercise && (exercise.content.length / 1000 + 1).toFixed(0)} mins read</span>
                         </div>
-                        <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: excercise?.content }}>
+                        <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: exercise?.content }}>
                         </div>
                     </>
                     :
@@ -87,14 +87,14 @@ export default function Excercise() {
                         {/* Columna de imagen */}
                         <div className="flex justify-center items-start">
                             <img
-                                src={excercise?.image}
-                                alt={excercise?.title}
+                                src={exercise?.image}
+                                alt={exercise?.title}
                                 className="max-h-[600px] w-full object-cover rounded-lg"
                             />
                         </div>
                         {/* Columna de contenido */}
                         <div className="flex flex-col space-y-4">
-                            <div className="post-content" dangerouslySetInnerHTML={{ __html: excercise?.content }}>
+                            <div className="post-content" dangerouslySetInnerHTML={{ __html: exercise?.content }}>
                             </div>
                         </div>
                     </div>
@@ -103,12 +103,12 @@ export default function Excercise() {
             <div className="max-w-4xl mx-auto w-full">
                 <CallToAction />
             </div>
-            <CommentSection postId={excercise?._id} />
+            <CommentSection postId={exercise?._id} />
             <div className="flex flex-col justify-center items-center max-w-8xl p-3">
                 <h1 className="text-xl mt-5">Exercises similares</h1>
                 <div className="flex flex-wrap gap-5 mt-5 justify-center">
-                    {recentExcercise &&
-                        recentExcercise.map(excercise => <ExcerciseCard key={excercise._id} excercise={excercise} />)
+                    {recentExercise &&
+                        recentExercise.map(exercise => <ExerciseCard key={exercise._id} exercise={exercise} />)
                     }
                 </div>
             </div>

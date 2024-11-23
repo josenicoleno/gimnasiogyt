@@ -19,15 +19,16 @@ import ResetPassword from './pages/ResetPassword'
 import VerifyEmail from './pages/VerifyEmail'
 import ContactMe from './pages/ContactMe'
 import Posts from './pages/Posts'
-import UpdateExcercise from './pages/UpdateExcercise'
-import CreateExcercise from './pages/CreateExcercise'
-import Excercise from './pages/Excercise'
-import SearchExcercise from './pages/SearchExcercise'
+import UpdateExercise from './pages/UpdateExercise'
+import CreateExercise from './pages/CreateExercise'
+import Exercise from './pages/Exercise'
+import SearchExercise from './pages/SearchExercise'
 import Registration from './pages/Registration'
 import WhatsappButton from './components/WhatsappButton'
 import './utils/fetchInterceptor';
 import { setupAxiosInterceptors } from './utils/axiosInterceptor';
 import { useEffect } from 'react';
+import CreatePersonalRecord from './pages/CreatePersonalRecord'
 
 export default function App() {
   useEffect(() => {
@@ -46,22 +47,23 @@ export default function App() {
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/search' element={<Search />} />
-        <Route path='/searchExcercise' element={<SearchExcercise />} />
+        <Route path='/searchExercise' element={<SearchExercise />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password/:token' element={<ResetPassword />} />
         <Route path='/verify-email/:token' element={<VerifyEmail />} />
         <Route path='/contact-me' element={<ContactMe />} />
         <Route path='/post/:postSlug' element={<Post />} />
-        <Route path='/excercise/:excerciseSlug' element={<Excercise />} />
+        <Route path='/exercise/:exerciseSlug' element={<Exercise />} />
         <Route path='/registration' element={<Registration />} />
         <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/create-personal-record' element={<CreatePersonalRecord />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoutes />}>
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
-          <Route path='/create-excercise' element={<CreateExcercise />} />
-          <Route path='/update-excercise/:excerciseId' element={<UpdateExcercise />} />
+          <Route path='/create-exercise' element={<CreateExercise />} />
+          <Route path='/update-exercise/:exerciseId' element={<UpdateExercise />} />
         </Route>
         {/* 404 */}
         <Route path='*' element={<NotFound />} />

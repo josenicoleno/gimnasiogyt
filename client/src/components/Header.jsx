@@ -58,7 +58,7 @@ const Header = () => {
         const searchQuery = urlParams.toString();
         if (!searchQuery)
             return
-        navigate(`/searchexcercise?${searchQuery}`)
+        navigate(`/searchexercise?${searchQuery}`)
     }
 
     return (
@@ -81,7 +81,7 @@ const Header = () => {
                     />
                 </form>
                 <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-                    <Link to='/searchexcercise'>
+                    <Link to='/searchexercise'>
                         <AiOutlineSearch />
                     </Link>
                 </Button>
@@ -116,8 +116,8 @@ const Header = () => {
                             Inicio
                         </Link>
                     </Navbar.Link>
-                    <Navbar.Link active={path === "/searchexcercise"} as={'div'}>
-                        <Link to='/searchexcercise'>
+                    <Navbar.Link active={path === "/searchexercise"} as={'div'}>
+                        <Link to='/searchexercise'>
                             Ejercicios
                         </Link>
                     </Navbar.Link>
