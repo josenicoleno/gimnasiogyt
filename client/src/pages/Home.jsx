@@ -32,6 +32,7 @@ export default function Home() {
         const res = await fetch(`/api/exercise/getExercises?limit=${limit}`);
         const data = await res.json();
         setExercises(data.exercises);
+
       } catch (error) {
         console.log(error.message);
       }
