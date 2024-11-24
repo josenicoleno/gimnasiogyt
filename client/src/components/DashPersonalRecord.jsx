@@ -15,7 +15,7 @@ export const DashPersonalRecord = () => {
     useEffect(() => {
         const fetchPersonalRecord = async () => {
             try {
-                const res = await fetch(`/api/personalRecords/${currentUser._id}`)
+                const res = await fetch(`/api/personalRecord/${currentUser._id}`)
                 const data = await res.json();
                 if (res.ok) {
                     setRecords(data)
@@ -32,7 +32,7 @@ export const DashPersonalRecord = () => {
 
     const handleShowMore = async () => {
         try {
-            const startIndex = personalRecord.length;
+            const startIndex = records.length;
             const res = await fetch(`/api/personalRecord/getpersonalRecords?startIndex=${startIndex}`);
             const data = await res.json();
             if (res.ok) {
@@ -45,22 +45,22 @@ export const DashPersonalRecord = () => {
             console.log(error.message)
         }
     }
-    console.log(records)
     const handleDelete = async () => {
         try {
-            const res = await fetch(`api/personalRecord/delete/${personalRecordIdToDelete}/${currentUser._id}`, {
+            const res = await fetch(`/api/personalRecord/${personalRecordIdToDelete}`, {
                 method: 'DELETE'
             });
             const data = await res.json();
             if (!res.ok) {
                 console.log(data.message)
             } else {
-                setPersonalRecord(prev => prev.filter(personalRecord => personalRecord._id !== personalRecordIdToDelete))
+                setRecords(prev => prev.filter(personalRecord => personalRecord._id !== personalRecordIdToDelete))
             }
         } catch (error) {
             console.log(error.message)
+        } finally {
+            setShowModal(false)
         }
-        setShowModal(false)
     }
 
     const handleSearch = async (e) => {
@@ -97,34 +97,41 @@ export const DashPersonalRecord = () => {
                 <>
                     <Table hoverable className="shadow-md">
                         <Table.Head>
-                            <Table.HeadCell>Date</Table.HeadCell>
-                            <Table.HeadCell>Exercise</Table.HeadCell>
-                            <Table.HeadCell>Weight</Table.HeadCell>
-                            <Table.HeadCell>Reps</Table.HeadCell>
-                            <Table.HeadCell>Created By</Table.HeadCell>
-                            {currentUser.isAdmin && <Table.HeadCell>Delete</Table.HeadCell>}
+                            <Table.HeadCell>Fecha</Table.HeadCell>
+                            {currentUser.isAdmin && <Table.HeadCell>Username</Table.HeadCell>}
+                            <Table.HeadCell>Ejercicio</Table.HeadCell>
+                            <Table.HeadCell>Peso</Table.HeadCell>
+                            <Table.HeadCell>Repes</Table.HeadCell>
+                            <Table.HeadCell>Creado por</Table.HeadCell>
+                            <Table.HeadCell>Delete</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
                             {records.map((record) => (
                                 <Table.Row key={record._id}>
                                     <Table.Cell>{new Date(record.date).toLocaleDateString()}</Table.Cell>
-                                    <Table.Cell>{record.exerciseId.title}</Table.Cell>
+                                    {currentUser.isAdmin && <Table.Cell>{record.userId.username}</Table.Cell>}
+                                    <Table.Cell className="flex flex-row gap-5 items-center">
+                                        <img
+                                            src={record.exerciseId.image}
+                                            alt={record.exerciseId.title}
+                                            className="w-14 h-10 object-cover rounded-lg bg-gray-500"
+                                        />
+                                        {record.exerciseId.title}
+                                    </Table.Cell>
                                     <Table.Cell>{record.record.weight} kg</Table.Cell>
                                     <Table.Cell>{record.record.reps}</Table.Cell>
                                     <Table.Cell>{record.createdBy.username}</Table.Cell>
-                                    {currentUser.isAdmin && (
-                                        <Table.Cell>
-                                            <span
-                                                className="font-medium text-red-500 hover:underline cursor-pointer"
-                                                onClick={() => {
-                                                    setPersonalRecordIdToDelete(record._id);
-                                                    setShowModal(true);
-                                                }}
-                                            >
-                                                Delete
-                                            </span>
-                                        </Table.Cell>
-                                    )}
+                                    <Table.Cell>
+                                        <span
+                                            className="font-medium text-red-500 hover:underline cursor-pointer"
+                                            onClick={() => {
+                                                setPersonalRecordIdToDelete(record._id);
+                                                setShowModal(true);
+                                            }}
+                                        >
+                                            Delete
+                                        </span>
+                                    </Table.Cell>
                                 </Table.Row>
                             ))}
                         </Table.Body>
@@ -139,12 +146,12 @@ export const DashPersonalRecord = () => {
                 : <p>Aún no tienes marcas!</p>
             }
             <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-                <Modal.Header>Delete post?</Modal.Header>
+                <Modal.Header>Delete record?</Modal.Header>
                 <Modal.Body>
                     <div className="text-center">
                         <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
                         <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400 ">
-                            Are you sure you want to delete the post?
+                            Are you sure you want to delete this record?
                         </h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" onClick={handleDelete}>Yes, I'm sure</Button>

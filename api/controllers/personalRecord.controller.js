@@ -42,30 +42,15 @@ export const getPersonalRecords = async (req, res) => {
     const filter = { userId };
     if (exerciseId) filter.exerciseId = exerciseId;
 
-    const recordsBeforePopulate = await PersonalRecord.find(filter);
-    console.log('Registros antes del populate:', recordsBeforePopulate);
-
-    const ejerciciosPrueba = await Exercise.find({
-      _id: { 
-        $in: [
-          '6734fd6cce39dc958bf12322',
-          '6734fe0ace39dc958bf1233b'
-        ]
-      }
-    });
-    console.log('Ejercicios encontrados:', ejerciciosPrueba);
-
     const records = await PersonalRecord.find(filter)
       .populate("userId", "username")
       .populate("createdBy", "username")
-      .populate("exerciseId", "title")
+      .populate("exerciseId", "title image")
       .exec();
-
-    console.log('Registros después del populate:', records);
 
     res.status(200).json(records);
   } catch (error) {
-    console.error('Error completo:', error);
+    console.error("Error completo:", error);
     res.status(500).json({ message: error.message });
   }
 };

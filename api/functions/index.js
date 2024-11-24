@@ -35,7 +35,7 @@ app.use("/api/exerciseCategory", exerciseCategoryRoutes);
 app.use("/api/exercise", exerciseRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/param", paramRoutes);
-app.use("/api/personalRecords", personalRecordRoutes);
+app.use("/api/personalRecord", personalRecordRoutes);
 
 const __html = path.resolve();
 app.use(express.static(path.join(__html, "/client/dist")));

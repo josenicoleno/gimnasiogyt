@@ -28,12 +28,10 @@ export default function CreatePersonalRecord() {
                 const exerciseRes = await fetch("/api/exercise/getexercises")
                 const exerciseData = await exerciseRes.json();
                 setExercises(exerciseData.exercises);
-                console.log(exerciseData)
-
                 if (currentUser.isAdmin) {
                     const usersRes = await fetch("/api/user/getusers?sort=asc")
                     const userData = await usersRes.json();
-                    setUsers(userData);
+                    setUsers(userData.users);
                 } else {
                 }
             } catch (error) {
@@ -56,7 +54,7 @@ export default function CreatePersonalRecord() {
         setPublishError(null);
         setLoading(true);
         try {
-            const res = await fetch(`/api/personalRecords`, {
+            const res = await fetch(`/api/personalRecord`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -73,7 +71,7 @@ export default function CreatePersonalRecord() {
                 setPublishError(data.message);
                 return;
             }
-            navigate("/personal-records");
+            navigate("/dashboard?tab=personalRecords");
         } catch (error) {
             setPublishError("Error saving the record");
         } finally {
@@ -128,7 +126,7 @@ export default function CreatePersonalRecord() {
 
                     {currentUser.isAdmin && (
                         <Select
-                            id="createdFor"
+                            id="userId"
                             required
                             onChange={handleChange}
                             value={formData.createdFor}
