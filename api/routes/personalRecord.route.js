@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/", verifyToken, createPersonalRecord);
 
 // Obtener todos los registros de un usuario (opcional: filtrar por ejercicio)
-router.get("/:userId", verifyToken, getPersonalRecords);
+router.get("/", verifyToken, getPersonalRecords);
 
 // Actualizar un registro personal
 router.put("/:id", verifyToken, updatePersonalRecord);

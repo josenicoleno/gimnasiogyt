@@ -11,6 +11,7 @@ export default function CreatePersonalRecord() {
         weight: "", // en kg o lb
         reps: "", // repeticiones
         time: "", // tiempo si aplica
+        date: new Date().toISOString().split('T')[0],
         createdBy: currentUser._id,
     });
 
@@ -42,7 +43,6 @@ export default function CreatePersonalRecord() {
         };
         fetchData();
     }, [currentUser.isAdmin]);
-
     // Manejo de cambios en los inputs
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -102,7 +102,6 @@ export default function CreatePersonalRecord() {
                             </option>
                         ))}
                     </Select>
-
                     <div className="flex flex-col gap-4 sm:flex-row">
                         <TextInput
                             id="weight"
@@ -123,13 +122,23 @@ export default function CreatePersonalRecord() {
                             onChange={handleChange}
                         />
                     </div>
+                    <div className="flex flex-col gap-4 sm:flex-row">
+                        <TextInput
+                            id="date"
+                            type="date"
+                            required
+                            className="flex-1"
+                            value={formData.date}
+                            onChange={handleChange}
+                        />
+                    </div>
 
                     {currentUser.isAdmin && (
                         <Select
                             id="userId"
                             required
                             onChange={handleChange}
-                            value={formData.createdFor}
+                            value={formData.userId}
                         >
                             <option value="">Selecciona un usuario</option>
                             {users.map((user) => (

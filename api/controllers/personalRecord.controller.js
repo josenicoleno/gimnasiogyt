@@ -3,7 +3,7 @@ import Exercise from "../models/exercise.model.js";
 
 // Crear un nuevo registro personal
 export const createPersonalRecord = async (req, res) => {
-  const { userId, exerciseId, record } = req.body;
+  const { userId, exerciseId, record, date } = req.body;
   const createdBy = req.user.id; // Usuario que está creando el registro
 
   try {
@@ -18,6 +18,7 @@ export const createPersonalRecord = async (req, res) => {
       userId,
       exerciseId,
       record,
+      date,
       createdBy,
     });
     await newRecord.save();
@@ -29,7 +30,10 @@ export const createPersonalRecord = async (req, res) => {
 
 // Obtener todos los registros de un usuario (opcional: filtrar por ejercicio)
 export const getPersonalRecords = async (req, res) => {
-  const { userId } = req.params;
+  const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 9;
+  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const { userId } = req.query;
   const { exerciseId } = req.query;
   try {
     // Validar que el usuario puede acceder a los datos (propios o si es admin)
@@ -39,13 +43,17 @@ export const getPersonalRecords = async (req, res) => {
         .json({ message: "No tienes permisos para acceder a estos registros" });
     }
 
-    const filter = { userId };
+    const filter = {};
+    if (userId) filter.userId = userId;
     if (exerciseId) filter.exerciseId = exerciseId;
 
     const records = await PersonalRecord.find(filter)
       .populate("userId", "username")
       .populate("createdBy", "username")
-      .populate("exerciseId", "title image")
+      .populate("exerciseId", "title image slug")
+      .sort({ date: sortDirection })
+      .skip(startIndex)
+      .limit(limit)
       .exec();
 
     res.status(200).json(records);
