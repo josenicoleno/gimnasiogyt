@@ -75,6 +75,7 @@ export const DashPersonalRecord = () => {
             console.log(error.message)
         }
     }
+
     const handleDelete = async () => {
         try {
             const res = await fetch(`/api/personalRecord/${personalRecordIdToDelete}`, {
@@ -175,28 +176,27 @@ export const DashPersonalRecord = () => {
                                 <Table.HeadCell>Peso</Table.HeadCell>
                                 <Table.HeadCell>Repes</Table.HeadCell>
                                 <Table.HeadCell>Creado por</Table.HeadCell>
-                                <Table.HeadCell>Delete</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {records.map((record, i) => (
-                                    <Table.Row key={record._id}>
+                                    <Table.Row key={i}>
                                         <Table.Cell>{i + 1}</Table.Cell>
                                         <Table.Cell>{new Date(record.date).toLocaleDateString()}</Table.Cell>
-                                        {currentUser.isAdmin && <Table.Cell>{record.userId.username}</Table.Cell>}
+                                        {currentUser.isAdmin && <Table.Cell>{record.username}</Table.Cell>}
                                         <Table.Cell>
-                                            <Link to={`/exercise/${record.exerciseId.slug}`} className="flex flex-row gap-3 items-center">
+                                            <Link to={`/exercise/${record.slug}`} className="flex flex-row gap-3 items-center">
                                                 <img
-                                                    src={record.exerciseId.image}
-                                                    alt={record.exerciseId.title}
+                                                    src={record.image}
+                                                    alt={record.title}
                                                     className="w-14 h-10 object-cover rounded-lg bg-gray-500"
                                                 />
-                                                {record.exerciseId.title}
+                                                {record.title}
                                             </Link>
                                         </Table.Cell>
                                         <Table.Cell>{record.record.weight} kg</Table.Cell>
                                         <Table.Cell>{record.record.reps}</Table.Cell>
-                                        <Table.Cell>{record.createdBy.username}</Table.Cell>
-                                        <Table.Cell>
+                                        <Table.Cell>{record.createdByUsername}</Table.Cell>
+                                        {/* <Table.Cell>
                                             <span
                                                 className="font-medium text-red-500 hover:underline cursor-pointer"
                                                 onClick={() => {
@@ -206,7 +206,7 @@ export const DashPersonalRecord = () => {
                                             >
                                                 Delete
                                             </span>
-                                        </Table.Cell>
+                                        </Table.Cell> */}
                                     </Table.Row>
                                 ))}
                             </Table.Body>
