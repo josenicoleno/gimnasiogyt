@@ -58,6 +58,7 @@ export default function App() {
         <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/create-personal-record' element={<CreatePersonalRecord />} />
+          <Route path='/update-personal-record/:recordId' element={<CreatePersonalRecord />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoutes />}>
           <Route path='/create-post' element={<CreatePost />} />

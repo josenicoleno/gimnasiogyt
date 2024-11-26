@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
-import { Button, Modal, Select, Spinner, Table, TextInput } from 'flowbite-react'
+import { Button, Modal, Select, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { HiArrowCircleDown, HiOutlineExclamationCircle } from 'react-icons/hi'
 
 export const DashPersonalRecord = () => {
     const { currentUser } = useSelector(state => state.user)
@@ -17,6 +17,11 @@ export const DashPersonalRecord = () => {
     const [showMore, setShowMore] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [personalRecordIdToDelete, setPersonalRecordIdToDelete] = useState(null)
+    const [exerciseHistory, setExerciseHistory] = useState([]);
+    const [historyVisible, setHistoryVisible] = useState({});
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [username, setUsername] = useState("");
+    const [exerciseName, setExerciseName] = useState("");
 
     useEffect(() => {
         const fetchPersonalRecord = async () => {
@@ -85,7 +90,7 @@ export const DashPersonalRecord = () => {
             if (!res.ok) {
                 console.log(data.message)
             } else {
-                setRecords(prev => prev.filter(personalRecord => personalRecord._id !== personalRecordIdToDelete))
+                setExerciseHistory(prev => prev.filter(exerciseHistory => exerciseHistory._id !== personalRecordIdToDelete))
             }
         } catch (error) {
             console.log(error.message)
@@ -118,6 +123,25 @@ export const DashPersonalRecord = () => {
     }
     const handleChange = (e) => {
         setFilterData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
+    const fetchExerciseHistory = async (exerciseId, userId) => {
+        try {
+            const res = await fetch(`/api/personalRecord/personalRecords?exerciseId=${exerciseId}&userId=${userId}`);
+            const data = await res.json();
+            if (res.ok) {
+                setExerciseHistory(data);
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    const handleShowHistory = (username, exerciseName, exerciseId, userId) => {
+        setUsername(username);
+        setExerciseName(exerciseName);
+        fetchExerciseHistory(exerciseId, userId);
+        setShowHistoryModal(true);
     };
 
     return (
@@ -176,6 +200,7 @@ export const DashPersonalRecord = () => {
                                 <Table.HeadCell>Peso</Table.HeadCell>
                                 <Table.HeadCell>Repes</Table.HeadCell>
                                 <Table.HeadCell>Creado por</Table.HeadCell>
+                                <Table.HeadCell>Cant. registros</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {records.map((record, i) => (
@@ -196,17 +221,12 @@ export const DashPersonalRecord = () => {
                                         <Table.Cell>{record.record.weight} kg</Table.Cell>
                                         <Table.Cell>{record.record.reps}</Table.Cell>
                                         <Table.Cell>{record.createdByUsername}</Table.Cell>
-                                        {/* <Table.Cell>
-                                            <span
-                                                className="font-medium text-red-500 hover:underline cursor-pointer"
-                                                onClick={() => {
-                                                    setPersonalRecordIdToDelete(record._id);
-                                                    setShowModal(true);
-                                                }}
-                                            >
-                                                Delete
-                                            </span>
-                                        </Table.Cell> */}
+                                        <Table.Cell className="flex flex-row items-center justify-center gap-2">
+                                            {record.count}
+                                            {record.count > 1 &&
+                                                <HiArrowCircleDown onClick={() => handleShowHistory(record.username, record.title, record.exerciseId, record.userId)} className="w-8 h-8 hover:cursor-pointer" />
+                                            }
+                                        </Table.Cell>
                                     </Table.Row>
                                 ))}
                             </Table.Body>
@@ -232,6 +252,45 @@ export const DashPersonalRecord = () => {
                             <Button color="failure" onClick={handleDelete}>Yes, I'm sure</Button>
                             <Button color='gray' onClick={() => setShowModal(false)}>No, I'm not.</Button>
                         </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showHistoryModal} onClose={() => setShowHistoryModal(false)} size='xl'>
+                <Modal.Header>Historial de {username + ' ' + exerciseName}</Modal.Header>
+                <Modal.Body>
+                    <div className="overflow-x-auto">
+                        <Table hoverable className="shadow-md">
+                            <Table.Head>
+                                <Table.HeadCell>#</Table.HeadCell>
+                                <Table.HeadCell>Fecha</Table.HeadCell>
+                                <Table.HeadCell>Peso</Table.HeadCell>
+                                <Table.HeadCell>Repes</Table.HeadCell>
+                                <Table.HeadCell>Borrar</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
+                                {exerciseHistory.map((historyRecord, index) => (
+                                    <Table.Row key={index}>
+                                        <Table.Cell>{index + 1}</Table.Cell>
+                                        <Table.Cell>{new Date(historyRecord.date).toLocaleDateString()}</Table.Cell>
+                                        <Table.Cell>{historyRecord.record.weight} kg</Table.Cell>
+                                        <Table.Cell>{historyRecord.record.reps}</Table.Cell>
+                                         <Table.Cell>
+                                            <span
+                                                className="font-medium text-red-500 hover:underline 
+                                                cursor-pointer"
+                                                onClick={() => {
+                                                    setPersonalRecordIdToDelete(historyRecord._id);
+                                                    setShowModal(true);
+                                                }}
+                                            >
+                                                Delete
+                                            </span>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table>
                     </div>
                 </Modal.Body>
             </Modal>

@@ -2,6 +2,7 @@ import express from "express";
 import {
   createPersonalRecord,
   deletePersonalRecord,
+  getAllPersonalRecords,
   getPersonalRecords,
   updatePersonalRecord,
 } from "../controllers/personalRecord.controller.js";
@@ -14,6 +15,7 @@ router.post("/", verifyToken, createPersonalRecord);
 
 // Obtener todos los registros de un usuario (opcional: filtrar por ejercicio)
 router.get("/", verifyToken, getPersonalRecords);
+router.get("/personalRecords", verifyToken, getAllPersonalRecords);
 
 // Actualizar un registro personal
 router.put("/:id", verifyToken, updatePersonalRecord);

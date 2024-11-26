@@ -15,7 +15,7 @@ const Header = () => {
     const { currentUser } = useSelector(state => state.user);
     const { theme } = useSelector(state => state.theme);
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState([]);
+    /*  const [categories, setCategories] = useState([]); */
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search)
@@ -25,14 +25,14 @@ const Header = () => {
         }
     }, [location.search])
 
-    useEffect(() => {
+    /* useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch('/api/category')
             const data = await res.json()
             setCategories(data)
         }
         fetchCategories()
-    }, [])
+    }, []) */
 
 
     const handleSignout = async () => {
@@ -97,6 +97,9 @@ const Header = () => {
                             </Dropdown.Header>
                             <Link to='/dashboard?tab=profile'>
                                 <Dropdown.Item>Perfil</Dropdown.Item>
+                            </Link>
+                            <Link to='/dashboard?tab=personalRecords'>
+                                <Dropdown.Item>Mis marcas</Dropdown.Item>
                             </Link>
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleSignout}>Salir</Dropdown.Item>
