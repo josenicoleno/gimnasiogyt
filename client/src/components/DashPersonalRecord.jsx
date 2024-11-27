@@ -2,7 +2,11 @@ import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
 import { Button, Modal, Select, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
-import { HiArrowCircleDown, HiOutlineExclamationCircle } from 'react-icons/hi'
+import { HiOutlineExclamationCircle, HiArrowCircleDown, HiTrash } from 'react-icons/hi'
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const DashPersonalRecord = () => {
     const { currentUser } = useSelector(state => state.user)
@@ -14,7 +18,6 @@ export const DashPersonalRecord = () => {
         exerciseId: ""
     })
     const [loading, setLoading] = useState(false);
-    const [showMore, setShowMore] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [personalRecordIdToDelete, setPersonalRecordIdToDelete] = useState(null)
     const [exerciseHistory, setExerciseHistory] = useState([]);
@@ -22,6 +25,20 @@ export const DashPersonalRecord = () => {
     const [showHistoryModal, setShowHistoryModal] = useState(false);
     const [username, setUsername] = useState("");
     const [exerciseName, setExerciseName] = useState("");
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [
+            {
+                label: `${exerciseName} kg levantados`,
+                data: [],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: false,
+            },
+        ],
+    });
+    const [activeRow, setActiveRow] = useState(null);
 
     useEffect(() => {
         const fetchPersonalRecord = async () => {
@@ -64,22 +81,6 @@ export const DashPersonalRecord = () => {
         };
         fetchData();
     }, [currentUser.isAdmin]);
-
-    const handleShowMore = async () => {
-        try {
-            const startIndex = records.length;
-            const queryParams = new URLSearchParams(filterData).toString();
-            const res = await fetch(`/api/personalRecord/?${queryParams}&startIndex=${startIndex}`);
-            const data = await res.json();
-            if (res.ok) {
-                setRecords(prev => [...prev, ...data]);
-                if (data.length < 9)
-                    setShowMore(false);
-            }
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
 
     const handleDelete = async () => {
         try {
@@ -131,15 +132,42 @@ export const DashPersonalRecord = () => {
             const data = await res.json();
             if (res.ok) {
                 setExerciseHistory(data);
+                updateChartData(data);
+            } else {
+                console.error("Error fetching exercise history:", data.message);
             }
         } catch (error) {
-            console.log(error.message);
+            console.log("Error:", error.message);
         }
     };
 
-    const handleShowHistory = (username, exerciseName, exerciseId, userId) => {
-        setUsername(username);
-        setExerciseName(exerciseName);
+    const updateChartData = (history) => {
+        if (!history || history.length === 0) {
+            console.log("No history data available");
+            return;
+        }
+
+        const sortedHistory = history.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const labels = sortedHistory.map(record => new Date(record.date).toLocaleDateString());
+        const weights = sortedHistory.map(record => record.record.weight);
+
+        setChartData({
+            labels: labels,
+            datasets: [
+                {
+                    label: `${exerciseName} kg levantados`,
+                    data: weights,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
+        });
+    };
+
+    const handleShowHistory = (exerciseId, userId) => {
         fetchExerciseHistory(exerciseId, userId);
         setShowHistoryModal(true);
     };
@@ -204,7 +232,16 @@ export const DashPersonalRecord = () => {
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {records.map((record, i) => (
-                                    <Table.Row key={i}>
+                                    <Table.Row
+                                        key={i}
+                                        onMouseEnter={() => {
+                                            setActiveRow(true);
+                                            setUsername(record.username)
+                                            setExerciseName(record.title)
+                                            fetchExerciseHistory(record.exerciseId, record.userId);
+                                        }}
+                                        onMouseLeave={() => setActiveRow(false)}
+                                    >
                                         <Table.Cell>{i + 1}</Table.Cell>
                                         <Table.Cell>{new Date(record.date).toLocaleDateString()}</Table.Cell>
                                         {currentUser.isAdmin && <Table.Cell>{record.username}</Table.Cell>}
@@ -224,19 +261,16 @@ export const DashPersonalRecord = () => {
                                         <Table.Cell className="flex flex-row items-center justify-center gap-2">
                                             {record.count}
                                             {record.count > 1 &&
-                                                <HiArrowCircleDown onClick={() => handleShowHistory(record.username, record.title, record.exerciseId, record.userId)} className="w-8 h-8 hover:cursor-pointer" />
+                                                <HiArrowCircleDown onClick={() => handleShowHistory(record.exerciseId, record.userId)} className="w-8 h-8 hover:cursor-pointer" />
                                             }
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
                             </Table.Body>
                         </Table>
-                        {showMore && <>
-                            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
-                                Show more
-                            </button>
-                        </>
-                        }
+                        <div className="mt-10 mb-10">
+                            <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
+                        </div>
                     </>
                 : <p>Aún no tienes marcas!</p>
             }
@@ -257,7 +291,7 @@ export const DashPersonalRecord = () => {
             </Modal>
 
             <Modal show={showHistoryModal} onClose={() => setShowHistoryModal(false)} size='xl'>
-                <Modal.Header>Historial de {username + ' ' + exerciseName}</Modal.Header>
+                <Modal.Header>{`${exerciseName} de ${username}`}</Modal.Header>
                 <Modal.Body>
                     <div className="overflow-x-auto">
                         <Table hoverable className="shadow-md">
@@ -266,7 +300,7 @@ export const DashPersonalRecord = () => {
                                 <Table.HeadCell>Fecha</Table.HeadCell>
                                 <Table.HeadCell>Peso</Table.HeadCell>
                                 <Table.HeadCell>Repes</Table.HeadCell>
-                                <Table.HeadCell>Borrar</Table.HeadCell>
+                                <Table.HeadCell>Delete</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {exerciseHistory.map((historyRecord, index) => (
@@ -275,22 +309,23 @@ export const DashPersonalRecord = () => {
                                         <Table.Cell>{new Date(historyRecord.date).toLocaleDateString()}</Table.Cell>
                                         <Table.Cell>{historyRecord.record.weight} kg</Table.Cell>
                                         <Table.Cell>{historyRecord.record.reps}</Table.Cell>
-                                         <Table.Cell>
-                                            <span
+                                        <Table.Cell>
+                                            <HiTrash
                                                 className="font-medium text-red-500 hover:underline 
                                                 cursor-pointer"
                                                 onClick={() => {
                                                     setPersonalRecordIdToDelete(historyRecord._id);
                                                     setShowModal(true);
                                                 }}
-                                            >
-                                                Delete
-                                            </span>
+                                            />
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
                             </Table.Body>
                         </Table>
+                    </div>
+                    <div className="mt-4">
+                        {chartData.labels.length > 0 && <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />}
                     </div>
                 </Modal.Body>
             </Modal>
