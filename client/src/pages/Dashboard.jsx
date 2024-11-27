@@ -38,6 +38,8 @@ export default function Dashboard() {
       {tab === 'personalRecords' && <DashPersonalRecord />}
       {/* Users */}
       {tab === 'users' && <DashUser />}
+       {/* Users update */}
+       {tab === 'userupdate' && <DashUserUpdate />}
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
       {/* Excersises */}

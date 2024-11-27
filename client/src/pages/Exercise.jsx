@@ -4,9 +4,11 @@ import { Button, Spinner } from 'flowbite-react'
 import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
 import ExerciseCard from "../components/ExerciseCard"
+import { useSelector } from "react-redux"
 
 export default function Exercise() {
     const { exerciseSlug } = useParams()
+    const { currentUser } = useSelector((state) => state.user);
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [exercise, setExercise] = useState(null)
@@ -68,7 +70,14 @@ export default function Exercise() {
                 >
                     <Button color="gray" pill size="xs">{exercise?.category}</Button>
                 </Link>
-
+                {currentUser &&
+                    <Link
+                        to={`/create-personal-record?exerciseId=${exercise?._id}`}
+                        className="self-start"
+                    >
+                        <Button gradientDuoTone="cyanToBlue" outline >{exercise?.category}</Button>
+                    </Link>
+                }
                 {typeExercise === 'exercise' ?
                     <>
                         <img
@@ -100,12 +109,6 @@ export default function Exercise() {
                         </div>
                     </div>
                 }
-                <Link
-                    to={`/create-personal-record?exerciseId=${exercise?._id}`}
-                    className="self-center mt-5"
-                >
-                    <Button gradientDuoTone="cyanToBlue" outline>Agregar marca</Button>
-                </Link>
             </main>
             <div className="max-w-4xl mx-auto w-full">
                 <CallToAction />
