@@ -1,13 +1,15 @@
 import { Alert, Button, Select, Spinner, TextInput } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreatePersonalRecord() {
     const { currentUser } = useSelector((state) => state.user);
+    const urlParams = new URLSearchParams(location.search)
+    const exerciseId = urlParams.get('exerciseId') || ''
     const [formData, setFormData] = useState({
         userId: currentUser._id,
-        exerciseId: "",
+        exerciseId: exerciseId,
         weight: "", // en kg o lb
         reps: "", // repeticiones
         time: "", // tiempo si aplica
@@ -20,6 +22,9 @@ export default function CreatePersonalRecord() {
     const [loading, setLoading] = useState(false);
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
+    useEffect(() => {
+        document.getElementById('weight').focus();
+    }, [formData.exerciseId]);
 
     // Fetch ejercicios y usuarios
     useEffect(() => {
@@ -78,6 +83,7 @@ export default function CreatePersonalRecord() {
             setLoading(false);
         }
     };
+
     return (
         loading ? (
             <div className="flex justify-center items-center h-screen">
@@ -105,21 +111,23 @@ export default function CreatePersonalRecord() {
                     <div className="flex flex-col gap-4 sm:flex-row">
                         <TextInput
                             id="weight"
-                            type="number"
+                            type="text"
                             placeholder="Peso (kg)"
                             required
                             className="flex-1"
                             value={formData.weight}
                             onChange={handleChange}
+                            inputMode="numeric"
                         />
                         <TextInput
                             id="reps"
-                            type="number"
+                            type="text"
                             placeholder="Repeticiones"
                             required
                             className="flex-1"
                             value={formData.reps}
                             onChange={handleChange}
+                            inputMode="numeric"
                         />
                     </div>
                     <div className="flex flex-col gap-4 sm:flex-row">

@@ -68,6 +68,7 @@ export default function Exercise() {
                 >
                     <Button color="gray" pill size="xs">{exercise?.category}</Button>
                 </Link>
+
                 {typeExercise === 'exercise' ?
                     <>
                         <img
@@ -99,6 +100,12 @@ export default function Exercise() {
                         </div>
                     </div>
                 }
+                <Link
+                    to={`/create-personal-record?exerciseId=${exercise?._id}`}
+                    className="self-center mt-5"
+                >
+                    <Button gradientDuoTone="cyanToBlue" outline>Agregar marca</Button>
+                </Link>
             </main>
             <div className="max-w-4xl mx-auto w-full">
                 <CallToAction />

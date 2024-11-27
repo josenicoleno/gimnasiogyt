@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
 import { Button, Modal, Select, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
-import { HiOutlineExclamationCircle, HiArrowCircleDown, HiTrash } from 'react-icons/hi'
+import { HiOutlineExclamationCircle, HiOutlineSearch , HiTrash } from 'react-icons/hi'
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -261,7 +261,7 @@ export const DashPersonalRecord = () => {
                                         <Table.Cell className="flex flex-row items-center justify-center gap-2">
                                             {record.count}
                                             {record.count > 1 &&
-                                                <HiArrowCircleDown onClick={() => handleShowHistory(record.exerciseId, record.userId)} className="w-8 h-8 hover:cursor-pointer" />
+                                                <HiOutlineSearch  onClick={() => handleShowHistory(record.exerciseId, record.userId)} className="w-5 h-5 hover:cursor-pointer" />
                                             }
                                         </Table.Cell>
                                     </Table.Row>
