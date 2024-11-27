@@ -75,7 +75,7 @@ export default function Exercise() {
                         to={`/create-personal-record?exerciseId=${exercise?._id}`}
                         className="self-start"
                     >
-                        <Button gradientDuoTone="cyanToBlue" outline >{exercise?.category}</Button>
+                        <Button gradientDuoTone="cyanToBlue" outline >Nueva marca</Button>
                     </Link>
                 }
                 {typeExercise === 'exercise' ?
