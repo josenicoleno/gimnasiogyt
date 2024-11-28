@@ -14,6 +14,7 @@ import DashWhatsapp from '../components/DashWhatsapp';
 import { DashContact } from '../components/DashContact';
 import DashUserUpdate from '../components/DashUserUpdate';
 import { DashPersonalRecord } from '../components/DashPersonalRecord';
+import DashSettingLogo from '../components/DashSettingLogo';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -38,24 +39,30 @@ export default function Dashboard() {
       {tab === 'personalRecords' && <DashPersonalRecord />}
       {/* Users */}
       {tab === 'users' && <DashUser />}
-       {/* Users update */}
-       {tab === 'userupdate' && <DashUserUpdate />}
+      {/* Users update */}
+      {tab === 'userupdate' && <DashUserUpdate />}
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
       {/* Excersises */}
       {tab === 'exercises' && <DashExercise />}
-      {/* Excersise Categories */}
-      {tab === 'exerciseCategories' && <DashExerciseCategory />}
       {/* Comments */}
       {tab === 'comments' && <DashComments />}
-      {/* Categories */}
+      {/* Contacts*/}
+      {tab === 'contacts' && <DashContact />}
+      
+      {/* SETTINGS */}
+      {/* Post Categories */}
       {tab === 'categories' && <DashCategory />}
+      {/* Excersise Categories */}
+      {tab === 'exerciseCategories' && <DashExerciseCategory />}
       {/* About */}
       {tab === 'about' && <DashAbout />}
       {/* WhatsApp */}
       {tab === 'whatsapp' && <DashWhatsapp />}
-      {/* Contacts*/}
-      {tab === 'contacts' && <DashContact />}
+      {/* Logo y marca */}
+      {tab === 'settingLogo' && <DashSettingLogo />}
+      {/* Social networks */}
+      {tab === 'socialNetwork' && <DashWhatsapp />}
     </div>
   )
 }

@@ -157,6 +157,24 @@ export default function DashSidebar() {
                                     WhatsApp
                                 </Sidebar.Item>
                             </Link>
+                            <Link to="/dashboard?tab=settingLogo">
+                                <Sidebar.Item
+                                    active={tab === 'settingLogo'}
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Logo y marca
+                                </Sidebar.Item>
+                            </Link>
+                            <Link to="/dashboard?tab=socialNetworks">
+                                <Sidebar.Item
+                                    active={tab === 'socialNetworks'}
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Redes sociales
+                                </Sidebar.Item>
+                            </Link>
                         </Sidebar.Collapse>
                     </>
                     }

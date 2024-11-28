@@ -9,9 +9,9 @@ export default function CategoryList({ categories, title, type }) {
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
                 {categories.map((category, index) => (
                     <Link to={url + category.name} key={index}>
-                        <div className={`${colors[index]} flex items-center p-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 cursor-pointer`}>
+                        <div className={`${colors[index]} flex items-center p-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 cursor-pointer h-20 w-full`}>
                             <img src={category.image} className="w-8 h-8 rounded-full flex items-center justify-center mr-3" />
-                            <span className="text-gray-800 dark:text-gray-200 font-semibold">{category.name}</span>
+                            <span className="text-gray-800 dark:text-gray-200 font-semibold truncate">{category.name}</span>
                         </div>
                     </Link>
                 ))}
