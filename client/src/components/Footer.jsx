@@ -1,23 +1,75 @@
 import { Footer } from "flowbite-react"
 import { Link } from "react-router-dom"
-import { BsFacebook, BsFillPinMapFill, BsInstagram, BsLinkedin } from 'react-icons/bs'
+import { BsFacebook, BsFillPinMapFill, BsGithub, BsInstagram, BsLinkedin, BsYoutube } from 'react-icons/bs'
+import { useEffect, useState } from "react";
+import { socialNetworks } from "../../public/data";
 
 const FooterComponent = () => {
+    const [logo, setLogo] = useState({
+        key: "Logo",
+        text: ""
+    });
+    const [marca, setMarca] = useState({
+        key: "Marca",
+        text: ""
+    })
+    const [direccion, setDireccion] = useState({
+        key: "Direccion",
+        text: ""
+    })
+
+    const [linkDireccion, setLinkDireccion] = useState({
+        key: "LinkDireccion",
+        text: ""
+    })
+    const [redesSociales, setRedesSociales] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`/api/param/${logo.key}`)
+                const data = await res.json()
+                setLogo({ ...logo, text: data.text })
+
+                const resMarca = await fetch(`/api/param/${marca.key}`)
+                const dataMarca = await resMarca.json()
+                setMarca({ ...marca, text: dataMarca.text })
+
+                const resDireccion = await fetch(`/api/param/${direccion.key}`)
+                const dataDireccion = await resDireccion.json()
+                setDireccion({ ...direccion, text: dataDireccion.text })
+
+                const resLinkDireccion = await fetch(`/api/param/${linkDireccion.key}`)
+                const dataLinkDireccion = await resLinkDireccion.json()
+                setLinkDireccion({ ...linkDireccion, text: dataLinkDireccion.text })
+
+                const redesData = await Promise.all(socialNetworks.map(async sn => {
+                    const res = await fetch(`/api/param/${sn}`)
+                    const data = await res.json()
+                    return data
+                }))
+                setRedesSociales(redesData.filter(r => r.boolean))
+            } catch (error) {
+
+            }
+        }
+        fetchData()
+    }, [])
     return (
         <Footer container className="border border-t-8 border-teal-500 mt-auto">
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid w-full justify-between sm:flex md:grid-cols-1">
                     <div className="mt-5">
                         <Link to='/' className='flex self-center whitespace-nowrap text-lg sm:text-xl font-semibold dark:text-white'>
-                            <img src="/logo.png" className="w-10 h-10" />
+                            <img src={logo.text} className="w-10 h-10" />
                             <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white'>
-                                Gimnasio GyT
+                                {marca.text}
                             </span>
                         </Link>
                         <p className="flex flex-row  items-center gap-3 mt-3">
                             <BsFillPinMapFill className="align-bottom" />
-                            <Link to={"https://maps.app.goo.gl/VBZjjzjJA6FMCqqZ7"} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                Vicente Lopez 670, Salta
+                            <Link to={linkDireccion.text} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                {direccion.text}
                             </Link>
                         </p>
                     </div>
@@ -33,15 +85,11 @@ const FooterComponent = () => {
                         <div>
                             <Footer.Title title="Sígueme!" />
                             <Footer.LinkGroup col>
-                                <Footer.Link href="https://www.facebook.com/jose.nicoleno/" target="_blank" rel="noopener noreferrer">
-                                    Facebook
-                                </Footer.Link>
-                                <Footer.Link href="https://www.instagram.com/jose.nicoleno/" target="_blank" rel="noopener noreferrer">
-                                    Instagram
-                                </Footer.Link>
-                                <Footer.Link href="https://www.linkedin.com/in/jose-nicoleno/" target="_blank" rel="noopener noreferrer">
-                                    LinkedIn
-                                </Footer.Link>
+                                {redesSociales.filter(sn => sn.boolean).map(sn => (
+                                    <Footer.Link key={sn.key} href={sn.url} target="_blank" rel="noopener noreferrer">
+                                        {sn.key}
+                                    </Footer.Link>
+                                ))}
                             </Footer.LinkGroup>
                         </div>
                         <div>
@@ -61,9 +109,18 @@ const FooterComponent = () => {
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
                     <Footer.Copyright href="#" by="Gimnasia y Tiro" year={new Date().getFullYear()} />
                     <div className="flex gap-6 sm:mt-0 mt-5 sm:justify-center">
-                        <Footer.Icon href="https://www.facebook.com/jose.nicoleno/" icon={BsFacebook} />
-                        <Footer.Icon href="https://www.instagram.com/jose.nicoleno/" icon={BsInstagram} />
-                        <Footer.Icon href="https://www.linkedin.com/in/jose-nicoleno/" icon={BsLinkedin} />
+                        {redesSociales.filter(sn => sn.boolean).map(sn => (
+                            < Footer.Icon
+                                key={sn.key}
+                                href={sn.text}
+                                icon={
+                                    sn.key === "Facebook" ? BsFacebook :
+                                        sn.key === "Instagram" ? BsInstagram :
+                                            sn.key === "Linkedin" ? BsLinkedin :
+                                                sn.key === "Github" ? BsGithub :
+                                                    BsYoutube}
+                            />))
+                        }
                     </div>
                 </div>
             </div>

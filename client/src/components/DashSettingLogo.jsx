@@ -1,6 +1,6 @@
 import { Alert, Button, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, connectStorageEmulator } from "firebase/storage";
 import { app } from "../firebase";
 import { CircularProgressbar } from 'react-circular-progressbar';
 
@@ -17,6 +17,18 @@ export default function DashSettingLogo() {
   const keyMarca = 'Marca'
   const [formDataMarca, setFormDataMarca] = useState({
     key: keyMarca,
+    text: ""
+  });
+
+  const keyDireccion = 'Direccion'
+  const [formDataDireccion, setFormDataDireccion] = useState({
+    key: keyDireccion,
+    text: ""
+  });
+
+  const keyLinkDireccion = 'LinkDireccion'
+  const [formDataLinkDireccion, setFormDataLinkDireccion] = useState({
+    key: keyLinkDireccion,
     text: ""
   });
   const [success, setSuccess] = useState("");
@@ -45,13 +57,36 @@ export default function DashSettingLogo() {
         });
       }
     }
+    const fetchDireccion = async () => {
+      const res = await fetch(`/api/param/${keyDireccion}`);
+      if (res.ok) {
+        const data = await res.json();
+        setFormDataDireccion({
+          _id: data._id,
+          key: keyDireccion,
+          text: data.text
+        });
+      }
+    }
+    const fetchLinkDireccion = async () => {
+      const res = await fetch(`/api/param/${keyLinkDireccion}`);
+      if (res.ok) {
+        const data = await res.json();
+        setFormDataLinkDireccion({
+          _id: data._id,
+          key: keyLinkDireccion,
+          text: data.text
+        });
+      }
+    }
     fetchLogo();
     fetchMarca();
+    fetchDireccion();
+    fetchLinkDireccion();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formDataLogo._id, formDataMarca._id)
     if (!formDataLogo._id) {
       const res = await fetch(`/api/param/create`, {
         method: "POST",
@@ -79,6 +114,7 @@ export default function DashSettingLogo() {
         setError("Failed to update phone number");
       }
     }
+
     if (!formDataMarca._id) {
       const res = await fetch(`/api/param/create`, {
         method: "POST",
@@ -106,8 +142,65 @@ export default function DashSettingLogo() {
         setError("Failed to update message");
       }
     }
-  }
 
+    if (!formDataDireccion._id) {
+      const res = await fetch(`/api/param/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataDireccion),
+      });
+      if (res.ok) {
+        setSuccess("Message created successfully");
+      } else {
+        setError("Failed to create message");
+      }
+    } else {
+      const res = await fetch(`/api/param/${formDataDireccion._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: formDataDireccion.text }),
+      });
+      if (res.ok) {
+        setSuccess("Message updated successfully");
+      } else {
+        setError("Failed to update message");
+      }
+    }
+
+    if (!formDataLinkDireccion._id) {
+      const res = await fetch(`/api/param/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataLinkDireccion),
+      });
+      if (res.ok) {
+        setSuccess("Message created successfully");
+      } else {
+        setError("Failed to create message");
+      }
+    } else {
+      const res = await fetch(`/api/param/${formDataLinkDireccion._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: formDataLinkDireccion.text }),
+      });
+      if (res.ok) {
+        setSuccess("Message updated successfully");
+      } else {
+        setError("Failed to update message");
+      }
+    }
+
+
+  }
   const handledUploadImage = () => {
     try {
       if (!file) {
@@ -115,7 +208,7 @@ export default function DashSettingLogo() {
       }
       setImageUploadError(null);
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + "-" + file.name;
+      const fileName = "logo";
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
@@ -186,8 +279,21 @@ export default function DashSettingLogo() {
           value={formDataMarca.text}
           onChange={e => setFormDataMarca({ ...formDataMarca, text: e.target.value })}
         />
-        {console.log(formDataMarca)}
-        {console.log(formDataLogo)}
+        <TextInput
+          id="direccion"
+          type="text"
+          placeholder="Dirección"
+          value={formDataDireccion.text}
+          onChange={e => setFormDataDireccion({ ...formDataDireccion, text: e.target.value })}
+        />
+
+        <TextInput
+          id="linkDireccion"
+          type="text"
+          placeholder="URL Dirección"
+          value={formDataLinkDireccion.text}
+          onChange={e => setFormDataLinkDireccion({ ...formDataLinkDireccion, text: e.target.value })}
+        />
         <Button gradientDuoTone="purpleToPink" outline type="submit">
           Save
         </Button>

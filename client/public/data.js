@@ -15,4 +15,5 @@ export const profesores = [
       bio: "Especialista en entrenamiento funcional y fuerza."
     }
   ];
-  
+
+  export const socialNetworks = ["Facebook", "Instagram", "Linkedin", "Github", "Youtube"]

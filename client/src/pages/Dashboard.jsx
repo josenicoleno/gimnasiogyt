@@ -15,6 +15,7 @@ import { DashContact } from '../components/DashContact';
 import DashUserUpdate from '../components/DashUserUpdate';
 import { DashPersonalRecord } from '../components/DashPersonalRecord';
 import DashSettingLogo from '../components/DashSettingLogo';
+import DashSettingSocialNetworks from '../components/DashSettingSocialNetworks';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -62,7 +63,7 @@ export default function Dashboard() {
       {/* Logo y marca */}
       {tab === 'settingLogo' && <DashSettingLogo />}
       {/* Social networks */}
-      {tab === 'socialNetwork' && <DashWhatsapp />}
+      {tab === 'socialNetworks' && <DashSettingSocialNetworks />}
     </div>
   )
 }

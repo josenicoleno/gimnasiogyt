@@ -15,6 +15,15 @@ const Header = () => {
     const { currentUser } = useSelector(state => state.user);
     const { theme } = useSelector(state => state.theme);
     const [searchTerm, setSearchTerm] = useState('');
+    const [logo, setLogo] = useState({
+        key: "Logo",
+        text: ""
+    });
+    const [marca, setMarca] = useState({
+        key: "Marca",
+        text: ""
+    })
+
     /*  const [categories, setCategories] = useState([]); */
 
     useEffect(() => {
@@ -25,6 +34,23 @@ const Header = () => {
         }
     }, [location.search])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`/api/param/${logo.key}`)
+                const data = await res.json()
+                setLogo({ ...logo, text: data.text })
+
+                const resMarca = await fetch(`/api/param/${marca.key}`)
+                const dataMarca = await resMarca.json()
+                setMarca({ ...marca, text: dataMarca.text })
+            } catch (error) {
+
+            }
+        }
+        fetchData()
+    }, []
+    )
     /* useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch('/api/category')
@@ -65,9 +91,9 @@ const Header = () => {
         <div>
             <Navbar className='border-b-2'>
                 <Link to='/' className='flex self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
-                    <img src="/logo.png" className="w-10 h-10" />
+                    <img src={logo.text} className="w-10 h-10" />
                     <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-light-blue-500 to-cyan-500 rounded-lg text-white content-center'>
-                        Gimnasio GyT
+                        {marca.text}
                     </span>
                 </Link>
                 <form onSubmit={handleSubmit}>

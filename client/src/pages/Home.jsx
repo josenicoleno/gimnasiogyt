@@ -3,8 +3,8 @@ import CallToAcction from '../components/CallToAction'
 import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import CategoryList from '../components/CategoryList';
-import { profesores } from '/public/profesores';
 import ExerciseCard from '../components/ExerciseCard'
+import { profesores } from '../../public/data';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
