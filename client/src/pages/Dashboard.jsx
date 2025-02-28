@@ -16,6 +16,7 @@ import DashUserUpdate from '../components/DashUserUpdate';
 import { DashPersonalRecord } from '../components/DashPersonalRecord';
 import DashSettingLogo from '../components/DashSettingLogo';
 import DashSettingSocialNetworks from '../components/DashSettingSocialNetworks';
+import { DashMachines } from '../components/DashMachines';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -44,8 +45,10 @@ export default function Dashboard() {
       {tab === 'userupdate' && <DashUserUpdate />}
       {/* Posts */}
       {tab === 'posts' && <DashPosts />}
-      {/* Excersises */}
+      {/* Exersises */}
       {tab === 'exercises' && <DashExercise />}
+      {/* Machines */}
+      {tab === 'machines' && <DashMachines />}
       {/* Comments */}
       {tab === 'comments' && <DashComments />}
       {/* Contacts*/}

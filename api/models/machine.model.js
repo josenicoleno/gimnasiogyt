@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const exerciseSchema = new mongoose.Schema(
+const machineSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -20,22 +20,18 @@ const exerciseSchema = new mongoose.Schema(
       default:
         "https://www.hostinger.it/tutorial/wp-content/uploads/sites/24/2023/09/come-scrivere-un-blog-768x334.webp",
     },
-    category: {
-      type: String,
-      default: "uncategorized",
-    },
     slug: {
       type: String,
       required: true,
       unique: true,
     },
     status: {
-      type: Boolean,
-      default: true,
+      type: String,
+      default: "Published",
     },
   },
-  { timestamps: true, collection: 'exercises' }
+  { timestamps: true, collection: 'machines' }
 );
 
-const Exercise = mongoose.model("Exercise", exerciseSchema);
-export default Exercise;
+const Machine = mongoose.model("Machine", machineSchema);
+export default Machine;

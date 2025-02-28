@@ -29,6 +29,7 @@ import './utils/fetchInterceptor';
 import { setupAxiosInterceptors } from './utils/axiosInterceptor';
 import { useEffect } from 'react';
 import CreatePersonalRecord from './pages/CreatePersonalRecord'
+import CreateMachine from './pages/CreateMachine'
 
 export default function App() {
   useEffect(() => {
@@ -65,7 +66,8 @@ export default function App() {
           <Route path='/update-post/:postId' element={<UpdatePost />} />
           <Route path='/create-exercise' element={<CreateExercise />} />
           <Route path='/update-exercise/:exerciseId' element={<UpdateExercise />} />
-        </Route>
+          <Route path='/create-machine' element={<CreateMachine />} />
+          </Route>
         {/* 404 */}
         <Route path='*' element={<NotFound />} />
       </Routes>

@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { useEffect, useState } from 'react';
-import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiDocumentText, HiFire, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
+import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiCube, HiDocumentText, HiFire, HiGift, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
@@ -98,6 +98,16 @@ export default function DashSidebar() {
                                 as='div'
                             >
                                 Exercises
+                            </Sidebar.Item>
+                        </Link>
+                        <Link to="/dashboard?tab=machines">
+                            <Sidebar.Item
+                                active={tab === 'machines'}
+                                icon={HiCube }
+                                labelColor='dark'
+                                as='div'
+                            >
+                                Machines
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=comments">
