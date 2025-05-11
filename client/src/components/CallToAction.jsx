@@ -9,7 +9,7 @@ export default function CallToAction() {
     }
 
     return (
-        <div className="flex flex-col sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center">
+        <div className="flex flex-col alig sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center">
             <div className="flex flex-col flex-1 justify-center">
                 <h2 className="text-2xl">
                     Inscribite al gimnasio de tu club!
@@ -21,8 +21,8 @@ export default function CallToAction() {
                     Inscribirse
                 </Button>
             </div>
-            <div className="p-7 flex-1">
-                <img src="https://stride.com.co/wp-content/uploads/2023/01/gabriel-heinzer-g5jpH62pwes-unsplash-1024x768.jpg" alt="callToAction" className="max-h-[300px]" />
+            <div className="p-7">
+                <img src="https://firebasestorage.googleapis.com/v0/b/mern-blog-410211.appspot.com/o/gym%20imagenes%2FcallToAction.png?alt=media&token=6fe83cad-5d92-4863-a51b-0462a4baafdc" alt="callToAction" className="max-h-[300px]" />
             </div>
         </div>
     )

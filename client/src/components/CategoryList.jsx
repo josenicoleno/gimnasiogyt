@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 const colors = ["bg-green-600", "bg-red-600", "bg-blue-600", "bg-pink-600", "bg-purple-600"]
+
 export default function CategoryList({ categories, title, type }) {
     const url = type === 'post' ? 'search?category=' : 'searchexercise?category='
     return (

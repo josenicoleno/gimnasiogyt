@@ -65,11 +65,10 @@ export default function Registration() {
                 {/* left */}
                 <div className="flex-1 mr-10">
                     <img
-                        src=""
+                        src="https://firebasestorage.googleapis.com/v0/b/mern-blog-410211.appspot.com/o/gym%20imagenes%2FInscripcion.jpg?alt=media&token=802a063d-333a-4348-a8e5-2355b34f02a5"
                         alt="contact"
                         className='md:w-full md:h-full object-cover md:rounded-md h-64 w-64 shadow-lg rounded-full mx-auto'
                     />
-                    <h1>Planes</h1>
                     <p className="text-justify text-gray-400">Dejanos tu número de teléfono y nos pondremos en contacto con vos para que te pasemos toda la info.</p>
                 </div>
                 {/* right */}

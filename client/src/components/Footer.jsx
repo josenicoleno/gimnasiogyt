@@ -83,10 +83,10 @@ const FooterComponent = () => {
                             </Footer.LinkGroup>
                         </div>
                         <div>
-                            <Footer.Title title="Sígueme!" />
+                            <Footer.Title title="Síguenos!" />
                             <Footer.LinkGroup col>
                                 {redesSociales.filter(sn => sn.boolean).map(sn => (
-                                    <Footer.Link key={sn.key} href={sn.url} target="_blank" rel="noopener noreferrer">
+                                    <Footer.Link key={sn.key} href={sn.text} target="_blank" rel="noopener noreferrer">
                                         {sn.key}
                                     </Footer.Link>
                                 ))}
@@ -113,12 +113,14 @@ const FooterComponent = () => {
                             < Footer.Icon
                                 key={sn.key}
                                 href={sn.text}
+                                target="_blank"
                                 icon={
                                     sn.key === "Facebook" ? BsFacebook :
                                         sn.key === "Instagram" ? BsInstagram :
                                             sn.key === "Linkedin" ? BsLinkedin :
                                                 sn.key === "Github" ? BsGithub :
-                                                    BsYoutube}
+                                                    BsYoutube
+                                }
                             />))
                         }
                     </div>

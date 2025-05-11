@@ -64,7 +64,7 @@ export default function ContactMe() {
             <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
                 {/* left */}
                 <div className="flex-1">
-                    <img src="https://scontent.fnap7-2.fna.fbcdn.net/v/t39.30808-6/460147200_8739177339477174_8527538700013903936_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=b04a48&_nc_ohc=FoDaVfFC5OwQ7kNvgFwLq3C&_nc_zt=23&_nc_ht=scontent.fnap7-2.fna&_nc_gid=AQNQxzBwT_jrznemDgD1jgm&oh=00_AYD7wqzafoLUyP8bES3qTUuVteToW9RnuYqzyopgG51uyg&oe=672D4A93" alt="contact" className='md:w-full md:h-full object-cover md:rounded-md h-64 w-64 shadow-lg rounded-full mx-auto' />
+                    <img src="https://firebasestorage.googleapis.com/v0/b/mern-blog-410211.appspot.com/o/gym%20imagenes%2Fcontacto.jpg?alt=media&token=58e098d4-fd98-4146-a1b9-042b39a1eb7c" alt="contact" className='md:w-full md:h-full object-cover md:rounded-md h-64 w-64 shadow-lg rounded-full mx-auto' />
                 </div>
                 {/* right */}
                 <div className="flex-1">
