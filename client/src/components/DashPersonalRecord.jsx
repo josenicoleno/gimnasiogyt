@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
 import { Button, Modal, Select, Spinner, Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
-import { HiOutlineExclamationCircle, HiOutlineSearch , HiTrash } from 'react-icons/hi'
+import { HiOutlineExclamationCircle, HiOutlineExternalLink, HiOutlineSearch, HiTrash } from 'react-icons/hi'
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -221,13 +221,13 @@ export const DashPersonalRecord = () => {
                     <>
                         <Table hoverable className="shadow-md">
                             <Table.Head>
-                                <Table.HeadCell>#</Table.HeadCell>
-                                <Table.HeadCell>Fecha</Table.HeadCell>
+                                <Table.HeadCell className="hidden md:table-cell">#</Table.HeadCell>
+                                <Table.HeadCell className="hidden md:table-cell">Fecha</Table.HeadCell>
                                 {currentUser.isAdmin && <Table.HeadCell>Username</Table.HeadCell>}
                                 <Table.HeadCell>Ejercicio</Table.HeadCell>
+                                <Table.HeadCell>Reps</Table.HeadCell>
                                 <Table.HeadCell>Peso</Table.HeadCell>
-                                <Table.HeadCell>Repes</Table.HeadCell>
-                                <Table.HeadCell>Creado por</Table.HeadCell>
+                                {currentUser.isAdmin && <Table.HeadCell>Creado por</Table.HeadCell>}
                                 <Table.HeadCell>Cant. registros</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
@@ -242,26 +242,27 @@ export const DashPersonalRecord = () => {
                                         }}
                                         onMouseLeave={() => setActiveRow(false)}
                                     >
-                                        <Table.Cell>{i + 1}</Table.Cell>
-                                        <Table.Cell>{new Date(record.date).toLocaleDateString()}</Table.Cell>
+                                        <Table.Cell className="hidden md:table-cell">{i + 1}</Table.Cell>
+                                        <Table.Cell className="hidden md:table-cell">{new Date(record.date).toLocaleDateString()}</Table.Cell>
                                         {currentUser.isAdmin && <Table.Cell>{record.username}</Table.Cell>}
                                         <Table.Cell>
                                             <Link to={`/exercise/${record.slug}`} className="flex flex-row gap-3 items-center">
                                                 <img
                                                     src={record.image}
                                                     alt={record.title}
-                                                    className="w-14 h-10 object-cover rounded-lg bg-gray-500"
+                                                    className="w-14 h-10 object-cover rounded-lg bg-gray-500 hidden md:table-cell"
                                                 />
                                                 {record.title}
+                                                <HiOutlineExternalLink />
                                             </Link>
                                         </Table.Cell>
-                                        <Table.Cell>{record.record.weight} kg</Table.Cell>
                                         <Table.Cell>{record.record.reps}</Table.Cell>
-                                        <Table.Cell>{record.createdByUsername}</Table.Cell>
+                                        <Table.Cell>{record.record.weight} kg</Table.Cell>
+                                        {currentUser.isAdmin && <Table.Cell>{record.createdByUsername}</Table.Cell>}
                                         <Table.Cell className="flex flex-row items-center justify-center gap-2">
                                             {record.count}
                                             {record.count > 1 &&
-                                                <HiOutlineSearch  onClick={() => handleShowHistory(record.exerciseId, record.userId)} className="w-5 h-5 hover:cursor-pointer" />
+                                                <HiOutlineSearch onClick={() => handleShowHistory(record.exerciseId, record.userId)} className="w-5 h-5 hover:cursor-pointer" />
                                             }
                                         </Table.Cell>
                                     </Table.Row>
