@@ -103,7 +103,7 @@ export default function Post() {
                         </div>
                         {/* Columna de contenido */}
                         <div className="flex flex-col space-y-4">
-                            <div className="post-content" dangerouslySetInnerHTML={{ __html: post?.content }}>
+                            <div className="post-content prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post?.content }}>
                             </div>
                         </div>
                     </div>

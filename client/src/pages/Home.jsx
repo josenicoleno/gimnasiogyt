@@ -99,7 +99,8 @@ export default function Home() {
       </div>
  */}
       {/* Sección Ejercicios */}
-      {exercises.length &&
+      {exercises.length > 0
+      ?
         <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-3/4">
             <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios recientes</h2>
@@ -114,6 +115,8 @@ export default function Home() {
           {/* Sidebar de Categorías de Ejercicios */}
           <CategoryList categories={exercisesCategories} title={"Categorías de Ejercicios"} type={"exercise"} />
         </div>
+        :<>
+        </>
       }
 
       {/* Sección de Posts */}
