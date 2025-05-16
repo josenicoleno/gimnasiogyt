@@ -101,7 +101,7 @@ export default function Home() {
       {/* Sección Ejercicios */}
       {exercises.length > 0
       ?
-        <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
+        <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-8xl mx-auto flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-3/4">
             <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios recientes</h2>
             <div className="flex flex-wrap gap-1 justify-center">
@@ -121,7 +121,7 @@ export default function Home() {
 
       {/* Sección de Posts */}
       {posts.length &&
-        <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
+        <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-8xl mx-auto flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-3/4">
             <h2 className="text-2xl font-semibold text-center mb-5">Posts recientes</h2>
             <div className="flex flex-wrap gap-5 justify-center">
