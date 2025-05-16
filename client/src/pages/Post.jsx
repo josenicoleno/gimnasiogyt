@@ -5,6 +5,8 @@ import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
 import PostCard from "../components/PostCard"
 import { useSelector } from "react-redux"
+import 'react-quill-new/dist/quill.snow.css';
+
 
 export default function Post() {
     const { postSlug } = useParams()
@@ -103,8 +105,7 @@ export default function Post() {
                         </div>
                         {/* Columna de contenido */}
                         <div className="flex flex-col space-y-4">
-                            <div className="post-content prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post?.content }}>
-                            </div>
+                            <div className="post-content prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post?.content }} />
                         </div>
                     </div>
                 }
