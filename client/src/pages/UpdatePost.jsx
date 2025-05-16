@@ -24,7 +24,6 @@ export default function UpdatePost() {
     const navigate = useNavigate();
     const { postId } = useParams();
     const { currentUser } = useSelector(state => state.user)
-    const [cont, setCont] = useState("")
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -40,7 +39,6 @@ export default function UpdatePost() {
                 }
                 setPublishError(null);
                 setFormData(data.posts[0]);
-                setCont(data.posts[0].content);
             } catch (error) {
                 console.log(error);
                 setPublishError('Error al cargar el post');
