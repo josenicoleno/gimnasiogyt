@@ -1,4 +1,5 @@
 import machine from "../models/machine.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const getMachines = async (req, res, next) => {
   const startIndex = parseInt(req.query.startIndex) || 0;
@@ -46,7 +47,7 @@ export const createMachine = async (req, res, next) => {
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to create a machine"));
   }
-  if (!req.body.title || !req.body.content) {
+  if (!req.body?.title || !req.body?.content) {
     return next(errorHandler(400, "Please provide all required fields"));
   }
   const slug = req.body.title
@@ -68,18 +69,19 @@ export const createMachine = async (req, res, next) => {
 };
 
 export const deleteMachine = async (req, res, next) => {
+  console.log(req.params)
   try {
     if (!req.user.isAdmin) {
       return next(errorHandler(401, "Unauthorized"));
     }
-    if (!req.params.categoryId) {
-      return next(errorHandler(400, "Category ID is required"));
+    if (!req.params.machineId) {
+      return next(errorHandler(400, "delete Id is required"));
     }
-    const categoryId = req.params.categoryId;
-    const deletedCategory = await exerciseCategory.findByIdAndDelete(
-      categoryId
+    const machineId = req.params.machineId;
+    const deletedMachine = await machine.findByIdAndDelete(
+      machineId
     );
-    res.status(200).json(deletedCategory);
+    res.status(200).json(deletedMachine);
   } catch (error) {
     next(error);
   }

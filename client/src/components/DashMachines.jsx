@@ -51,7 +51,8 @@ export const DashMachines = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`api/machine/delete/${machineIdToDelete}/${currentUser._id}`, {
+      console.log(machineIdToDelete, currentUser._id)
+      const res = await fetch(`/api/machine/delete/${machineIdToDelete}`, {
         method: 'DELETE'
       });
       const data = await res.json();

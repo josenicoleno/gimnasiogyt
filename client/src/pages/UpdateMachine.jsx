@@ -1,22 +1,68 @@
 import { Alert, Button, FileInput, Select, Spinner, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function CreateMachine() {
+export default function UpdateMachine() {
     const [file, setFile] = useState(null)
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        _id: '',
+        title: '', // Valor inicial vacío
+        category: 'uncategorized', // Valor inicial definido
+        image: '',
+        content: ''
+    });
     const [publishError, setPublishError] = useState(null);
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { machineId } = useParams();
+    const { currentUser } = useSelector(state => state.user)
+    const [cont, setCont] = useState("")
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const handledUploadImage = () => {
+    useEffect(() => {
+        const fetchMachine = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch(`/api/machine/getmachines?machineId=${machineId}`);
+                const data = await res.json();
+                if (!res.ok) {
+                    setPublishError(data.message);
+                    return;
+                }
+                setPublishError(null);
+                setFormData(data.machines[0]);
+                setCont(data.machines[0].content);
+            } catch (error) {
+                console.log(error);
+                setPublishError('Error al cargar el machine');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch('/api/machineCategory/');
+                const data = await res.json();
+                setCategories(data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        // Ejecutar ambas funciones
+        fetchMachine();
+        fetchCategories();
+    }, [machineId]);
+
+    const handleUploadImage = () => {
         try {
             if (!file) {
                 return setImageUploadError('Please select an image')
@@ -51,50 +97,40 @@ export default function CreateMachine() {
         }
     }
 
-    const handleChange = e => {
-        setFormData({ ...formData, [e.target.id]: e.target.value })
-    }
-
     const handleSubmit = async e => {
         e.preventDefault();
         setPublishError(null)
         setLoading(true);
-        if (formData.title && formData.content){
-            try {
-                const res = await fetch(`/api/machine/create`, {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                })
-                const data = await res.json()
-                if (!res.ok) {
-                    setPublishError(data.message)
-                    return
-                }
-                if (res.ok) {
-                    setPublishError(null)
-                    navigate(`/dashboard?tab=machines`)
-                }
-            } catch (error) {
-                setPublishError('Something went wrong!!')
-            } finally {
-                setLoading(false);
+        try {
+            const res = await fetch(`/api/post/update/${formData._id}/${currentUser._id}`, {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setPublishError(data.message)
+                return
             }
-        }else{
-            setPublishError('Título y descripción son obligatorios.')
+            if (res.ok) {
+                setPublishError(null)
+                navigate(`/post/${data.slug}`)
+                return
+            }
+        } catch (error) {
+            setPublishError('Something went wrong ' + error)
+        } finally {
             setLoading(false);
         }
     }
-
     return (
         loading ?
             <div className="flex justify-center items-center h-screen">
                 <Spinner />
-            </div>
-            :
+            </div> :
             <div className="p-3 max-w-3xl mx-auto min-h-screen">
                 <h1 className="text-center text-3xl my-7 font-semibold">
-                    New machine
+                    Update post
                 </h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -104,8 +140,20 @@ export default function CreateMachine() {
                             placeholder="Title"
                             required
                             className="flex-1"
-                            onChange={handleChange}
+                            value={formData.title}
+                            onChange={(e) => { setFormData({ ...formData, title: e.target.value }) }}
                         />
+                        <Select
+                            id="category"
+                            itemType="string"
+                            value={formData.category || 'uncategorized'}
+                            onChange={(e) => { setFormData({ ...formData, category: e.target.value }) }}
+                        >
+                            <option value="uncategorized">Select a category</option>
+                            {categories.map((category) => (
+                                <option key={category._id} value={category.name}>{category.name}</option>
+                            ))}
+                        </Select>
                     </div>
                     <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
                         <FileInput
@@ -118,7 +166,7 @@ export default function CreateMachine() {
                             gradientDuoTone="purpleToBlue"
                             size="sm"
                             outline
-                            onClick={handledUploadImage}
+                            onClick={handleUploadImage}
                             disabled={imageUploadProgress}
                         >
                             {imageUploadProgress
@@ -139,15 +187,16 @@ export default function CreateMachine() {
                     {formData.image && (
                         <img src={formData.image} alt="upload" className="w-full h-72 object-cover" />
                     )}
-                    <ReactQuill
+                    {<ReactQuill
                         id="content"
                         theme="snow"
                         placeholder="Write something..."
                         className="h-72 mb-12"
                         required
+                        value={formData.content}
                         onChange={value => setFormData({ ...formData, content: value })}
-                    />
-                    <Button type="submit" gradientDuoTone="purpleToPink">Publish</Button>
+                    />}
+                    <Button type="submit" gradientDuoTone="purpleToPink">Update</Button>
                     {publishError &&
                         <Alert color="failure" className="mt-4">
                             {publishError}
