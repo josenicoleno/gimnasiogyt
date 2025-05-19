@@ -31,7 +31,7 @@ export default function UpdateMachine() {
         const fetchMachine = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`/api/machine/getmachines?machineId=${machineId}`);
+                const res = await fetch(`/api/machine/?machineId=${machineId}`);
                 const data = await res.json();
                 if (!res.ok) {
                     setPublishError(data.message);
@@ -59,7 +59,7 @@ export default function UpdateMachine() {
         };
         // Ejecutar ambas funciones
         fetchMachine();
-        fetchCategories();
+        /* fetchCategories(); */
     }, [machineId]);
 
     const handleUploadImage = () => {
@@ -102,7 +102,7 @@ export default function UpdateMachine() {
         setPublishError(null)
         setLoading(true);
         try {
-            const res = await fetch(`/api/post/update/${formData._id}/${currentUser._id}`, {
+            const res = await fetch(`/api/machine/update/${formData._id}`, {
                 method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -114,7 +114,8 @@ export default function UpdateMachine() {
             }
             if (res.ok) {
                 setPublishError(null)
-                navigate(`/post/${data.slug}`)
+                navigate(`/dashboard?tab=machines`)
+                /* navigate(`/machine/${data.slug}`) */
                 return
             }
         } catch (error) {
@@ -130,7 +131,7 @@ export default function UpdateMachine() {
             </div> :
             <div className="p-3 max-w-3xl mx-auto min-h-screen">
                 <h1 className="text-center text-3xl my-7 font-semibold">
-                    Update post
+                    Update machine
                 </h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -143,7 +144,7 @@ export default function UpdateMachine() {
                             value={formData.title}
                             onChange={(e) => { setFormData({ ...formData, title: e.target.value }) }}
                         />
-                        <Select
+                        {/* <Select
                             id="category"
                             itemType="string"
                             value={formData.category || 'uncategorized'}
@@ -153,7 +154,7 @@ export default function UpdateMachine() {
                             {categories.map((category) => (
                                 <option key={category._id} value={category.name}>{category.name}</option>
                             ))}
-                        </Select>
+                        </Select> */}
                     </div>
                     <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
                         <FileInput

@@ -74,6 +74,7 @@ export default function CreateMachine() {
                 if (res.ok) {
                     setPublishError(null)
                     navigate(`/dashboard?tab=machines`)
+                    return
                 }
             } catch (error) {
                 setPublishError('Something went wrong!!')

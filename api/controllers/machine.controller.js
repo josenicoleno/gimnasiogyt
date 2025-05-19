@@ -1,4 +1,4 @@
-import machine from "../models/machine.model.js";
+import Machine from "../models/machine.model.js";
 import { errorHandler } from "../utils/error.js";
 
 export const getMachines = async (req, res, next) => {
@@ -6,7 +6,7 @@ export const getMachines = async (req, res, next) => {
   const limit = parseInt(req.query.limit) || 9;
   const sortDirection = req.query.order === "asc" ? 1 : -1;
   try {
-    const machines = await machine
+    const machines = await Machine
       .find({
         ...(req.query.slug && { slug: req.query.slug }),
         ...(req.query.machineId && { _id: req.query.machineId }),
@@ -21,7 +21,7 @@ export const getMachines = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-    const totalMachine = await machine.countDocuments();
+    const totalMachine = await Machine.countDocuments();
 
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -30,7 +30,7 @@ export const getMachines = async (req, res, next) => {
       now.getDate()
     );
 
-    const totalMachineMonth = await machine.countDocuments({
+    const totalMachineMonth = await Machine.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
     res.status(200).json({
@@ -55,7 +55,7 @@ export const createMachine = async (req, res, next) => {
     .join("-")
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, "");
-  const newMachine = new machine({
+  const newMachine = new Machine({
     ...req.body,
     slug,
     userId: req.user.id,
@@ -69,7 +69,6 @@ export const createMachine = async (req, res, next) => {
 };
 
 export const deleteMachine = async (req, res, next) => {
-  console.log(req.params)
   try {
     if (!req.user.isAdmin) {
       return next(errorHandler(401, "Unauthorized"));
@@ -78,7 +77,7 @@ export const deleteMachine = async (req, res, next) => {
       return next(errorHandler(400, "delete Id is required"));
     }
     const machineId = req.params.machineId;
-    const deletedMachine = await machine.findByIdAndDelete(
+    const deletedMachine = await Machine.findByIdAndDelete(
       machineId
     );
     res.status(200).json(deletedMachine);
@@ -89,26 +88,26 @@ export const deleteMachine = async (req, res, next) => {
 
 export const updateMachine = async (req, res, next) => {
   try {
-    if (!req.params.categoryId) {
+    if (!req.params.machineId) {
       return next(errorHandler(400, "Category ID is required"));
     }
-    const categoryId = req.params.categoryId;
-    const category = await exerciseCategory.findById(categoryId);
-    if (!category) {
+    const machineId = req.params.machineId;
+    const machine = await Machine.findById(machineId);
+    if (!machine) {
       return next(errorHandler(404, "Category not found"));
     }
     if (!req.user.isAdmin) {
       return next(errorHandler(401, "Unauthorized"));
     }
-    if (!req.body.name) {
-      return next(errorHandler(400, "Name is required"));
+    if (!req.body.title) {
+      return next(errorHandler(400, "Title is required"));
     }
-    const updatedCategory = await exerciseCategory.findByIdAndUpdate(
-      categoryId,
+    const updatedMachine = await Machine.findByIdAndUpdate(
+      machineId,
       { ...req.body },
       { new: true }
     );
-    res.status(200).json(updatedCategory);
+    res.status(200).json(updatedMachine);
   } catch (error) {
     next(error);
   }
