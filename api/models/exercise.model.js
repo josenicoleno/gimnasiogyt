@@ -24,6 +24,10 @@ const exerciseSchema = new mongoose.Schema(
       type: String,
       default: "uncategorized",
     },
+    machines: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Machine'
+    }],
     slug: {
       type: String,
       required: true,

@@ -14,10 +14,11 @@ export default function UpdateExercise() {
     const [imageUploadError, setImageUploadError] = useState(null);
     const [formData, setFormData] = useState({
         _id: '',
-        title: '', // Valor inicial vacío
-        category: 'uncategorized', // Valor inicial definido
+        title: '',
+        category: 'uncategorized',
         image: '',
-        content: ''
+        content: '',
+        machines: []
     });
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
@@ -25,21 +26,33 @@ export default function UpdateExercise() {
     const { currentUser } = useSelector(state => state.user)
     const [cont, setCont] = useState("")
     const [categories, setCategories] = useState([]);
+    const [machines, setMachines] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchExercise = async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`/api/exercise/getexercises?exerciseId=${exerciseId}`);
-                const data = await res.json();
-                if (!res.ok) {
-                    setPublishError(data.message);
+                const [exerciseRes, categoriesRes, machinesRes] = await Promise.all([
+                    fetch(`/api/exercise/getexercises?exerciseId=${exerciseId}`),
+                    fetch('/api/exerciseCategory/'),
+                    fetch('/api/machine/')
+                ]);
+                
+                const exerciseData = await exerciseRes.json();
+                const categoriesData = await categoriesRes.json();
+                const machinesData = await machinesRes.json();
+
+                if (!exerciseRes.ok) {
+                    setPublishError(exerciseData.message);
                     return;
                 }
+                
                 setPublishError(null);
-                setFormData(data.exercises[0]);
-                setCont(data.exercises[0].content);
+                setFormData(exerciseData.exercises[0]);
+                setCont(exerciseData.exercises[0].content);
+                setCategories(categoriesData);
+                setMachines(machinesData.machines);
             } catch (error) {
                 console.log(error);
                 setPublishError('Error al cargar el exercise');
@@ -48,21 +61,10 @@ export default function UpdateExercise() {
             }
         };
 
-        const fetchCategories = async () => {
-            try {
-                const res = await fetch('/api/exerciseCategory/');
-                const data = await res.json();
-                setCategories(data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        // Ejecutar ambas funciones
-        fetchExercise();
-        fetchCategories();
+        fetchData();
     }, [exerciseId]);
 
-    const handleUploadImage = () => {
+    const handleUploadImage = async () => {
         try {
             if (!file) {
                 return setImageUploadError('Please select an image')
@@ -97,12 +99,10 @@ export default function UpdateExercise() {
         }
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setPublishError(null)
-        setLoading(true);
         try {
-            const res = await fetch(`/api/post/update/${formData._id}/${currentUser._id}`, {
+            const res = await fetch(`/api/exercise/update/${formData._id}/${currentUser._id}`, {
                 method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -113,16 +113,14 @@ export default function UpdateExercise() {
                 return
             }
             if (res.ok) {
-                setPublishError(null)
-                navigate(`/post/${data.slug}`)
-                return
+                setPublishError(null);
+                navigate(`/exercise/${data.slug}`);
             }
         } catch (error) {
-            setPublishError('Something went wrong ' + error)
-        } finally {
-            setLoading(false);
+            setPublishError('Something went wrong');
         }
-    }
+    };
+
     return (
         loading ?
             <div className="flex justify-center items-center h-screen">
@@ -130,7 +128,7 @@ export default function UpdateExercise() {
             </div> :
             <div className="p-3 max-w-3xl mx-auto min-h-screen">
                 <h1 className="text-center text-3xl my-7 font-semibold">
-                    Update post
+                    Update exercise
                 </h1>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -152,6 +150,22 @@ export default function UpdateExercise() {
                             <option value="uncategorized">Select a category</option>
                             {categories.map((category) => (
                                 <option key={category._id} value={category.name}>{category.name}</option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                        <label htmlFor="machines" className="text-lg font-semibold">Máquinas:</label>
+                        <Select
+                            id="machines"
+                            multiple
+                            value={formData.machines || []}
+                            onChange={e => {
+                                const selectedMachines = Array.from(e.target.selectedOptions, option => option.value);
+                                setFormData({ ...formData, machines: selectedMachines });
+                            }}
+                        >
+                            {machines.map((machine) => (
+                                <option key={machine._id} value={machine._id}>{machine.title}</option>
                             ))}
                         </Select>
                     </div>
@@ -187,15 +201,14 @@ export default function UpdateExercise() {
                     {formData.image && (
                         <img src={formData.image} alt="upload" className="w-full h-72 object-cover" />
                     )}
-                    {<ReactQuill
-                        id="content"
+                    <ReactQuill
                         theme="snow"
                         placeholder="Write something..."
                         className="h-72 mb-12"
                         required
                         value={formData.content}
                         onChange={value => setFormData({ ...formData, content: value })}
-                    />}
+                    />
                     <Button type="submit" gradientDuoTone="purpleToPink">Update</Button>
                     {publishError &&
                         <Alert color="failure" className="mt-4">

@@ -15,6 +15,7 @@ export const createExercise = async (req, res, next) => {
     .replace(/[^a-zA-Z0-9-]/g, "");
   const newExercise = new Exercise({
     ...req.body,
+    machines: req.body.machines || [],
     slug,
     userId: req.user.id,
   });
@@ -100,6 +101,7 @@ export const updateExercise = async (req, res, next) => {
           status: req.body.status,
           category: req.body.category,
           image: req.body.image,
+          machines: req.body.machines || [],
         },
       },
       { new: true }

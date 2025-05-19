@@ -20,6 +20,10 @@ const machineSchema = new mongoose.Schema(
       default:
         "https://www.hostinger.it/tutorial/wp-content/uploads/sites/24/2023/09/come-scrivere-un-blog-768x334.webp",
     },
+    exercises: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Exercise'
+    }],
     slug: {
       type: String,
       required: true,

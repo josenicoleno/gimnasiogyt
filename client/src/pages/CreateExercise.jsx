@@ -15,17 +15,28 @@ export default function CreateExercise() {
     const [publishError, setPublishError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [exerciseCategories, setExerciseCategories] = useState([]);
+    const [machines, setMachines] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchExerciseCategories = async () => {
+        const fetchData = async () => {
             setLoading(true);
-            const res = await fetch(`/api/exerciseCategory/`);
-            const data = await res.json();
-            setExerciseCategories(data);
-            setLoading(false);
-        }
-        fetchExerciseCategories();
+            try {
+                const [categoriesRes, machinesRes] = await Promise.all([
+                    fetch(`/api/exerciseCategory/`),
+                    fetch(`/api/machine/`)
+                ]);
+                const categoriesData = await categoriesRes.json();
+                const machinesData = await machinesRes.json();
+                setExerciseCategories(categoriesData);
+                setMachines(machinesData.machines);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
     const handledUploadImage = () => {
@@ -119,6 +130,21 @@ export default function CreateExercise() {
                             <option value="uncategorized">Select a category</option>
                             {exerciseCategories.map((exerciseCategory) => (
                                 <option key={exerciseCategory._id} value={exerciseCategory.name}>{exerciseCategory.name}</option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                        <label htmlFor="machines" className="text-lg font-semibold">Máquinas:</label>
+                        <Select
+                            id="machines"
+                            multiple
+                            onChange={e => {
+                                const selectedMachines = Array.from(e.target.selectedOptions, option => option.value);
+                                setFormData({ ...formData, machines: selectedMachines });
+                            }}
+                        >
+                            {machines.map((machine) => (
+                                <option key={machine._id} value={machine._id}>{machine.title}</option>
                             ))}
                         </Select>
                     </div>
