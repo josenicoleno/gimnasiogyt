@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import { errorHandler } from "../utils/error.js";
+import mongoose from "mongoose";
 
 export const createPost = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -16,7 +17,7 @@ export const createPost = async (req, res, next) => {
   const newPost = new Post({
     ...req.body,
     slug,
-    userId: req.user.id,
+    userId: mongoose.Types.ObjectId.createFromHexString(req.user.id),
   });
   try {
     const savedPost = await newPost.save();
@@ -44,6 +45,7 @@ export const getPosts = async (req, res, next) => {
         ],
       }),
     })
+      .populate('userId', 'username profilePicture')
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);

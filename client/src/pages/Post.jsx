@@ -84,30 +84,51 @@ export default function Post() {
                         <img
                             src={post?.image}
                             alt={post?.title}
-                            className="mt-10 p-3 max-h-[600px] w-full object-cover"
+                            className="mt-10 max-h-[600px] w-full object-cover"
                         />
-                        <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
+                        <div className="flex justify-between items-baseline p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
+                            <div className="flex items-center gap-1 mt-5 text-gray-500">
+                                <p>Escrito por: </p>
+                                <img className='w-10 h-10 rounded-full object-cover' src={post?.userId.profilePicture} alt="profile" />
+                                <Link className='text-xs text-cyan-600 hover:underline' to='/dashboard?tab=profile'>
+                                    {post?.userId.username}
+                                </Link>
+                            </div>
                             <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
                             <span className="italic">{post && (post.content.length / 1000 + 1).toFixed(0)} mins read</span>
                         </div>
                         <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: post?.content }}>
                         </div>
                     </>
-                    :
-                    <div className="grid md:grid-cols-2 gap-8 mt-10">
-                        {/* Columna de imagen */}
-                        <div className="flex justify-center items-start">
-                            <img
-                                src={post?.image}
-                                alt={post?.title}
-                                className="max-h-[600px] w-full object-cover rounded-lg"
-                            />
+                    : //Card
+                    <>
+                        <div className="grid md:grid-cols-2 gap-8 mt-10">
+                            {/* Columna de imagen */}
+                            <div className="flex flex-col justify-center items-start">
+                                <img
+                                    src={post?.image}
+                                    alt={post?.title}
+                                    className="max-h-[600px] w-full object-cover rounded-lg"
+                                />
+                                <div className="flex justify-between items-baseline p-3 border-slate-500 mx-auto w-full max-w-2xl text-xs">
+                                    <div className="flex items-center gap-1 mt-5 text-gray-500">
+                                        <p>Escrito por: </p>
+                                        <img className='w-10 h-10 rounded-full object-cover' src={post?.userId.profilePicture} alt="profile" />
+                                        <Link className='text-xs text-cyan-600 hover:underline' to='/dashboard?tab=profile'>
+                                            {post?.userId.username}
+                                        </Link>
+                                    </div>
+                                    <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
+                                    <span className="italic">{post && (post.content.length / 1000 + 1).toFixed(0)} mins read</span>
+                                </div>
+                            </div>
+                            {/* Columna de contenido */}
+                            <div className="flex flex-col space-y-4">
+                                <div className="post-content prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post?.content }} />
+                            </div>
                         </div>
-                        {/* Columna de contenido */}
-                        <div className="flex flex-col space-y-4">
-                            <div className="post-content prose prose-lg max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post?.content }} />
-                        </div>
-                    </div>
+
+                    </>
                 }
             </main>
             <div className="max-w-4xl mx-auto w-full">
