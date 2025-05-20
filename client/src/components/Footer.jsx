@@ -73,7 +73,7 @@ const FooterComponent = () => {
                             </Link>
                         </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
+                    <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-4 sm:gap-6">
                         <div>
                             <Footer.Title title="Sobre nosotros" />
                             <Footer.LinkGroup col>
@@ -93,6 +93,17 @@ const FooterComponent = () => {
                             </Footer.LinkGroup>
                         </div>
                         <div>
+                            <Footer.Title title="Escribinos!" />
+                            <Footer.LinkGroup col>
+                                <Footer.Link href='contact-me' rel="noopener noreferrer">
+                                    Contacto
+                                </Footer.Link>
+                                <Footer.Link href='registration' rel="noopener noreferrer">
+                                    Inscribirse
+                                </Footer.Link>
+                            </Footer.LinkGroup>
+                        </div>
+                        <div>
                             <Footer.Title title="Legal" />
                             <Footer.LinkGroup col>
                                 <Footer.Link href="#">
@@ -107,7 +118,8 @@ const FooterComponent = () => {
                 </div>
                 <Footer.Divider />
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
-                    <Footer.Copyright href="#" by="Gimnasia y Tiro" year={new Date().getFullYear()} />
+                    <Footer.Copyright href="https://www.facebook.com/gytoficial/" by="Gimnasia y Tiro" year={new Date().getFullYear()} />
+                    <Footer.Copyright href="https://www.josenicoleno.ar" by="José Nicoleno" year={new Date().getFullYear()} />
                     <div className="flex gap-6 sm:mt-0 mt-5 sm:justify-center">
                         {redesSociales.filter(sn => sn.boolean).map(sn => (
                             < Footer.Icon

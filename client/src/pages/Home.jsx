@@ -66,11 +66,11 @@ export default function Home() {
     <div className="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
       {/* Header */}
       <div className="flex flex-col gap-6 p-10 px-6 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold lg:text-6xl text-blue-500">Gimnasio GyT</h1>
-        <p className="text-gray-500 dark:text-gray-300 text-xs sm:text-sm">Bienvenido a la web del Gimnasio de tu club...</p>
+        <h1 className="text-3xl font-bold lg:text-6xl" style={{ color: 'rgba(145,216,248,255)' }}>Gimnasio GyT</h1>
+        <p className="text-gray-500 dark:text-gray-300 text-xs sm:text-sm font-bold">Bienvenido al Gimnasio del Club de Salta</p>
         <div className="flex gap-4">
-          <Link to='/search' className='text-sm text-teal-500 hover:underline font-bold'>Ver todos los posts</Link>
-          <Link to='/searchexercise' className='text-sm text-teal-500 hover:underline font-bold'>Ver todos los ejercicios</Link>
+          <Link to='/search' className='text-sm hover:underline font-bold'style={{ color: 'rgb(145, 215, 248)' }}>Ver todos los posts</Link>
+          <Link to='/searchexercise' className='text-sm hover:underline font-bold' style={{ color: 'rgb(145, 215, 248)' }}>Ver todos los ejercicios</Link>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ export default function Home() {
           </div>
 
           {/* Sidebar de Categorías de Ejercicios */}
-          <CategoryList categories={exercisesCategories} title={"Categorías de Ejercicios"} type={"exercise"} />
+          <CategoryList categories={exercisesCategories} title={"Categorías"} type={"exercise"} />
         </div>
         :<>
         </>
@@ -133,7 +133,7 @@ export default function Home() {
           </div>
 
           {/* Sidebar de Categorías de Posts */}
-          <CategoryList categories={categories} title={'Categorías de posts'} type={"post"} />
+          <CategoryList categories={categories} title={'Categorías'} type={"post"} />
         </div>
       }
     </div>
