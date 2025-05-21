@@ -45,6 +45,7 @@ export const getExercises = async (req, res, next) => {
         ],
       }),
     })
+      .populate("machines", "title image")
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);

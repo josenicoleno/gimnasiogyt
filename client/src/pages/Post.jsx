@@ -6,6 +6,7 @@ import CommentSection from "../components/CommentSection"
 import PostCard from "../components/PostCard"
 import { useSelector } from "react-redux"
 import 'react-quill-new/dist/quill.snow.css';
+import { HiViewList, HiViewGrid } from "react-icons/hi"
 
 
 export default function Post() {
@@ -79,6 +80,22 @@ export default function Post() {
                 >
                     <Button color="gray" pill size="xs">{post?.category}</Button>
                 </Link>
+                <div className="hidden md:flex justify-end items-center gap-4">
+                    <Button
+                        color={typePost === 'post' ? 'blue' : 'gray'}
+                        onClick={() => setTypePost('post')}
+                        size="sm"
+                    >
+                        <HiViewList className="h-5 w-5" />
+                    </Button>
+                    <Button
+                        color={typePost === 'card' ? 'blue' : 'gray'}
+                        onClick={() => setTypePost('card')}
+                        size="sm"
+                    >
+                        <HiViewGrid className="h-5 w-5" />
+                    </Button>
+                </div>
                 {typePost === 'post' ?
                     <>
                         <img

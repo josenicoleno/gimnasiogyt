@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { Button, Spinner } from 'flowbite-react'
+import { Button, Spinner, Tooltip } from 'flowbite-react'
+import { HiViewGrid, HiViewList } from 'react-icons/hi'
 import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
 import ExerciseCard from "../components/ExerciseCard"
@@ -13,7 +14,7 @@ export default function Exercise() {
     const [error, setError] = useState('')
     const [exercise, setExercise] = useState(null)
     const [recentExercise, setRecentExercise] = useState(null)
-    const [typeExercise, setTypeExercise] = useState(null)
+    const [typeExercise, setTypeExercise] = useState('post')
 
     useEffect(() => {
         const fetchExercise = async () => {
@@ -27,9 +28,10 @@ export default function Exercise() {
                     return
                 }
                 setExercise(data.exercises[0])
+                console.log(exercise)
                 const resCategory = await fetch(`/api/exerciseCategory/?category=${data.exercises[0].category}`)
                 const dataCategory = await resCategory.json();
-                setTypeExercise(dataCategory[0]?.type || 'exercise')
+                setTypeExercise(dataCategory[0]?.type || 'post')
                 setLoading(false)
                 setError(false)
             } catch (error) {
@@ -64,21 +66,41 @@ export default function Exercise() {
                 <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
                     {exercise?.title}
                 </h1>
-                <Link
-                    to={`/searchexercise?category=${exercise?.category}`}
-                    className="self-center mt-5"
-                >
-                    <Button color="gray" pill size="xs">{exercise?.category}</Button>
-                </Link>
-                {currentUser &&
+                <div className="flex justify-center items-center gap-4 mt-5">
                     <Link
-                        to={`/create-personal-record?exerciseId=${exercise?._id}`}
-                        className="self-start"
+                        to={`/searchexercise?category=${exercise?.category}`}
                     >
-                        <Button gradientDuoTone="cyanToBlue" outline >Nueva marca</Button>
+                        <Button color="gray" pill size="xs">{exercise?.category}</Button>
                     </Link>
-                }
-                {typeExercise === 'exercise' ?
+
+                </div>
+                <div className="flex justify-between items-center gap-4 mt-5">
+                    {currentUser &&
+                        <Link
+                            to={`/create-personal-record?exerciseId=${exercise?._id}`}
+                            className="self-start"
+                        >
+                            <Button gradientDuoTone="cyanToBlue" outline >Nueva marca</Button>
+                        </Link>
+                    }
+                    <div className="hidden md:flex justify-center items-center gap-4">
+                        <Button
+                            color={typeExercise === 'post' ? 'blue' : 'gray'}
+                            onClick={() => setTypeExercise('post')}
+                            size="sm"
+                        >
+                            <HiViewList className="h-5 w-5" />
+                        </Button>
+                        <Button
+                            color={typeExercise === 'card' ? 'blue' : 'gray'}
+                            onClick={() => setTypeExercise('card')}
+                            size="sm"
+                        >
+                            <HiViewGrid className="h-5 w-5" />
+                        </Button>
+                    </div>
+                </div>
+                {typeExercise === 'post' ?
                     <>
                         <img
                             src={exercise?.image}
@@ -86,8 +108,21 @@ export default function Exercise() {
                             className="mt-10 p-3 max-h-[600px] w-full object-cover"
                         />
                         <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
-                            <span>{exercise && new Date(exercise.createdAt).toLocaleDateString()}</span>
-                            <span className="italic">{exercise && (exercise.content.length / 1000 + 1).toFixed(0)} mins read</span>
+                            <div className="flex items-center gap-2">
+                                {exercise?.machines?.map((machine) => (
+                                    <Tooltip
+                                        key={machine._id}
+                                        content={machine.title}
+                                        placement="top"
+                                    >
+                                        <img
+                                            src={machine.image}
+                                            alt={machine.title}
+                                            className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hover:border-blue-500 transition-all"
+                                        />
+                                    </Tooltip>
+                                ))}
+                            </div>
                         </div>
                         <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: exercise?.content }}>
                         </div>
@@ -96,11 +131,30 @@ export default function Exercise() {
                     <div className="grid md:grid-cols-2 gap-8 mt-10">
                         {/* Columna de imagen */}
                         <div className="flex justify-center items-start">
-                            <img
-                                src={exercise?.image}
-                                alt={exercise?.title}
-                                className="max-h-[600px] w-full object-cover rounded-lg"
-                            />
+                            <div className="relative">
+                                <img
+                                    src={exercise?.image}
+                                    alt={exercise?.title}
+                                    className="max-h-[600px] w-full object-cover rounded-lg"
+                                />
+                                <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
+                                    <div className="flex items-center gap-2">
+                                        {exercise?.machines?.map((machine) => (
+                                            <Tooltip
+                                                key={machine._id}
+                                                content={machine.title}
+                                                placement="top"
+                                            >
+                                                <img
+                                                    src={machine.image}
+                                                    alt={machine.title}
+                                                    className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hover:border-blue-500 transition-all"
+                                                />
+                                            </Tooltip>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         {/* Columna de contenido */}
                         <div className="flex flex-col space-y-4">
