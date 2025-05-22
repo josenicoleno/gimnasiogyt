@@ -12,10 +12,10 @@ export default function CallToAction() {
         <div className="flex flex-col alig sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center">
             <div className="flex flex-col flex-1 justify-center">
                 <h2 className="text-2xl">
-                    Inscribite al gimnasio de tu club!
+                    ¡Inscribite al gimnasio de tu club!
                 </h2>
                 <p className="text-gray-400 my-2">
-                    Completá el formulario y empezá. Podés también mandarnos un whatsapp o llámarnos
+                    Completá el formulario y empezá. Podés también mandarnos un Whatsapp o llamarnos
                 </p>
                 <Button gradientDuoTone="cyanToBlue" onClick={handleClick} className="rounded-tl-xl rounded-bl-none">
                     Inscribirse

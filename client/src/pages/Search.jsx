@@ -116,30 +116,30 @@ export default function Search() {
                         <TextInput
                             id='searchTerm'
                             type='text'
-                            placeholder='Search...'
+                            placeholder='Buscar...'
                             value={sidebarData.searchTerm}
                             onChange={handleChange}
                         />
                     </div>
                     <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Sort:</label>
+                        <label className='whitespace-nowrap font-semibold'>Ordenar:</label>
                         <Select
                             id='sort'
                             onChange={handleChange}
                             value={sidebarData.sort}
                         >
-                            <option value='desc'>Latest</option>
-                            <option value='asc'>Oldest</option>
+                            <option value='desc'>Más recientes</option>
+                            <option value='asc'>Más antiguos</option>
                         </Select>
                     </div>
                     <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Category:</label>
+                        <label className='whitespace-nowrap font-semibold'>Categoría:</label>
                         <Select
                             id='category'
                             onChange={handleChange}
                             value={sidebarData.category}
                         >
-                            <option value=''>Select</option>
+                            <option value=''>Seleccionar</option>
                             {categories.map(category => (
                                 <option key={category._id} value={category.name}>
                                     {category.name}

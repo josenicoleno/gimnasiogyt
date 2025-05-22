@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { Button, Modal, Table, TextInput } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { formToJSON } from "axios"
 
 export const DashMachines = () => {
   const { currentUser } = useSelector(state => state.user)

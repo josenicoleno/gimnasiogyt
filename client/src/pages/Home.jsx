@@ -103,7 +103,7 @@ export default function Home() {
       ?
         <div className="py-10 border-t border-gray-200 dark:border-gray-600 max-w-8xl mx-auto flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-3/4">
-            <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios recientes</h2>
+            <h2 className="text-2xl font-semibold text-center mb-5">Ejercicios</h2>
             <div className="flex flex-wrap gap-1 justify-center">
               {exercises.map((exercise) => (
                 <ExerciseCard key={exercise._id} exercise={exercise} />

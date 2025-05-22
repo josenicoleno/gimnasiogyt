@@ -83,7 +83,7 @@ const FooterComponent = () => {
                             </Footer.LinkGroup>
                         </div>
                         <div>
-                            <Footer.Title title="Síguenos!" />
+                            <Footer.Title title="Seguinos!" />
                             <Footer.LinkGroup col>
                                 {redesSociales.filter(sn => sn.boolean).map(sn => (
                                     <Footer.Link key={sn.key} href={sn.text} target="_blank" rel="noopener noreferrer">
@@ -119,7 +119,7 @@ const FooterComponent = () => {
                 <Footer.Divider />
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
                     <Footer.Copyright href="https://www.facebook.com/gytoficial/" by="Gimnasia y Tiro" year={new Date().getFullYear()} />
-                    <Footer.Copyright href="https://www.josenicoleno.ar" by="José Nicoleno" year={new Date().getFullYear()} />
+                    <Footer.Copyright href="https://www.josenicoleno.ar" by="With love - José Nicoleno" />
                     <div className="flex gap-6 sm:mt-0 mt-5 sm:justify-center">
                         {redesSociales.filter(sn => sn.boolean).map(sn => (
                             < Footer.Icon

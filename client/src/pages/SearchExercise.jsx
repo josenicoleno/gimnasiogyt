@@ -14,6 +14,7 @@ export default function SearchExercise() {
     const [exercises, setExercises] = useState([])
     const [showMore, setShowMore] = useState(false)
     const [categories, setCategories] = useState([])
+    const [machines, setMachines] = useState([])
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,11 +22,13 @@ export default function SearchExercise() {
         const searchTermFromUrl = urlParams.get('searchTerm') || ''
         const sortFromUrl = urlParams.get('sort') || 'desc'
         const categoryFromUrl = urlParams.get('category') || ''
+        const machineFromUrl = urlParams.get('machine') || ''
 
         setSidebarData({
             searchTerm: searchTermFromUrl,
             sort: sortFromUrl,
             category: categoryFromUrl,
+            machine: machineFromUrl
         })
 
         const fetchExercise = async () => {
@@ -54,7 +57,13 @@ export default function SearchExercise() {
             const data = await res.json()
             setCategories(data)
         }
+        const fetchExerciseMachines = async () => {
+            const res = await fetch(`/api/machine/`)
+            const data = await res.json()
+            setMachines(data)
+        }
         fetchExerciseCategories()
+        fetchExerciseMachines()
     }, [])
 
     const handleChange = e => {
@@ -67,6 +76,10 @@ export default function SearchExercise() {
         if (e.target.id === 'category') {
             const category = e.target.value || '';
             setSidebarData({ ...sidebarData, category: category })
+        }
+        if (e.target.id === 'machine') {
+            const machine = e.target.value || '';
+            setSidebarData({ ...sidebarData, machine: machine })
         }
     }
 
@@ -84,6 +97,11 @@ export default function SearchExercise() {
             urlParams.set('category', sidebarData.category)
 
         urlParams.set('sort', sidebarData.sort)
+
+        if (sidebarData.machine === '')
+            urlParams.delete('machine')
+        else
+            urlParams.set('machine', sidebarData.machine)
 
         const searchQuery = urlParams.toString();
         navigate(`/searchexercise?${searchQuery}`)
@@ -112,37 +130,52 @@ export default function SearchExercise() {
                     className='flex flex-col gap-8'
                 >
                     <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Search Term:</label>
+                        <label className='whitespace-nowrap font-semibold'>Ejercicio:</label>
                         <TextInput
                             id='searchTerm'
                             type='text'
-                            placeholder='Search...'
+                            placeholder='Buscar...'
                             value={sidebarData.searchTerm}
                             onChange={handleChange}
                         />
                     </div>
-                    <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Sort:</label>
+                    {/* <div className='flex items-center gap-2'>
+                        <label className='whitespace-nowrap font-semibold'>Ordenar por:</label>
                         <Select
                             id='sort'
                             onChange={handleChange}
                             value={sidebarData.sort}
                         >
-                            <option value='desc'>Latest</option>
-                            <option value='asc'>Oldest</option>
+                            <option value='desc'>Más recientes</option>
+                            <option value='asc'>Más antiguos</option>
                         </Select>
-                    </div>
+                    </div> */}
                     <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Category:</label>
+                        <label className='whitespace-nowrap font-semibold'>Categoría:</label>
                         <Select
                             id='category'
                             onChange={handleChange}
                             value={sidebarData.category}
                         >
-                            <option value=''>Select</option>
+                            <option value=''>Seleccionar</option>
                             {categories.map(category => (
                                 <option key={category._id} value={category.name}>
                                     {category.name}
+                                </option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <label className='whitespace-nowrap font-semibold'>Máquina:</label>
+                        <Select
+                            id='machine'
+                            onChange={handleChange}
+                            value={sidebarData.machine}
+                        >
+                            <option value=''>Seleccionar</option>
+                            {machines?.machines?.map(machine => (
+                                <option key={machine._id} value={machine.title}>
+                                    {machine.title}
                                 </option>
                             ))}
                         </Select>
@@ -153,14 +186,14 @@ export default function SearchExercise() {
                         outline
                         disabled={loading}
                     >
-                        Search
+                        Buscar
                     </Button>
                 </form>
             </div>
             {/* Main */}
             <div className='w-full p-7'>
                 <h1 className='text-3xl font-semibold sm:border-b sm:border-gray-500 pb-4'>
-                    Exercise results
+                    Ejercicios
                 </h1>
                 {loading &&
                     <div className='flex justify-center items-center min-h-screen'>

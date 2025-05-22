@@ -1,5 +1,6 @@
 import Exercise from "../models/exercise.model.js";
 import { errorHandler } from "../utils/error.js";
+import Machine from "../models/machine.model.js";
 
 export const createExercise = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -31,11 +32,17 @@ export const getExercises = async (req, res, next) => {
   const startIndex = parseInt(req.query.startIndex) || 0;
   const limit = parseInt(req.query.limit) || 9;
   const sortDirection = req.query.order === "asc" ? 1 : -1;
+  let machineId = null;
   try {
+    if(req.query.machine) {
+      const machine = await Machine.findOne({ title: req.query.machine })
+      machineId = machine._id;
+    }
     const exercises = await Exercise.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
-      ...(req.query.status && { category: req.query.status }),
+      ...(req.query.status && { status: req.query.status }),
+      ...(machineId && { machines: machineId }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.exerciseId && { _id: req.query.exerciseId }),
       ...(req.query.searchTerm && {
@@ -50,6 +57,7 @@ export const getExercises = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
+      
     const totalExercises = await Exercise.countDocuments();
 
     const now = new Date();
