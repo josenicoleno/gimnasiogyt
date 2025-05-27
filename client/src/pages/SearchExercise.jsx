@@ -174,7 +174,7 @@ export default function SearchExercise() {
                         >
                             <option value=''>Seleccionar</option>
                             {machines?.machines?.map(machine => (
-                                <option key={machine._id} value={machine.title}>
+                                <option key={machine._id} id={machine._id} value={machine.title}>
                                     {machine.title}
                                 </option>
                             ))}

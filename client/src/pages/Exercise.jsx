@@ -28,7 +28,6 @@ export default function Exercise() {
                     return
                 }
                 setExercise(data.exercises[0])
-                console.log(exercise)
                 const resCategory = await fetch(`/api/exerciseCategory/?category=${data.exercises[0].category}`)
                 const dataCategory = await resCategory.json();
                 setTypeExercise(dataCategory[0]?.type || 'post')

@@ -31,6 +31,7 @@ import { useEffect } from 'react';
 import CreatePersonalRecord from './pages/CreatePersonalRecord'
 import CreateMachine from './pages/CreateMachine'
 import UpdateMachine from './pages/UpdateMachine'
+import Machine from './pages/Machine'
 
 export default function App() {
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function App() {
         <Route path='/contact-me' element={<ContactMe />} />
         <Route path='/post/:postSlug' element={<Post />} />
         <Route path='/exercise/:exerciseSlug' element={<Exercise />} />
+        <Route path='/machine/:machineSlug' element={<Machine />} />
         <Route path='/registration' element={<Registration />} />
         <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />

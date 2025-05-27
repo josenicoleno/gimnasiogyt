@@ -50,7 +50,6 @@ export const DashMachines = () => {
 
   const handleDelete = async () => {
     try {
-      console.log(machineIdToDelete, currentUser._id)
       const res = await fetch(`/api/machine/delete/${machineIdToDelete}`, {
         method: 'DELETE'
       });
