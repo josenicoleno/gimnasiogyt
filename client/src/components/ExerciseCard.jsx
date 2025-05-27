@@ -18,11 +18,13 @@ export default function ExerciseCard({ exercise }) {
                                 content={machine.title}
                                 placement="top"
                             >
-                                <img
-                                    src={machine.image}
-                                    alt={machine.title}
-                                    className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hover:border-blue-500 transition-all"
-                                />
+                                <Link to={`/machine/${machine.slug}`}>
+                                    <img
+                                        src={machine.image}
+                                        alt={machine.title}
+                                        className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hover:border-blue-500 transition-all"
+                                    />
+                                </Link>
                             </Tooltip>
                         ))}
                     </div>

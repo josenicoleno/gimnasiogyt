@@ -52,7 +52,7 @@ export const getExercises = async (req, res, next) => {
         ],
       }),
     })
-      .populate("machines", "title image")
+      .populate("machines", "title image slug")
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);

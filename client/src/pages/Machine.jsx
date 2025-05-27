@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Button, Spinner } from 'flowbite-react'
 import CallToAction from "../components/CallToAction"
 import CommentSection from "../components/CommentSection"
-import PostCard from "../components/PostCard"
-import ExerciseCard from "../components/ExerciseCard"
-import { useSelector } from "react-redux"
 import 'react-quill-new/dist/quill.snow.css';
 import { HiViewList, HiViewGrid } from "react-icons/hi"
+import MachineCard from "../components/MachineCard"
 
 
 export default function Machine() {
     const { machineSlug } = useParams()
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
     const [machine, setMachine] = useState(null)
+    const [error, setError] = useState(null)
     const [otherMachine, setOtherMachine] = useState(null)
     const [relatedExercises, setRelatedExercises] = useState([])
     const [typeView, setTypeView] = useState('card')
-    const { currentUser } = useSelector(state => state.user)
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMachine = async () => {
@@ -40,7 +36,7 @@ export default function Machine() {
                 setLoading(false)
             }
         }
-        const fetchRecentPost = async () => {
+        const fetchOtherMachines = async () => {
             try {
                 const res = await fetch(`/api/machine/?limit=4`)
                 if (res.ok) {
@@ -60,16 +56,15 @@ export default function Machine() {
                 if (res.ok) {
                     const data = await res.json();
                     setRelatedExercises(data.exercises)
-                    console.log(relatedExercises.map(x => console.log(x.title)))
                 }
             } catch (error) {
                 console.log(error.message)
             }
         }
-        fetchRecentPost();
         fetchMachine();
-        fetchRelatedExercises();
+        fetchOtherMachines();
         if (machine?.title) {
+            fetchRelatedExercises();
         }
     }, [machineSlug, machine?.title])
 
@@ -191,7 +186,7 @@ export default function Machine() {
                 <h1 className="text-xl mt-5">Otras máquinas</h1>
                 <div className="flex flex-wrap gap-5 mt-5 justify-center">
                     {otherMachine &&
-                        otherMachine.map(machine => <PostCard key={machine._id} post={machine} />)
+                        otherMachine.map(machine => <MachineCard key={machine._id} machine={machine} />)
                     }
                 </div>
             </div>
