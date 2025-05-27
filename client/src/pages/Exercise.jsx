@@ -73,16 +73,18 @@ export default function Exercise() {
                     </Link>
 
                 </div>
-                <div className="flex justify-between items-center gap-4 mt-5">
-                    {currentUser &&
-                        <Link
-                            to={`/create-personal-record?exerciseId=${exercise?._id}`}
-                            className="self-start"
-                        >
-                            <Button gradientDuoTone="cyanToBlue" outline >Nueva marca</Button>
-                        </Link>
-                    }
-                    <div className="hidden md:flex justify-center items-center gap-4">
+                <div className="flex justify-between items-center gap-2">
+                    <div className="flex-1">
+                        {currentUser &&
+                            <Link
+                                to={`/create-personal-record?exerciseId=${exercise?._id}`}
+                                className="self-start"
+                            >
+                                <Button gradientDuoTone="cyanToBlue" outline>Nueva marca</Button>
+                            </Link>
+                        }
+                    </div>
+                    <div className="flex justify-center items-center gap-4">
                         <Button
                             color={typeExercise === 'post' ? 'blue' : 'gray'}
                             onClick={() => setTypeExercise('post')}
