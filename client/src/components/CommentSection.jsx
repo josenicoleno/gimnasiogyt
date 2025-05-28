@@ -151,7 +151,7 @@ export default function CommentSection({ postId }) {
                             outline
                             gradientDuoTone='purpleToBlue'
                         >
-                            Submit
+                            Comentar
                         </Button>
                     </div>
                     {commentError &&

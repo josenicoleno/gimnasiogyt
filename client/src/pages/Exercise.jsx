@@ -110,7 +110,7 @@ export default function Exercise() {
                         />
                         <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
                             <div className="flex items-center gap-2">
-                                {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas asociadas:</p>}
+                                {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas:</p>}
                                 {exercise?.machines?.map((machine) => (
                                     <Tooltip
                                         key={machine._id}
@@ -143,7 +143,7 @@ export default function Exercise() {
                                 />
                                 <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
                                     <div className="flex items-center gap-2">
-                                        {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas asociadas:</p>}
+                                        {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas:</p>}
                                         {exercise?.machines?.map((machine) => (
                                             <Tooltip
                                                 key={machine._id}
