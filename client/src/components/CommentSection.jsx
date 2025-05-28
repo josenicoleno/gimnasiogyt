@@ -118,7 +118,7 @@ export default function CommentSection({ postId }) {
             {currentUser ?
                 (
                     <div className="flex items-center gap-1 my-5 text-gray-500">
-                        <p>Signed in as: </p>
+                        <p>Logueado como: </p>
                         <img className='w-10 h-10 rounded-full object-cover' src={currentUser.profilePicture} alt="profile" />
                         <Link className='text-xs text-cyan-600 hover:underline' to='/dashboard?tab=profile'>
                             @{currentUser.username}
@@ -133,19 +133,19 @@ export default function CommentSection({ postId }) {
                 </div>
             }
             {comments.length === 0 &&
-                <p className='text-sm my-5'>Make the first comment!</p>
+                <p className='text-sm my-5'>¡Haz el primer comentario!</p>
             }
             {currentUser && (
                 <form onSubmit={handleSubmit} className='border border-teal-500 rounded-md p-3'>
                     <Textarea
-                        placeholder='Add a comment...'
+                        placeholder='Agregar comentario...'
                         rows='3'
                         maxLength='200'
                         onChange={e => setComment(e.target.value)}
                         value={comment}
                     />
                     <div className='flex justify-between items-center mt-5'>
-                        <p className='text-gray-500 text-xs'>{200 - comment.length} characters remaining</p>
+                        <p className='text-gray-500 text-xs'>Te quedan {200 - comment.length} caracteres...</p>
                         <Button
                             type='submit'
                             outline

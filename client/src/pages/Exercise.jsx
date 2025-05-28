@@ -110,6 +110,7 @@ export default function Exercise() {
                         />
                         <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
                             <div className="flex items-center gap-2">
+                                {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas asociadas:</p>}
                                 {exercise?.machines?.map((machine) => (
                                     <Tooltip
                                         key={machine._id}
@@ -142,6 +143,7 @@ export default function Exercise() {
                                 />
                                 <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
                                     <div className="flex items-center gap-2">
+                                        {exercise?.machines && <p className='text-gray-500 text-xs'>Máquinas asociadas:</p>}
                                         {exercise?.machines?.map((machine) => (
                                             <Tooltip
                                                 key={machine._id}
@@ -174,7 +176,7 @@ export default function Exercise() {
             </div>
             <CommentSection postId={exercise?._id} />
             <div className="flex flex-col justify-center items-center max-w-8xl p-3">
-                <h1 className="text-xl mt-5">Exercises similares</h1>
+                <h1 className="text-xl mt-5">Otros ejercicios</h1>
                 <div className="flex flex-wrap gap-5 mt-5 justify-center">
                     {recentExercise &&
                         recentExercise.map(exercise => <ExerciseCard key={exercise._id} exercise={exercise} />)
