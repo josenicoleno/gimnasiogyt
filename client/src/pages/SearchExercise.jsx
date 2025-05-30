@@ -6,7 +6,6 @@ import ExerciseCard from '../components/ExerciseCard'
 export default function SearchExercise() {
     const [sidebarData, setSidebarData] = useState({
         searchTerm: '',
-        sort: 'desc',
         category: 'uncategorized'
     })
     const [loading, setLoading] = useState(false)
@@ -76,10 +75,33 @@ export default function SearchExercise() {
         if (e.target.id === 'category') {
             const category = e.target.value || '';
             setSidebarData({ ...sidebarData, category: category })
+            const urlParams = new URLSearchParams(location.search);
+            if (category === '')
+                urlParams.delete('category')
+            else
+                urlParams.set('category', category)
+            if (sidebarData.searchTerm)
+                urlParams.set('searchTerm', sidebarData.searchTerm)
+            if (sidebarData.machine)
+                urlParams.set('machine', sidebarData.machine)
+            const searchQuery = urlParams.toString();
+            navigate(`/searchexercise?${searchQuery}`)
         }
+
         if (e.target.id === 'machine') {
             const machine = e.target.value || '';
             setSidebarData({ ...sidebarData, machine: machine })
+            const urlParams = new URLSearchParams(location.search);
+            if (machine === '')
+                urlParams.delete('machine')
+            else
+                urlParams.set('machine', machine)
+            if (sidebarData.searchTerm)
+                urlParams.set('searchTerm', sidebarData.searchTerm)
+            if (sidebarData.category)
+                urlParams.set('category', sidebarData.category)
+            const searchQuery = urlParams.toString();
+            navigate(`/searchexercise?${searchQuery}`)
         }
     }
 
@@ -95,8 +117,6 @@ export default function SearchExercise() {
             urlParams.delete('category')
         else
             urlParams.set('category', sidebarData.category)
-
-        urlParams.set('sort', sidebarData.sort)
 
         if (sidebarData.machine === '')
             urlParams.delete('machine')
@@ -139,17 +159,6 @@ export default function SearchExercise() {
                             onChange={handleChange}
                         />
                     </div>
-                    {/* <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>Ordenar por:</label>
-                        <Select
-                            id='sort'
-                            onChange={handleChange}
-                            value={sidebarData.sort}
-                        >
-                            <option value='desc'>Más recientes</option>
-                            <option value='asc'>Más antiguos</option>
-                        </Select>
-                    </div> */}
                     <div className='flex items-center gap-2'>
                         <label className='whitespace-nowrap font-semibold'>Categoría:</label>
                         <Select

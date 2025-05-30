@@ -27,7 +27,7 @@ export default function Search() {
             sort: sortFromUrl,
             category: categoryFromUrl,
         })
-        
+
         const fetchPosts = async () => {
             try {
                 setLoading(true)
@@ -67,6 +67,17 @@ export default function Search() {
         if (e.target.id === 'category') {
             const category = e.target.value || '';
             setSidebarData({ ...sidebarData, category: category })
+            const urlParams = new URLSearchParams(location.search);
+            if (category === '')
+                urlParams.delete('category')
+            else
+                urlParams.set('category', category)
+            if (sidebarData.searchTerm)
+                urlParams.set('searchTerm', sidebarData.searchTerm)
+            if (sidebarData.machine)
+                urlParams.set('machine', sidebarData.machine)
+            const searchQuery = urlParams.toString();
+            navigate(`/search?${searchQuery}`)
         }
     }
 
