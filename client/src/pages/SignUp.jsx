@@ -2,20 +2,30 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import OAuth from '../components/OAuth'
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState(null)
   const navigate = useNavigate();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   }
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  }
+
   const isValid = (formData) => {
-    if (formData.username.length < 6 || formData.username.length > 20 || !formData.username) {
-      setErrorMessage('Username must be between 6 and 20 characters long.')
+    if (!captchaToken) {
+      setErrorMessage('Por favor, completa el captcha')
+      return false
+    }
+    if (formData.username.length < 8 || formData.username.length > 20 || !formData.username) {
+      setErrorMessage('Username must be between 8 and 20 characters long.')
       return false
     }
     if (!formData.email.includes('@') || !formData.email) {
@@ -38,7 +48,7 @@ const SignUp = () => {
       const res = await fetch('api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({...formData, captchaToken})
       })
       const data = await res.json();
       if (data.success === false) {
@@ -78,6 +88,12 @@ const SignUp = () => {
             <div>
               <Label value='Tu contraseña' />
               <TextInput id='password' required type='password' placeholder='contraseña' onChange={handleChange} />
+            </div>
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptchaChange}
+              />
             </div>
             <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
               {loading ? (

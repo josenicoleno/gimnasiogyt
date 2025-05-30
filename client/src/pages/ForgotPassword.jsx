@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useDispatch, useSelector } from 'react-redux'
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ForgotPassword = () => {
 
   const [formData, setFormData] = useState({});
+  const [captchaToken, setCaptchaToken] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector(state => state.user)
@@ -22,17 +24,24 @@ const ForgotPassword = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   }
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  }
+
   const handleSubmit = async e => {
     e.preventDefault();
     if (!formData.email) {
       return setErrorMessage('Por favor, complete todos los campos.')
+    }
+    if (!captchaToken) {
+      return setErrorMessage('Por favor, complete el captcha')
     }
     try {
       setLoading(true)
       const res = await fetch('api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({...formData, captchaToken})
       })
       const data = await res.json();
       if (data.success === false) {
@@ -65,6 +74,12 @@ const ForgotPassword = () => {
             <div>
               <Label value='Your email' />
               <TextInput id='email' type='email' placeholder='name@company.com' onChange={handleChange} />
+            </div>
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptchaChange}
+              />
             </div>
             <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
               {loading ? (

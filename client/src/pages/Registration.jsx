@@ -2,6 +2,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Registration() {
     const { currentUser } = useSelector((state) => state.user)
@@ -14,6 +15,7 @@ export default function Registration() {
     const [loading, setLoading] = useState(false)
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const [captchaToken, setCaptchaToken] = useState(null)
 
     useEffect(() => {
         if (currentUser) {
@@ -22,6 +24,10 @@ export default function Registration() {
         }
         document?.getElementById(currentUser ? 'phone' : 'name').focus();
     }, [currentUser])
+
+    const handleCaptchaChange = (token) => {
+        setCaptchaToken(token);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -34,12 +40,23 @@ export default function Registration() {
                 setError(true)
                 return setErrorMessage('Todos los campos son obligatorios')
             }
+            if (!captchaToken) {
+                setError(true)
+                return setErrorMessage('Por favor, complete el captcha')
+            }
             const res = await fetch('/api/contact/create?type=Registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId: currentUser?._id || '', name, email, phone, content })
+                body: JSON.stringify({ 
+                    userId: currentUser?._id || '', 
+                    name, 
+                    email, 
+                    phone, 
+                    content,
+                    captchaToken 
+                })
             })
             const data = await res.json()
             if (res.status === 201) {
@@ -133,6 +150,12 @@ export default function Registration() {
                                         value={content}
                                         onChange={(e) => setContent(e.target.value)}
                                     />
+                                    <div className="flex justify-center">
+                                        <ReCAPTCHA
+                                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                                            onChange={handleCaptchaChange}
+                                        />
+                                    </div>
                                     <Button type="submit" gradientDuoTone='purpleToPink' className='mt-3' outline disabled={loading}>
                                         Enviar mensaje
                                     </Button>

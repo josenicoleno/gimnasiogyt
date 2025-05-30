@@ -2,21 +2,7 @@ import Contact from "../models/contact.model.js";
 import User from "../models/user.model.js";
 import { sendContactEmail, sendRegistrationtEmail } from "../utils/emails.js";
 import { errorHandler } from "../utils/error.js";
-
-const verifyCaptcha = async (token) => {
-  const response = await fetch(
-    "https://www.google.com/recaptcha/api/siteverify",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-    }
-  );
-  const data = await response.json();
-  return data.success;
-};
+import { verifyCaptcha } from "../utils/captcha.js";
 
 export const getContacts = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -82,9 +68,7 @@ export const createContact = async (req, res, next) => {
     // Verificar el captcha
     const isValidCaptcha = await verifyCaptcha(captchaToken);
     if (!isValidCaptcha) {
-      return res
-        .status(400)
-        .json({ message: "Verificación de captcha fallida" });
+      return res.status(400).json({ message: "Verificación de captcha fallida" });
     }
 
     if (!newContact.name || !newContact.email || !newContact.content) {

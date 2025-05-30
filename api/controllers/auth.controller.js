@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { verifyCaptcha } from "../utils/captcha.js";
 import {
   sendResetPasswordEmail,
   sendVerificationEmail,
@@ -9,7 +10,14 @@ import {
 } from "../utils/emails.js";
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, captchaToken } = req.body;
+  
+  // Verificar el captcha
+  const isValidCaptcha = await verifyCaptcha(captchaToken);
+  if (!isValidCaptcha) {
+    return res.status(400).json({ message: "Verificación de captcha fallida" });
+  }
+
   if (
     !username ||
     !email ||
@@ -160,7 +168,14 @@ export const googleAuth = async (req, res, next) => {
 };
 
 export const forgotPassword = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, captchaToken } = req.body;
+  
+  // Verificar el captcha
+  const isValidCaptcha = await verifyCaptcha(captchaToken);
+  if (!isValidCaptcha) {
+    return res.status(400).json({ message: "Verificación de captcha fallida" });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
