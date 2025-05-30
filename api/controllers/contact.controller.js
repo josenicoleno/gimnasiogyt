@@ -3,6 +3,21 @@ import User from "../models/user.model.js";
 import { sendContactEmail, sendRegistrationtEmail } from "../utils/emails.js";
 import { errorHandler } from "../utils/error.js";
 
+const verifyCaptcha = async (token) => {
+  const response = await fetch(
+    "https://www.google.com/recaptcha/api/siteverify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    }
+  );
+  const data = await response.json();
+  return data.success;
+};
+
 export const getContacts = async (req, res, next) => {
   if (!req.user.isAdmin) {
     errorHandler(403, "You are not allowed to see this contacts");
@@ -62,6 +77,16 @@ export const createContact = async (req, res, next) => {
   const type = req.query.type || "Contact us";
   const newContact = new Contact({ ...req.body, type });
   try {
+    const { name, email, content, captchaToken } = req.body;
+
+    // Verificar el captcha
+    const isValidCaptcha = await verifyCaptcha(captchaToken);
+    if (!isValidCaptcha) {
+      return res
+        .status(400)
+        .json({ message: "Verificación de captcha fallida" });
+    }
+
     if (!newContact.name || !newContact.email || !newContact.content) {
       return next(errorHandler(400, "All fields are required"));
     }

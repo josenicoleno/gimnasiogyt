@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CallToAction from "../components/CallToAction";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function ContactMe() {
     const { currentUser } = useSelector((state) => state.user)
@@ -14,6 +15,7 @@ export default function ContactMe() {
     const [loading, setLoading] = useState(false)
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const [captchaValue, setCaptchaValue] = useState(null)
 
     useEffect(() => {
         if (currentUser) {
@@ -34,12 +36,22 @@ export default function ContactMe() {
                 setError(true)
                 return setErrorMessage('Todos los campos son obligatorios')
             }
+            if (!captchaValue) {
+                setError(true)
+                return setErrorMessage('Por favor, completa el captcha')
+            }
             const res = await fetch('/api/contact/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId: currentUser?._id || '', name, email, content })
+                body: JSON.stringify({ 
+                    userId: currentUser?._id || '', 
+                    name, 
+                    email, 
+                    content,
+                    captchaToken: captchaValue 
+                })
             })
             const data = await res.json()
             if (res.status === 201) {
@@ -119,6 +131,12 @@ export default function ContactMe() {
                                         value={content} onChange={(e) => setContent(e.target.value)}
                                         required
                                     />
+                                    <div className="flex justify-center my-4">
+                                        <ReCAPTCHA
+                                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                                            onChange={(value) => setCaptchaValue(value)}
+                                        />
+                                    </div>
                                     <Button type="submit" gradientDuoTone='purpleToPink' className='mt-3' outline disabled={loading}>
                                         Enviar mensaje
                                     </Button>
