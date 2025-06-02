@@ -12,6 +12,7 @@ import exerciseRoutes from "../routes/exercise.route.js";
 import exerciseCategoryRoutes from "../routes/exerciseCategory.route.js";
 import personalRecordRoutes from "../routes/personalRecord.route.js";
 import machineRoutes from '../routes/machine.route.js'
+import routineRoutes from '../routes/routine.route.js'
 import cookieParser from "cookie-parser";
 import path from "path";
 
@@ -38,7 +39,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/param", paramRoutes);
 app.use("/api/personalRecord", personalRecordRoutes);
 app.use("/api/machine", machineRoutes);
-
+app.use("/api/routine", routineRoutes);
 const __html = path.resolve();
 app.use(express.static(path.join(__html, "/client/dist")));
 app.get("*", (req, res) => {
