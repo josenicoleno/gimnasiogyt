@@ -32,6 +32,7 @@ import CreatePersonalRecord from './pages/CreatePersonalRecord'
 import CreateMachine from './pages/CreateMachine'
 import UpdateMachine from './pages/UpdateMachine'
 import Machine from './pages/Machine'
+import CreateRoutine from './pages/CreateRoutine'
 
 export default function App() {
   useEffect(() => {
@@ -71,6 +72,8 @@ export default function App() {
           <Route path='/update-exercise/:exerciseId' element={<UpdateExercise />} />
           <Route path='/create-machine' element={<CreateMachine />} />
           <Route path='/update-machine/:machineId' element={<UpdateMachine />} />
+          <Route path='/create-routine' element={<CreateRoutine />} />
+          {/* <Route path='/update-routine/:routineId' element={<UpdateRoutine />} /> */}
           </Route>
         {/* 404 */}
         <Route path='*' element={<NotFound />} />

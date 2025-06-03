@@ -21,11 +21,42 @@ export const createRoutine = async (req, res) => {
 // Obtener todas las rutinas
 export const getRoutines = async (req, res) => {
   try {
-    const routines = await Routine.find()
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const routines = await Routine.find(
+      ...(req.query.userId && { userId: req.query.userId }),
+      ...(req.query.createdBy && { createdBy: req.query.createdBy }),
+      ...(req.query.status && { status: req.query.status }),
+      ...(req.query.routineId && { _id: req.query.routineId }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { name: { $regex: req.query.searchTerm, $options: "i" } },
+          { description: { $regex: req.query.searchTerm, $options: "i" } },
+        ],
+      }),
+    )
       .populate('createdBy', 'name')
       .populate('users', 'name')
-      .sort({ fechaDesde: -1 });
-    res.json(routines);
+      .sort({ fechaDesde: -1 })
+      .skip(startIndex)
+      .limit(limit);
+    const totalRoutines = await Routine.countDocuments();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const totalRoutinesLastMonth = await Routine.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    res.status(200).json({
+      routines,
+      totalRoutines,
+      totalRoutinesLastMonth,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

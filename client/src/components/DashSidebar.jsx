@@ -80,6 +80,16 @@ export default function DashSidebar() {
                                 Users
                             </Sidebar.Item>
                         </Link>
+                        <Link to="/dashboard?tab=routines">
+                            <Sidebar.Item
+                                active={tab === 'routines'}
+                                icon={HiDocumentText}
+                                labelColor='dark'
+                                as='div'
+                            >
+                                Routines
+                            </Sidebar.Item>
+                        </Link>
                         <Link to="/dashboard?tab=posts">
                             <Sidebar.Item
                                 active={tab === 'posts'}
