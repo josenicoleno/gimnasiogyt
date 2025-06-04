@@ -1,25 +1,28 @@
-import Routine from '../models/routine.model.js';
+import mongoose from "mongoose";
+import Routine from "../models/routine.model.js";
 
 // Crear una nueva rutina
-export const createRoutine = async (req, res) => {
+export const createRoutine = async (req, res, next) => {
   try {
     const routine = new Routine({
       name: req.body.name,
       description: req.body.description,
       file: req.body.file,
-      fechaDesde: req.body.fechaDesde,
-      fechaHasta: req.body.fechaHasta,
-      createdBy: req.user._id
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      status: req.body.status,
+      users: req.body.users || [],
+      createdBy: mongoose.Types.ObjectId.createFromHexString(req.user.id),
     });
     await routine.save();
     res.status(201).json(routine);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
 // Obtener todas las rutinas
-export const getRoutines = async (req, res) => {
+export const getRoutines = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
@@ -33,10 +36,10 @@ export const getRoutines = async (req, res) => {
           { name: { $regex: req.query.searchTerm, $options: "i" } },
           { description: { $regex: req.query.searchTerm, $options: "i" } },
         ],
-      }),
+      })
     )
-      .populate('createdBy', 'name')
-      .populate('users', 'name')
+      .populate("createdBy", "name")
+      .populate("users", "name")
       .sort({ fechaDesde: -1 })
       .skip(startIndex)
       .limit(limit);
@@ -58,7 +61,7 @@ export const getRoutines = async (req, res) => {
       totalRoutinesLastMonth,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -69,13 +72,13 @@ export const getUserActiveRoutines = async (req, res) => {
     const routines = await Routine.find({
       users: req.params.userId,
       fechaDesde: { $lte: now },
-      fechaHasta: { $gte: now }
+      fechaHasta: { $gte: now },
     })
-    .populate('createdBy', 'name')
-    .sort({ fechaDesde: -1 });
+      .populate("createdBy", "name")
+      .sort({ fechaDesde: -1 });
     res.json(routines);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -83,11 +86,11 @@ export const getUserActiveRoutines = async (req, res) => {
 export const getUserRoutines = async (req, res) => {
   try {
     const routines = await Routine.find({ users: req.params.userId })
-      .populate('createdBy', 'name')
+      .populate("createdBy", "name")
       .sort({ fechaDesde: -1 });
     res.json(routines);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -96,19 +99,19 @@ export const assignUsers = async (req, res) => {
   try {
     const routine = await Routine.findById(req.params.id);
     if (!routine) {
-      return res.status(404).json({ message: 'Rutina no encontrada' });
+      return res.status(404).json({ message: "Rutina no encontrada" });
     }
 
     // Agregar nuevos usuarios sin duplicados
     const newUsers = req.body.userIds.filter(
-      userId => !routine.users.includes(userId)
+      (userId) => !routine.users.includes(userId)
     );
     routine.users.push(...newUsers);
-    
+
     await routine.save();
     res.json(routine);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -117,18 +120,18 @@ export const removeUsers = async (req, res) => {
   try {
     const routine = await Routine.findById(req.params.id);
     if (!routine) {
-      return res.status(404).json({ message: 'Rutina no encontrada' });
+      return res.status(404).json({ message: "Rutina no encontrada" });
     }
 
     // Remover usuarios especificados
     routine.users = routine.users.filter(
-      userId => !req.body.userIds.includes(userId.toString())
+      (userId) => !req.body.userIds.includes(userId.toString())
     );
-    
+
     await routine.save();
     res.json(routine);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -137,16 +140,16 @@ export const deleteRoutine = async (req, res) => {
   try {
     const routine = await Routine.findById(req.params.id);
     if (!routine) {
-      return res.status(404).json({ message: 'Rutina no encontrada' });
+      return res.status(404).json({ message: "Rutina no encontrada" });
     }
-
     if (routine.createdBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'No tienes permiso para eliminar esta rutina' });
+      return res
+        .status(403)
+        .json({ message: "No tienes permiso para eliminar esta rutina" });
     }
-
     await routine.deleteOne();
-    res.json({ message: 'Rutina eliminada correctamente' });
+    res.json({ message: "Rutina eliminada correctamente" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
-}; 
+};

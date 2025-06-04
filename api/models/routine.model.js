@@ -11,7 +11,7 @@ const routineSchema = new mongoose.Schema({
     required: false
   },
   file: {
-    type: String,  // URL o path del archivo
+    type: String,
     required: true
   },
   startDate: {
@@ -21,6 +21,11 @@ const routineSchema = new mongoose.Schema({
   endDate: {
     type: Date,
     required: true
+  },
+  status: {
+    type: String,
+    enum: ['Published', 'Draft'],
+    default: 'Draft'
   },
   users: [{
     type: mongoose.Schema.Types.ObjectId,
