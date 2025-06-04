@@ -22,28 +22,32 @@ export const createRoutine = async (req, res, next) => {
 };
 
 // Obtener todas las rutinas
-export const getRoutines = async (req, res, next) => {
+export const getRoutines = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const routines = await Routine.find(
-      ...(req.query.userId && { userId: req.query.userId }),
-      ...(req.query.createdBy && { createdBy: req.query.createdBy }),
-      ...(req.query.status && { status: req.query.status }),
-      ...(req.query.routineId && { _id: req.query.routineId }),
-      ...(req.query.searchTerm && {
-        $or: [
-          { name: { $regex: req.query.searchTerm, $options: "i" } },
-          { description: { $regex: req.query.searchTerm, $options: "i" } },
-        ],
-      })
-    )
+    
+    const query = {};
+    
+    if (req.query.userId) query.userId = req.query.userId;
+    if (req.query.createdBy) query.createdBy = req.query.createdBy;
+    if (req.query.status) query.status = req.query.status;
+    if (req.query.routineId) query._id = req.query.routineId;
+    if (req.query.searchTerm) {
+      query.$or = [
+        { name: { $regex: req.query.searchTerm, $options: "i" } },
+        { description: { $regex: req.query.searchTerm, $options: "i" } },
+      ];
+    }
+
+    const routines = await Routine.find(query)
       .populate("createdBy", "name")
       .populate("users", "name")
-      .sort({ fechaDesde: -1 })
+      .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
-    const totalRoutines = await Routine.countDocuments();
+
+    const totalRoutines = await Routine.countDocuments(query);
 
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -55,13 +59,14 @@ export const getRoutines = async (req, res, next) => {
     const totalRoutinesLastMonth = await Routine.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
+
     res.status(200).json({
       routines,
       totalRoutines,
       totalRoutinesLastMonth,
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
