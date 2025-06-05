@@ -165,6 +165,20 @@ const Header = () => {
                             Contactar
                         </Link>
                     </Navbar.Link>
+                    {currentUser && (
+                        <>
+                            <Navbar.Link active={path === "/dashboard?tab=routines"} as={'div'}>
+                                <Link to='/dashboard?tab=routines'>
+                                    Mis rutinas
+                                </Link>
+                            </Navbar.Link>
+                            <Navbar.Link active={path === `/dashboard?tab=personalRecords`} as={'div'}>
+                                <Link to='/dashboard?tab=personalRecords'>
+                                    Mis marcas
+                                </Link>
+                            </Navbar.Link>
+                        </>
+                    )}
                 </Navbar.Collapse>
             </Navbar >
         </div >
