@@ -120,6 +120,7 @@ export const DashRoutines = () => {
               <Table.HeadCell>Desde</Table.HeadCell>
               <Table.HeadCell>Hasta</Table.HeadCell>
               <Table.HeadCell>Nombre</Table.HeadCell>
+              <Table.HeadCell>Descripción</Table.HeadCell>
               {currentUser.isAdmin && (
                 <>
                   <Table.HeadCell>Estado</Table.HeadCell>
@@ -135,10 +136,12 @@ export const DashRoutines = () => {
             <Table.Body className="divide-y">
               {userRoutines.map(routine =>
                 <Table.Row key={routine._id} className={routine.status === 'Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600"}>
-                  <Table.Cell>{new Date(routine.startDate).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>{new Date(routine.endDate).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>{routine.startDate ? new Date(routine.startDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
+                  <Table.Cell>{routine.endDate ? new Date(routine.endDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
                   <Table.Cell>
                     <Link to={`/routine/${routine.slug}`}>{routine.name}</Link>
+                  </Table.Cell>
+                  <Table.Cell dangerouslySetInnerHTML={{ __html: routine.description }}>
                   </Table.Cell>
                   {currentUser.isAdmin && (<>
                     <Table.Cell>{routine.status}</Table.Cell>

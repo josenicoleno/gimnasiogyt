@@ -12,15 +12,15 @@ const routineSchema = new mongoose.Schema({
   },
   file: {
     type: String,
-    required: true
+    /* required: true */
   },
   startDate: {
     type: Date,
-    required: true
+    /* required: true */
   },
   endDate: {
     type: Date,
-    required: true
+    /* required: true */
   },
   status: {
     type: String,

@@ -86,7 +86,6 @@ export default function CreateRoutine() {
         } catch (error) {
             setFileUploadError('Error al subir el archivo');
             setFileUploadProgress(null);
-            console.log(error)
         }
     }
 
@@ -147,7 +146,7 @@ export default function CreateRoutine() {
                             <input
                                 id="startDate"
                                 type="date"
-                                required
+                                /* required */
                                 className="flex-1 border-2 border-gray-300 rounded-md p-2 dark:bg-gray-600"
                                 onChange={handleChange}
                                 value={formData.startDate}
@@ -159,7 +158,7 @@ export default function CreateRoutine() {
                                 className="flex-1 border-2 border-gray-300 rounded-md p-2 dark:bg-gray-600"
                                 onChange={handleChange}
                                 value={formData.endDate}
-                                required
+                                /* required */
                             />
                         </div>
                         <input
@@ -209,12 +208,12 @@ export default function CreateRoutine() {
                         </a>
                     )}
                     <ReactQuill
-                        id="content"
+                        id="description"
                         theme="snow"
                         placeholder="Escribe algo..."
                         className="h-72 mb-12"
                         required
-                        onChange={value => setFormData({ ...formData, content: value })}
+                        onChange={value => setFormData({ ...formData, description: value })}
                     />
                     {currentUser.isAdmin && (
                         <div className="flex flex-col gap-4">
