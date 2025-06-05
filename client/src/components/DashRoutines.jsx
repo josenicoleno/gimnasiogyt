@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
 import { Button, Modal, Table, TextInput } from 'flowbite-react'
 import { Link } from 'react-router-dom'
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { HiOutlineExclamationCircle, HiDownload } from 'react-icons/hi'
 
 export const DashRoutines = () => {
   const { currentUser } = useSelector(state => state.user)
@@ -27,8 +27,24 @@ export const DashRoutines = () => {
         console.log(error.message)
       }
     }
+    const fetchRoutineUser = async () => {
+      try {
+        const res = await fetch(`/api/routine/user/${currentUser._id}`)
+        const data = await res.json();
+        if (res.ok) {
+          setUserRoutines(data.routines)
+          if (data.routines.length < 9) {
+            setShowMore(false)
+          }
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
     if (currentUser.isAdmin) {
       fetchRoutine();
+    } else {
+      fetchRoutineUser();
     }
   }, [currentUser._id])
 
@@ -50,7 +66,7 @@ export const DashRoutines = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/routine/delete/${routineIdToDelete}/${currentUser._id}`, {
+      const res = await fetch(`/api/routine/${routineIdToDelete}`, {
         method: 'DELETE'
       });
       const data = await res.json();
@@ -97,70 +113,77 @@ export const DashRoutines = () => {
           </form>
         </div>
       </div>
-      {currentUser.isAdmin && userRoutines?.length > 0 ?
+      {userRoutines?.length > 0 ?
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>
-            <Table.HeadCell>Date updated</Table.HeadCell>
-            <Table.HeadCell>Image</Table.HeadCell>
-            <Table.HeadCell>Title</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span>Edit</span>
-            </Table.HeadCell>
-            <Table.HeadCell>Delete</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {userRoutines.map(routine =>
-              <Table.Row key={routine._id} className={routine.status ==='Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600" }>
-                <Table.Cell>{new Date(routine.updatedAt).toLocaleDateString()}</Table.Cell>
-                <Table.Cell>
-                  <Link to={`/routine/${routine.slug}`}>
-                    <img
-                      src={routine.image}
-                      alt={routine.title}
-                      className="w-20 h-10 object-cover bg-gray-500"
-                    />
-                  </Link>
-                </Table.Cell>
-                <Table.Cell className="line-clamp-1">
-                  <Link to={`/routine/${routine.slug}`}>
-                    {routine.title}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>{routine.category}</Table.Cell>
-                <Table.Cell>{routine.status}</Table.Cell>
-                <Table.Cell>
-                  <Link className="text-teal-500 hover:underline" to={`/update-routine/${routine._id}`}>
-                    <span>
-                      Edit
-                    </span>
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <span
-                    className="font-medium text-red-500 hover:underline cursor-pointer"
-                    onClick={() => {
-                      setRoutineIdToDelete(routine._id)
-                      setShowModal(true)
-                    }}
-                  >
-                    Delete
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            )}
-          </Table.Body>
-        </Table>
+              <Table.HeadCell>Desde</Table.HeadCell>
+              <Table.HeadCell>Hasta</Table.HeadCell>
+              <Table.HeadCell>Nombre</Table.HeadCell>
+              {currentUser.isAdmin && (
+                <>
+                  <Table.HeadCell>Estado</Table.HeadCell>
+                  <Table.HeadCell>Creada por</Table.HeadCell>
+                  <Table.HeadCell>
+                    <span>Editar</span>
+                  </Table.HeadCell>
+                  <Table.HeadCell>Borrar</Table.HeadCell>
+                </>
+              )}
+              <Table.HeadCell>Descargar</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {userRoutines.map(routine =>
+                <Table.Row key={routine._id} className={routine.status === 'Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600"}>
+                  <Table.Cell>{new Date(routine.startDate).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>{new Date(routine.endDate).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/routine/${routine.slug}`}>{routine.name}</Link>
+                  </Table.Cell>
+                  {currentUser.isAdmin && (<>
+                    <Table.Cell>{routine.status}</Table.Cell>
+                    <Table.Cell className="line-clamp-1">
+                      {routine.createdBy.username}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link className="text-teal-500 hover:underline" to={`/update-routine/${routine._id}`}>
+                        <span>
+                          Edit
+                        </span>
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span
+                        className="font-medium text-red-500 hover:underline cursor-pointer"
+                        onClick={() => {
+                          setRoutineIdToDelete(routine._id)
+                          setShowModal(true)
+                        }}
+                      >
+                        Delete
+                      </span>
+                    </Table.Cell>
+                  </>
+                  )}
+                  <Table.Cell>
+                    {routine.file && (
+                      <a href={routine.file} download className="flex justify-center">
+                        <HiDownload href={routine.file} download />
+                      </a>
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              )}
+            </Table.Body>
+          </Table>
           {showMore && <>
-        <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
-          Show more
+            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
+              Show more
             </button>
           </>
-        }
+          }
         </>
-      : <p>No tienes rutinas aún!</p>
+        : <p>No tienes rutinas aún!</p>
       }
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
         <Modal.Header>¿Estás seguro de querer eliminar la rutina?</Modal.Header>

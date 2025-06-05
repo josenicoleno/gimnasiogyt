@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { useEffect, useState } from 'react';
-import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiCube, HiDocumentText, HiFire, HiGift, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
+import { HiAdjustments, HiAnnotation, HiArrowSmRight, HiChartPie, HiChatAlt2, HiCube, HiDocumentSearch, HiDocumentText, HiFire, HiGift, HiHand, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
@@ -59,6 +59,16 @@ export default function DashSidebar() {
                             Mis marcas
                         </Sidebar.Item>
                     </Link>
+                    <Link to="/dashboard?tab=routines">
+                        <Sidebar.Item
+                            active={tab === 'routines'}
+                            icon={HiDocumentSearch}
+                            labelColor='dark'
+                            as='div'
+                        >
+                            Rutinas
+                        </Sidebar.Item>
+                    </Link>
                     {currentUser.isAdmin && <>
                         <Link to="/dashboard?tab=dashboard">
                             <Sidebar.Item
@@ -77,17 +87,7 @@ export default function DashSidebar() {
                                 labelColor='dark'
                                 as='div'
                             >
-                                Users
-                            </Sidebar.Item>
-                        </Link>
-                        <Link to="/dashboard?tab=routines">
-                            <Sidebar.Item
-                                active={tab === 'routines'}
-                                icon={HiDocumentText}
-                                labelColor='dark'
-                                as='div'
-                            >
-                                Routines
+                                Usuarios
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=posts">
@@ -107,17 +107,17 @@ export default function DashSidebar() {
                                 labelColor='dark'
                                 as='div'
                             >
-                                Exercises
+                                Ejercicios
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=machines">
                             <Sidebar.Item
                                 active={tab === 'machines'}
-                                icon={HiCube }
+                                icon={HiCube}
                                 labelColor='dark'
                                 as='div'
                             >
-                                Machines
+                                Máquinas
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=comments">
@@ -127,7 +127,7 @@ export default function DashSidebar() {
                                 labelColor='dark'
                                 as='div'
                             >
-                                Comments
+                                Comentarios
                             </Sidebar.Item>
                         </Link>
                         <Link to="/dashboard?tab=contacts">
@@ -137,17 +137,17 @@ export default function DashSidebar() {
                                 labelColor='dark'
                                 as='div'
                             >
-                                Contacts
+                                Contactos
                             </Sidebar.Item>
                         </Link>
-                        <Sidebar.Collapse label='Settings' icon={HiAdjustments}>
+                        <Sidebar.Collapse label='Ajustes' icon={HiAdjustments}>
                             <Link to="/dashboard?tab=categories">
                                 <Sidebar.Item
                                     active={tab === 'categories'}
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Post Categories
+                                    Post categorías
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=exerciseCategories">
@@ -156,7 +156,7 @@ export default function DashSidebar() {
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    Exercise Categories
+                                    Ejercicios categorías
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=about">
@@ -165,7 +165,7 @@ export default function DashSidebar() {
                                     labelColor='dark'
                                     as='div'
                                 >
-                                    About
+                                    Acerca de nosotros
                                 </Sidebar.Item>
                             </Link>
                             <Link to="/dashboard?tab=whatsapp">

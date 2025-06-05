@@ -22,13 +22,13 @@ export const createRoutine = async (req, res, next) => {
 };
 
 // Obtener todas las rutinas
-export const getRoutines = async (req, res) => {
+export const getRoutines = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
-    
+
     const query = {};
-    
+
     if (req.query.userId) query.userId = req.query.userId;
     if (req.query.createdBy) query.createdBy = req.query.createdBy;
     if (req.query.status) query.status = req.query.status;
@@ -41,8 +41,8 @@ export const getRoutines = async (req, res) => {
     }
 
     const routines = await Routine.find(query)
-      .populate("createdBy", "name")
-      .populate("users", "name")
+      .populate("createdBy", "username email profilePicture")
+      .populate("users", "username email profilePicture")
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
@@ -88,12 +88,20 @@ export const getUserActiveRoutines = async (req, res) => {
 };
 
 // Obtener rutinas de un usuario específico
-export const getUserRoutines = async (req, res) => {
+export const getUserRoutines = async (req, res, next) => {
   try {
-    const routines = await Routine.find({ users: req.params.userId })
-      .populate("createdBy", "name")
+    const routines = await Routine.find({ users: req.params.userId, status:"Published" })
+      .populate("createdBy", "username")
       .sort({ fechaDesde: -1 });
-    res.json(routines);
+
+    const totalRoutines = await Routine.countDocuments({
+      users: req.params.userId,
+    });
+
+    res.status(200).json({
+      routines,
+      totalRoutines,
+    });
   } catch (error) {
     next(error);
   }
@@ -141,17 +149,17 @@ export const removeUsers = async (req, res) => {
 };
 
 // Eliminar una rutina
-export const deleteRoutine = async (req, res) => {
+export const deleteRoutine = async (req, res, next) => {
   try {
     const routine = await Routine.findById(req.params.id);
     if (!routine) {
       return res.status(404).json({ message: "Rutina no encontrada" });
     }
-    if (routine.createdBy.toString() !== req.user._id.toString()) {
+   /*  if (routine.createdBy.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "No tienes permiso para eliminar esta rutina" });
-    }
+    } */
     await routine.deleteOne();
     res.json({ message: "Rutina eliminada correctamente" });
   } catch (error) {
