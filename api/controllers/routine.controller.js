@@ -212,3 +212,36 @@ export const deleteRoutine = async (req, res, next) => {
     next(error);
   }
 };
+
+// Actualizar una rutina
+export const updateRoutine = async (req, res, next) => {
+  try {
+    const routine = await Routine.findById(req.params.id);
+    if (!routine) {
+      return res.status(404).json({ message: "Rutina no encontrada" });
+    }
+
+    const updatedRoutine = await Routine.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          name: req.body.name,
+          description: req.body.description,
+          file: req.body.file,
+          startDate: req.body.startDate,
+          endDate: req.body.endDate,
+          status: req.body.status,
+          users: req.body.users.map((userId) => ({
+            user: userId,
+            completed: false,
+          })),
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updatedRoutine);
+  } catch (error) {
+    next(error);
+  }
+};

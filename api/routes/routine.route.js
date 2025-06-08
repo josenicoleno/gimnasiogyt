@@ -6,7 +6,8 @@ import {
   getUserActiveRoutines,
   assignUsers,
   removeUsers,
-  deleteRoutine
+  deleteRoutine,
+  updateRoutine
 } from '../controllers/routine.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 
@@ -20,5 +21,6 @@ router.get('/user/:userId/active', verifyToken, getUserActiveRoutines);
 router.post('/:id/assign', verifyToken, assignUsers);
 router.post('/:id/remove', verifyToken, removeUsers);
 router.delete('/:id', verifyToken, deleteRoutine);
+router.put('/:id', verifyToken, updateRoutine);
 
 export default router; 

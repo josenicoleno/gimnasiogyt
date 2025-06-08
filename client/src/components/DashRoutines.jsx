@@ -117,9 +117,9 @@ export const DashRoutines = () => {
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>
+              <Table.HeadCell>Nombre</Table.HeadCell>
               <Table.HeadCell>Desde</Table.HeadCell>
               <Table.HeadCell>Hasta</Table.HeadCell>
-              <Table.HeadCell>Nombre</Table.HeadCell>
               {/* <Table.HeadCell>Descripción</Table.HeadCell> */}
               {currentUser.isAdmin && (
                 <>
@@ -136,8 +136,6 @@ export const DashRoutines = () => {
             <Table.Body className="divide-y">
               {userRoutines.map(routine =>
                 <Table.Row key={routine._id} className={routine.status === 'Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600"}>
-                  <Table.Cell>{routine.startDate ? new Date(routine.startDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
-                  <Table.Cell>{routine.endDate ? new Date(routine.endDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
                   <Table.Cell>
                     <Tooltip
                       content={
@@ -148,6 +146,8 @@ export const DashRoutines = () => {
                       <Link to={`/routine/${routine.slug}`}>{routine.name}</Link>
                     </Tooltip>
                   </Table.Cell>
+                  <Table.Cell>{routine.startDate ? new Date(routine.startDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
+                  <Table.Cell>{routine.endDate ? new Date(routine.endDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
                   {/* <Table.Cell dangerouslySetInnerHTML={{ __html: routine.description }}>
                   </Table.Cell> */}
                   {currentUser.isAdmin && (<>

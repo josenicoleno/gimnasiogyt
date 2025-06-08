@@ -177,7 +177,7 @@ export const sendRoutineAssignmentEmail = async (to, routineName, startDate, end
         </div>
         <p style="color: #666; margin-bottom: 30px;">Accede a tu perfil para ver los detalles completos de la rutina y comenzar a entrenar.</p>
         <div style="text-align: center;">
-          <a href="${process.env.FRONTEND_URL}/dashboard" style="background-color: #4F46E5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Ver Rutina</a>
+          <a href="${process.env.FRONTEND_URL}/dashboard?tab=routines" style="background-color: #4F46E5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Ver Rutina</a>
         </div>
       </div>
       <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
