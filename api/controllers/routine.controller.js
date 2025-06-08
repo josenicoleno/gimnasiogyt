@@ -6,7 +6,6 @@ import User from "../models/user.model.js";
 // Crear una nueva rutina
 export const createRoutine = async (req, res, next) => {
   try {
-    console.log('Entra aquí', req.body)
     const routine = new Routine({
       name: req.body.name,
       description: req.body.description,
@@ -14,16 +13,16 @@ export const createRoutine = async (req, res, next) => {
       startDate: req.body.startDate,
       endDate: req.body.endDate,
       status: req.body.status,
-      users: req.body.users ? req.body.users.map(userId => ({
-        user: userId,
-        completed: false
-      })) : [],
+      users: req.body.users
+        ? req.body.users.map((userId) => ({
+            user: userId,
+            completed: false,
+          }))
+        : [],
       createdBy: mongoose.Types.ObjectId.createFromHexString(req.user.id),
     });
     await routine.save();
-    
     res.status(201).json(routine);
-    console.log('llega aquí también')
     // Notificar a los usuarios asignados
     if (routine.users && routine.users.length > 0) {
       for (const user of routine.users) {
@@ -113,14 +112,14 @@ export const getUserActiveRoutines = async (req, res) => {
 export const getUserRoutines = async (req, res, next) => {
   try {
     const routines = await Routine.find({
-      users: req.params.userId,
+      "users.user": req.params.userId,
       status: "Published",
     })
       .populate("createdBy", "username")
       .sort({ fechaDesde: -1 });
 
     const totalRoutines = await Routine.countDocuments({
-      users: req.params.userId,
+      "users.user": req.params.userId,
     });
 
     res.status(200).json({
@@ -140,13 +139,35 @@ export const assignUsers = async (req, res) => {
       return res.status(404).json({ message: "Rutina no encontrada" });
     }
 
-    // Agregar nuevos usuarios sin duplicados
-    const newUsers = req.body.userIds.filter(
-      (userId) => !routine.users.includes(userId)
-    );
+    // Obtener los IDs de usuarios actuales
+    const currentUserIds = routine.users.map(user => user.user.toString());
+
+    // Filtrar y formatear nuevos usuarios
+    const newUsers = req.body.userIds
+      .filter(userId => !currentUserIds.includes(userId.toString()))
+      .map(userId => ({
+        user: userId,
+        completed: false
+      }));
+
+    // Agregar nuevos usuarios
     routine.users.push(...newUsers);
 
     await routine.save();
+
+    // Notificar a los nuevos usuarios asignados
+    for (const newUser of newUsers) {
+      const userData = await User.findById(newUser.user);
+      if (userData && userData.email) {
+        await sendRoutineAssignmentEmail(
+          userData.email,
+          routine.name,
+          routine.startDate,
+          routine.endDate
+        );
+      }
+    }
+
     res.json(routine);
   } catch (error) {
     next(error);
