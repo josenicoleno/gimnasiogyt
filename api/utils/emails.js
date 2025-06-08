@@ -159,3 +159,32 @@ export const sendRegistrationtEmail = async (to, name, content, phone) => {
   `;
   await sendEmail(to, `Nueva solicitud de registro de ${name}`, html);
 };
+
+export const sendRoutineAssignmentEmail = async (to, routineName, startDate, endDate) => {
+  const html = `
+    <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="${process.env.FRONTEND_URL}/logo.png" alt="Logo" style="width: 50px;">
+        <h1 style="color: #333; margin: 10px 0;">Gimnasio GyT</h1>
+      </div>
+      <div style="background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2 style="color: #333; margin-bottom: 20px;">¡Nueva Rutina Asignada!</h2>
+        <p style="color: #666; margin-bottom: 15px;">Se te ha asignado una nueva rutina:</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+          <h3 style="color: #4F46E5; margin-bottom: 10px;">${routineName}</h3>
+          <p style="color: #666; margin-bottom: 5px;"><strong>Fecha de inicio:</strong> ${new Date(startDate).toLocaleDateString()}</p>
+          <p style="color: #666;"><strong>Fecha de finalización:</strong> ${new Date(endDate).toLocaleDateString()}</p>
+        </div>
+        <p style="color: #666; margin-bottom: 30px;">Accede a tu perfil para ver los detalles completos de la rutina y comenzar a entrenar.</p>
+        <div style="text-align: center;">
+          <a href="${process.env.FRONTEND_URL}/dashboard" style="background-color: #4F46E5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Ver Rutina</a>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+        <p>&copy; ${new Date().getFullYear()} Gimnasio GyT. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  `;
+  await sendEmail(to, "Nueva Rutina Asignada", html);
+};
+

@@ -135,7 +135,7 @@ export const DashRoutines = () => {
             </Table.Head>
             <Table.Body className="divide-y">
               {userRoutines.map(routine =>
-                <Table.Row className={routine.status === 'Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600"}>
+                <Table.Row key={routine._id} className={routine.status === 'Published' ? "bg-white dark:border-gray-700 dark:bg-gray-800" : "bg-gray-200 dark:border-gray-300 dark:bg-gray-600"}>
                   <Table.Cell>{routine.startDate ? new Date(routine.startDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
                   <Table.Cell>{routine.endDate ? new Date(routine.endDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
                   <Table.Cell>

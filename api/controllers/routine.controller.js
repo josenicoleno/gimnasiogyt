@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 import Routine from "../models/routine.model.js";
+import { sendRoutineAssignmentEmail } from "../utils/emails.js";
+import User from "../models/user.model.js";
 
 // Crear una nueva rutina
 export const createRoutine = async (req, res, next) => {
   try {
+    console.log('Entra aquí', req.body)
     const routine = new Routine({
       name: req.body.name,
       description: req.body.description,
@@ -11,11 +14,30 @@ export const createRoutine = async (req, res, next) => {
       startDate: req.body.startDate,
       endDate: req.body.endDate,
       status: req.body.status,
-      users: req.body.users || [],
+      users: req.body.users ? req.body.users.map(userId => ({
+        user: userId,
+        completed: false
+      })) : [],
       createdBy: mongoose.Types.ObjectId.createFromHexString(req.user.id),
     });
     await routine.save();
+    
     res.status(201).json(routine);
+    console.log('llega aquí también')
+    // Notificar a los usuarios asignados
+    if (routine.users && routine.users.length > 0) {
+      for (const user of routine.users) {
+        const userData = await User.findById(user.user);
+        if (userData && userData.email) {
+          await sendRoutineAssignmentEmail(
+            userData.email,
+            routine.name,
+            routine.startDate,
+            routine.endDate
+          );
+        }
+      }
+    }
   } catch (error) {
     next(error);
   }
@@ -90,7 +112,10 @@ export const getUserActiveRoutines = async (req, res) => {
 // Obtener rutinas de un usuario específico
 export const getUserRoutines = async (req, res, next) => {
   try {
-    const routines = await Routine.find({ users: req.params.userId, status:"Published" })
+    const routines = await Routine.find({
+      users: req.params.userId,
+      status: "Published",
+    })
       .populate("createdBy", "username")
       .sort({ fechaDesde: -1 });
 
@@ -155,7 +180,7 @@ export const deleteRoutine = async (req, res, next) => {
     if (!routine) {
       return res.status(404).json({ message: "Rutina no encontrada" });
     }
-   /*  if (routine.createdBy.toString() !== req.user._id.toString()) {
+    /*  if (routine.createdBy.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "No tienes permiso para eliminar esta rutina" });
