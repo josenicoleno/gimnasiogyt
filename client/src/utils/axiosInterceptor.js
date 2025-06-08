@@ -1,6 +1,7 @@
 import axios from "axios";
 import { store } from "../redux/store";
 import { signoutSuccess } from "../redux/user/userSlice";
+import Swal from 'sweetalert2';
 
 export const setupAxiosInterceptors = () => {
   // Agregamos un interceptor para las peticiones
@@ -20,12 +21,8 @@ export const setupAxiosInterceptors = () => {
   // Modificamos el interceptor de respuesta
   axios.interceptors.response.use(
     (response) => response,
-    (error) => {
-      console.log('Interceptor error:', error.response); // Para debugging
-      
+    async (error) => {
       if (error.response?.status === 401) {
-        console.log('Error 401 detectado'); // Para debugging
-        
         // Limpiar el estado del usuario
         store.dispatch(signoutSuccess());
         
@@ -33,7 +30,25 @@ export const setupAxiosInterceptors = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
         
-        // Redirigir
+        // Mostrar notificación
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+
+        await Toast.fire({
+          icon: 'warning',
+          title: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.'
+        });
+        
+        // Redirigir después de mostrar la notificación
         window.location.href = "/sign-in";
       }
       return Promise.reject(error);

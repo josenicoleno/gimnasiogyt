@@ -117,6 +117,9 @@ export const signin = async (req, res, next) => {
       .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 90 * 24 * 60 * 60 * 1000 // 90 días en milisegundos
       })
       .json(rest);
   } catch (error) {
@@ -157,7 +160,6 @@ export const googleAuth = async (req, res, next) => {
       const token = jwt.sign(
         { id: newUser._id, isAdmin: newUser.isAdmin },
         process.env.JWT_SECRET,
-        { expiresIn: '90d' }
       );
       const { password, ...rest } = newUser._doc;
       res
