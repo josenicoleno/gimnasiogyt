@@ -9,6 +9,8 @@ export const DashRoutines = () => {
   const [userRoutines, setUserRoutines] = useState([]);
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [showViewModal, setShowViewModal] = useState(false)
+  const [selectedRoutine, setSelectedRoutine] = useState(null)
   const [routineIdToDelete, setRoutineIdToDelete] = useState(null)
   const [search, setSearch] = useState('')
 
@@ -143,7 +145,15 @@ export const DashRoutines = () => {
                       }
                       placement="right"
                     >
-                      <Link to={`/routine/${routine.slug}`}>{routine.name}</Link>
+                      <span 
+                        className="text-blue-500 hover:underline cursor-pointer"
+                        onClick={() => {
+                          setSelectedRoutine(routine);
+                          setShowViewModal(true);
+                        }}
+                      >
+                        {routine.name}
+                      </span>
                     </Tooltip>
                   </Table.Cell>
                   <Table.Cell>{routine.startDate ? new Date(routine.startDate).toLocaleDateString('es-ES') : "-"}</Table.Cell>
@@ -195,6 +205,61 @@ export const DashRoutines = () => {
         </>
         : <p>No tienes rutinas aún!</p>
       }
+      <Modal show={showViewModal} onClose={() => setShowViewModal(false)} size="xl">
+        <Modal.Header>
+          {selectedRoutine?.name}
+        </Modal.Header>
+        <Modal.Body>
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold">Fecha de inicio:</span> {selectedRoutine?.startDate ? new Date(selectedRoutine.startDate).toLocaleDateString('es-ES') : "-"}
+              </p>
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold">Fecha de fin:</span> {selectedRoutine?.endDate ? new Date(selectedRoutine.endDate).toLocaleDateString('es-ES') : "-"}
+              </p>
+            </div>
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Descripción</h3>
+              <div 
+                className="prose dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: selectedRoutine?.description || "Sin descripción" }}
+              />
+            </div>
+            {currentUser.isAdmin && selectedRoutine?.users && selectedRoutine?.users?.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-2">Usuarios Asignados</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {selectedRoutine?.users.map((user) => (
+                    <div key={user.user._id} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <img src={user.user.profilePicture} alt="Imagen del usuario" className="w-8 h-8 rounded-full" />
+                      <div>
+                        <p className="font-medium">{user.user.username}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.user.email}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {selectedRoutine?.file && (
+              <div className="mt-4">
+                <Button gradientDuoTone="purpleToBlue">
+                  <a href={selectedRoutine.file} download className="flex items-center gap-2">
+                    <HiDownload className="h-5 w-5" />
+                    Descargar archivo
+                  </a>
+                </Button>
+              </div>
+            )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="gray" onClick={() => setShowViewModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
         <Modal.Header>¿Estás seguro de querer eliminar la rutina?</Modal.Header>
         <Modal.Body>

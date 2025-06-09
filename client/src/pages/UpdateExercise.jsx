@@ -38,7 +38,7 @@ export default function UpdateExercise() {
                     fetch('/api/exerciseCategory/'),
                     fetch('/api/machine/')
                 ]);
-                
+
                 const exerciseData = await exerciseRes.json();
                 const categoriesData = await categoriesRes.json();
                 const machinesData = await machinesRes.json();
@@ -47,7 +47,7 @@ export default function UpdateExercise() {
                     setPublishError(exerciseData.message);
                     return;
                 }
-                
+
                 setPublishError(null);
                 setFormData(exerciseData.exercises[0]);
                 setCont(exerciseData.exercises[0].content);
@@ -71,7 +71,8 @@ export default function UpdateExercise() {
             }
             setImageUploadError(null);
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + "-" + file.name;
+            const folder = '/exercises/'
+            const fileName = folder + new Date().getTime() + "-" + file.name;
             const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(

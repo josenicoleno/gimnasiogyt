@@ -63,7 +63,7 @@ export const getRoutines = async (req, res, next) => {
 
     const routines = await Routine.find(query)
       .populate("createdBy", "username email profilePicture")
-      .populate("users", "username email profilePicture")
+      .populate("users.user", "username email profilePicture")
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
@@ -115,7 +115,8 @@ export const getUserRoutines = async (req, res, next) => {
       "users.user": req.params.userId,
       status: "Published",
     })
-      .populate("createdBy", "username")
+      .populate("createdBy", "username email profilePicture")
+      .populate("users.user", "username email profilePicture")
       .sort({ fechaDesde: -1 });
 
     const totalRoutines = await Routine.countDocuments({

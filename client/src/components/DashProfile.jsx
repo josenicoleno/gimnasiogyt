@@ -57,8 +57,9 @@ export default function DashProfile() {
         setImageFileUploading(true)
         setImageFileUploadError(null)
         const storage = getStorage(app)
-        const filename = new Date().getTime() + imageFile.name;
-        const storageRef = ref(storage, filename)
+        const folder = '/profiles/'
+        const fileName = folder + new Date().getTime() + imageFile.name;
+        const storageRef = ref(storage, fileName)
         const uploadTask = uploadBytesResumable(storageRef, imageFile)
         uploadTask.on(
             'state_changed',

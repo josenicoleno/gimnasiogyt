@@ -68,8 +68,9 @@ export default function UpdateMachine() {
                 return setImageUploadError('Please select an image')
             }
             setImageUploadError(null);
+            const folder = '/machines/'
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + "-" + file.name;
+            const fileName = folder + new Date().getTime() + "-" + file.name;
             const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(

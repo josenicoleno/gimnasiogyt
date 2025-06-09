@@ -95,8 +95,9 @@ export default function UpdateRoutine() {
             }
             setFileUploadError(null);
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + "-" + file.name;
-            const storageRef = ref(storage, `/routines/${fileName}`);
+            const folder = '/routines/'
+            const fileName = folder +  new Date().getTime() + "-" + file.name;
+            const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
                 'state_changed',

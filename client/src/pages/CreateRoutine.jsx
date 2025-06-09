@@ -62,8 +62,9 @@ export default function CreateRoutine() {
             }
             setFileUploadError(null);
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + "-" + file.name;
-            const storageRef = ref(storage, `/routines/${fileName}`);
+            const folder = '/routines/'
+            const fileName = folder + new Date().getTime() + "-" + file.name;
+            const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
                 'state_changed',
@@ -158,7 +159,7 @@ export default function CreateRoutine() {
                                 className="flex-1 border-2 border-gray-300 rounded-md p-2 dark:bg-gray-600"
                                 onChange={handleChange}
                                 value={formData.endDate}
-                                /* required */
+                            /* required */
                             />
                         </div>
                         <input
