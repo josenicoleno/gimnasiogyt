@@ -27,7 +27,9 @@ export default function OAuth() {
             const data = await res.json()
             if (res.ok) {
                 dispatch(signInSuccess(data))
-                navigate('/')
+                const redirectPath = localStorage.getItem('redirectPath') || '/home';
+                localStorage.removeItem('redirectPath');
+                navigate(redirectPath);
             }
         } catch (error) {
             console.log(error)

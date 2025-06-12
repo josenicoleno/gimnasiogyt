@@ -13,7 +13,11 @@ const SignIn = () => {
 
   useEffect(() => {
     if (currentUser) {
-      navigate('/')
+      // Obtener la URL guardada o redirigir a home por defecto
+      const redirectPath = localStorage.getItem('redirectPath') || '/home';
+      console.log(redirectPath)
+      localStorage.removeItem('redirectPath'); // Limpiar la URL guardada
+      navigate(redirectPath);
     } else {
       dispatch(signInFailure(null))
     }
@@ -41,7 +45,7 @@ const SignIn = () => {
       }
       if (res.ok) {
         dispatch(signInSuccess(data))
-        navigate('/home')
+        // La redirección se maneja en el useEffect
       }
     } catch (error) {
       return dispatch(signInFailure(error.message))
