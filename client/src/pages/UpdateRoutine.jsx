@@ -12,6 +12,7 @@ export default function UpdateRoutine() {
     const [file, setFile] = useState(null)
     const [fileUploadProgress, setFileUploadProgress] = useState(null);
     const [fileUploadError, setFileUploadError] = useState(null);
+    const [directLink, setDirectLink] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -43,6 +44,7 @@ export default function UpdateRoutine() {
                         endDate: routine.endDate ? new Date(routine.endDate).toISOString().split('T')[0] : "",
                         status: routine.status
                     });
+                    setDirectLink(routine.file);
                     const userIds = routine.users.map(user => user.user._id || user.user);
                     setSelectedUsers(userIds);
                 }
@@ -88,6 +90,11 @@ export default function UpdateRoutine() {
         }
     };
 
+    const handleDirectLinkChange = (e) => {
+        setDirectLink(e.target.value);
+        setFormData({ ...formData, file: e.target.value });
+    };
+
     const handledUploadFile = () => {
         try {
             if (!file) {
@@ -96,7 +103,7 @@ export default function UpdateRoutine() {
             setFileUploadError(null);
             const storage = getStorage(app);
             const folder = '/routines/'
-            const fileName = folder +  new Date().getTime() + "-" + file.name;
+            const fileName = folder + new Date().getTime() + "-" + file.name;
             const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
@@ -113,6 +120,7 @@ export default function UpdateRoutine() {
                     getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
                         setFileUploadError(null);
                         setFileUploadProgress(null);
+                        setDirectLink(downloadURL);
                         setFormData({ ...formData, file: downloadURL })
                     })
                 }
@@ -204,29 +212,40 @@ export default function UpdateRoutine() {
                             Publicado?
                         </label>
                     </div>
-                    <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
-                        <FileInput
-                            type='file'
-                            accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                            onChange={e => setFile(e.target.files[0])}
+                    <div className="flex flex-col gap-4 border-teal-500 border-dotted p-3 border-4">
+                        <div className="flex gap-4 items-center justify-between">
+                            <FileInput
+                                type='file'
+                                accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                onChange={e => setFile(e.target.files[0])}
+                                className="flex-2"
+                            />
+                            <Button
+                                type='button'
+                                gradientDuoTone="purpleToBlue"
+                                size="sm"
+                                outline
+                                onClick={handledUploadFile}
+                                disabled={fileUploadProgress}
+                                className=""
+                            >
+                                {fileUploadProgress
+                                    ? <div className="w-16 h-16">
+                                        <CircularProgressbar
+                                            value={fileUploadProgress}
+                                            text={`${fileUploadProgress || 0}%`}
+                                        />
+                                    </div>
+                                    : 'Subir archivo'}
+                            </Button>
+                        </div>
+                        <TextInput
+                            type="text"
+                            placeholder="Ingresa el enlace del archivo o sube uno nuevo"
+                            value={directLink}
+                            onChange={handleDirectLinkChange}
+                            className="w-full"
                         />
-                        <Button
-                            type='button'
-                            gradientDuoTone="purpleToBlue"
-                            size="sm"
-                            outline
-                            onClick={handledUploadFile}
-                            disabled={fileUploadProgress}
-                        >
-                            {fileUploadProgress
-                                ? <div className="w-16 h-16">
-                                    <CircularProgressbar
-                                        value={fileUploadProgress}
-                                        text={`${fileUploadProgress || 0}%`}
-                                    />
-                                </div>
-                                : 'Subir archivo'}
-                        </Button>
                     </div>
                     {fileUploadError && (
                         <Alert color="failure" className="mt-4" >
