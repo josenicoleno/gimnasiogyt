@@ -214,7 +214,8 @@ export default function DashSettingLogo() {
       }
       setImageUploadError(null);
       const storage = getStorage(app);
-      const fileName = "logo";
+      const folder = "/gymparametros/"
+      const fileName = folder + "logo";
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
