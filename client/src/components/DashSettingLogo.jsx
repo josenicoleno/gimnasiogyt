@@ -13,6 +13,7 @@ export default function DashSettingLogo() {
   const [file, setFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [directImageUrl, setDirectImageUrl] = useState('');
 
   const keyMarca = 'Marca'
   const [formDataMarca, setFormDataMarca] = useState({
@@ -44,6 +45,7 @@ export default function DashSettingLogo() {
           key: keyLogo,
           text: data.text
         });
+        setDirectImageUrl(data.text);
       }
     }
     const fetchMarca = async () => {
@@ -84,6 +86,11 @@ export default function DashSettingLogo() {
     fetchDireccion();
     fetchLinkDireccion();
   }, []);
+
+  const handleDirectImageUrlChange = (e) => {
+    setDirectImageUrl(e.target.value);
+    setFormDataLogo({ ...formDataLogo, text: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -198,9 +205,8 @@ export default function DashSettingLogo() {
         setError("Failed to update message");
       }
     }
-
-
   }
+
   const handledUploadImage = () => {
     try {
       if (!file) {
@@ -225,6 +231,7 @@ export default function DashSettingLogo() {
           getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
             setImageUploadError(null);
             setImageUploadProgress(null);
+            setDirectImageUrl(downloadURL);
             setFormDataLogo({ ...formDataLogo, text: downloadURL })
           })
         }
@@ -240,36 +247,45 @@ export default function DashSettingLogo() {
     <div className="flex flex-col w-full gap-4 items-center">
       <h1 className="text-2xl font-bold">Logo y Marca</h1>
       <form onSubmit={handleSubmit} className="max-w-4xl w-full flex flex-col gap-4">
-        <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
-          <FileInput
-            type='file'
-            accept="image/*"
-            onChange={e => setFile(e.target.files[0])}
+        <div className="flex flex-col gap-4 border-4 border-teal-500 border-dotted p-3">
+          <div className="flex gap-4 items-center justify-between">
+            <FileInput
+              type='file'
+              accept="image/*"
+              onChange={e => setFile(e.target.files[0])}
+            />
+            <Button
+              type='button'
+              gradientDuoTone="purpleToBlue"
+              size="sm"
+              outline
+              onClick={handledUploadImage}
+              disabled={imageUploadProgress}
+            >
+              {imageUploadProgress
+                ? <div className="w-16 h-16">
+                  <CircularProgressbar
+                    value={imageUploadProgress}
+                    text={`${imageUploadProgress || 0}%`}
+                  />
+                </div>
+                : 'Upload image'}
+            </Button>
+          </div>
+          <TextInput
+            type="text"
+            placeholder="Ingresa la URL de la imagen o sube una nueva"
+            value={directImageUrl}
+            onChange={handleDirectImageUrlChange}
+            className="w-full"
           />
-          <Button
-            type='button'
-            gradientDuoTone="purpleToBlue"
-            size="sm"
-            outline
-            onClick={handledUploadImage}
-            disabled={imageUploadProgress}
-          >
-            {imageUploadProgress
-              ? <div className="w-16 h-16">
-                <CircularProgressbar
-                  value={imageUploadProgress}
-                  text={`${imageUploadProgress || 0}%`}
-                />
-              </div>
-              : 'Upload image'}
-          </Button>
         </div>
         {imageUploadError && (
           <Alert color="failure" className="mt-4" >
             {imageUploadError}
           </Alert>
         )}
-        {formDataLogo.image && (
+        {formDataLogo.text && (
           <img src={formDataLogo.text} alt="upload" className="w-full h-72 object-cover" />
         )}
         <TextInput
