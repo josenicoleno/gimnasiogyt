@@ -7,7 +7,11 @@
   "scripts": {
     "dev": "nodemon api/functions/index.js",
     "start": "node api/functions/index.js",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "lint": "eslint . --ext .js,.jsx",
+    "lint:fix": "eslint . --ext .js,.jsx --fix",
+    "check-deps": "depcheck",
+    "optimize": "npm run lint:fix && npm run check-deps"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +30,9 @@
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16"
+    "@tailwindcss/typography": "^0.5.16",
+    "depcheck": "^1.4.7",
+    "eslint": "^9.29.0",
+    "purgecss": "^7.0.2"
   }
 }
