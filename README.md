@@ -47,7 +47,7 @@ GYM GYT es una aplicación web moderna y completa para la gestión de gimnasios,
 
 1. Clona el repositorio:
 ```bash
-git clone https://github.com/tu-usuario/gimnasiogyt.git
+git clone https://github.com/josenicoleno/gimnasiogyt.git
 cd gimnasiogyt
 ```
 
@@ -111,4 +111,4 @@ Para cualquier consulta o sugerencia, no dudes en contactarnos a través de:
 
 ---
 
-Desarrollado con ❤️ por {José Nicoleno}
+Hecho con ❤️ por {José Nicoleno}
