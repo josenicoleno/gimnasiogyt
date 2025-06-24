@@ -145,7 +145,8 @@ export default function DashCategory() {
             }
             setImageUploadError(null);
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + "-" + file.name;
+            const folder = '/posts/categories/'
+            const fileName = folder + new Date().getTime() + "-" + file.name;
             const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
